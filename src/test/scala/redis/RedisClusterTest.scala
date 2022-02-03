@@ -40,7 +40,6 @@ class RedisClusterTest extends RedisClusterClients {
         )
       )
       val clusterSlotsAsBulk: DecodeResult[RedisReply] = RedisProtocolReply.decodeReply(clusterSlotsAsByteString)
-      var decodeValue = ""
       val dr: DecodeResult[String] = clusterSlotsAsBulk.map {
         case a: MultiBulk =>
           ClusterSlots().decodeReply(a).map(c => c.copy(slaves = c.slaves.toList)).toString()
