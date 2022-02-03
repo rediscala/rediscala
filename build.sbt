@@ -47,7 +47,7 @@ lazy val standardSettings = Def.settings(
     ),
   publishTo := sonatypePublishTo.value,
   publishMavenStyle := true,
-
+  javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
     "-encoding", "UTF-8",
     "-Xlint",
