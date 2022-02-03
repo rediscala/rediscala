@@ -72,7 +72,7 @@ lazy val standardSettings = Def.settings(
   addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
   addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
   addCommandAlias("SetScala3", s"++ ${Scala3}! -v"),
-  licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
   pomExtra := (
