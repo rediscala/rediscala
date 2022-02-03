@@ -1,24 +1,20 @@
 package redis
 
 import java.net.InetSocketAddress
-
-import akka.actor.{ActorRef, ActorSystem}
-
+import akka.actor.ActorRef
+import akka.actor.ActorSystem
 import scala.concurrent.stm._
 import redis.actors.RedisClientActor
-import scala.concurrent.{Future, ExecutionContext}
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import redis.protocol.RedisReply
 import redis.commands.Transactions
 
-case class RedisServer(host: String = "localhost",
-                       port: Int = 6379,
-                       password: Option[String] = None,
-                       db: Option[Int] = None)
-
+case class RedisServer(host: String = "localhost", port: Int = 6379, password: Option[String] = None, db: Option[Int] = None)
 
 case class RedisConnection(actor: ActorRef, active: Ref[Boolean] = Ref(false))
 
-abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDispatcher)  {
+abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDispatcher) {
 
   def redisServerConnections: scala.collection.Map[RedisServer, RedisConnection]
 
@@ -26,6 +22,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
   implicit val executionContext = system.dispatchers.lookup(redisDispatcher.name)
 
   private val redisConnectionRef: Ref[Seq[ActorRef]] = Ref(Seq.empty)
+
   /**
     *
     * @param redisCommand
@@ -55,12 +52,12 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     server.db.foreach(redis.select)
   }
 
-  def onConnectStatus(server: RedisServer, active: Ref[Boolean]): (Boolean) => Unit = {
-    (status: Boolean) => {
-        if (active.single.compareAndSet(!status, status)) {
-          refreshConnections()
-        }
+  def onConnectStatus(server: RedisServer, active: Ref[Boolean]): (Boolean) => Unit = { (status: Boolean) =>
+    {
+      if (active.single.compareAndSet(!status, status)) {
+        refreshConnections()
       }
+    }
   }
 
   def refreshConnections() = {
@@ -92,20 +89,22 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
   }
 
   def makeRedisClientActor(server: RedisServer, active: Ref[Boolean]): ActorRef = {
-    system.actorOf(RedisClientActor.props(new InetSocketAddress(server.host, server.port),
-      getConnectOperations(server), onConnectStatus(server, active), redisDispatcher.name)
-      .withDispatcher(redisDispatcher.name),
+    system.actorOf(
+      RedisClientActor
+        .props(new InetSocketAddress(server.host, server.port), getConnectOperations(server), onConnectStatus(server, active), redisDispatcher.name)
+        .withDispatcher(redisDispatcher.name),
       name + '-' + Redis.tempName()
     )
   }
 
 }
 
-case class RedisClientMutablePool(redisServers: Seq[RedisServer],
-                                  name: String = "RedisClientPool")
-                                 (implicit system: ActorSystem,
-                                  redisDispatcher: RedisDispatcher = Redis.dispatcher
-                                  ) extends RedisClientPoolLike (system, redisDispatcher) with RoundRobinPoolRequest with RedisCommands {
+case class RedisClientMutablePool(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(implicit
+  system: ActorSystem,
+  redisDispatcher: RedisDispatcher = Redis.dispatcher
+) extends RedisClientPoolLike(system, redisDispatcher)
+    with RoundRobinPoolRequest
+    with RedisCommands {
 
   override val redisServerConnections = {
     val m = redisServers map { server => makeRedisConnection(server) }
@@ -134,14 +133,14 @@ case class RedisClientMutablePool(redisServers: Seq[RedisServer],
     }
   }
 
-
 }
 
-case class RedisClientPool(redisServers: Seq[RedisServer],
-                           name: String = "RedisClientPool")
-                          (implicit _system: ActorSystem,
-                           redisDispatcher: RedisDispatcher = Redis.dispatcher
-                          ) extends RedisClientPoolLike(_system, redisDispatcher) with RoundRobinPoolRequest with RedisCommands {
+case class RedisClientPool(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(implicit
+  _system: ActorSystem,
+  redisDispatcher: RedisDispatcher = Redis.dispatcher
+) extends RedisClientPoolLike(_system, redisDispatcher)
+    with RoundRobinPoolRequest
+    with RedisCommands {
 
   override val redisServerConnections = {
     redisServers.map { server =>
@@ -153,11 +152,11 @@ case class RedisClientPool(redisServers: Seq[RedisServer],
 
 }
 
-case class RedisClientMasterSlaves(master: RedisServer,
-                                   slaves: Seq[RedisServer])
-                                  (implicit _system: ActorSystem,
-                                  redisDispatcher: RedisDispatcher = Redis.dispatcher)
-                                  extends RedisCommands with Transactions {
+case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer])(implicit
+  _system: ActorSystem,
+  redisDispatcher: RedisDispatcher = Redis.dispatcher
+) extends RedisCommands
+    with Transactions {
   implicit val executionContext = _system.dispatchers.lookup(redisDispatcher.name)
 
   val masterClient = RedisClient(master.host, master.port, master.password, master.db)
@@ -175,26 +174,24 @@ case class RedisClientMasterSlaves(master: RedisServer,
   def redisConnection: ActorRef = masterClient.redisConnection
 }
 
+case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)] = Seq(("localhost", 26379)), master: String)(implicit
+  _system: ActorSystem,
+  redisDispatcher: RedisDispatcher = Redis.dispatcher
+) extends SentinelMonitored(_system, redisDispatcher)
+    with ActorRequest
+    with RedisCommands
+    with Transactions {
 
-case class SentinelMonitoredRedisClientMasterSlaves(
-    sentinels: Seq[(String, Int)] = Seq(("localhost", 26379)), master: String)
-    (implicit _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
-  extends SentinelMonitored(_system, redisDispatcher) with ActorRequest with RedisCommands with Transactions {
+  val masterClient: RedisClient = withMasterAddr((ip, port) => {
+    new RedisClient(ip, port, name = "SMRedisClient")
+  })
 
-  val masterClient: RedisClient = withMasterAddr(
-    (ip, port) => {
-      new RedisClient(ip, port, name = "SMRedisClient")
-    })
-
-  val slavesClients: RedisClientMutablePool = withSlavesAddr(
-    slavesHostPort => {
-      val slaves = slavesHostPort.map {
-        case (ip, port) =>
-          new RedisServer(ip, port)
-      }
-      new RedisClientMutablePool(slaves, name = "SMRedisClient")
-    })
-
+  val slavesClients: RedisClientMutablePool = withSlavesAddr(slavesHostPort => {
+    val slaves = slavesHostPort.map { case (ip, port) =>
+      new RedisServer(ip, port)
+    }
+    new RedisClientMutablePool(slaves, name = "SMRedisClient")
+  })
 
   val onNewSlave = (ip: String, port: Int) => {
     log.info(s"onNewSlave $ip:$port")

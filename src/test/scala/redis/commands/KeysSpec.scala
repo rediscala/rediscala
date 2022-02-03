@@ -1,7 +1,8 @@
 package redis.commands
 
 import redis._
-import scala.concurrent.{Future, Await}
+import scala.concurrent.Future
+import scala.concurrent.Await
 import akka.util.ByteString
 import redis.api._
 
@@ -183,7 +184,7 @@ class KeysSpec extends RedisStandaloneServer {
     }
 
     "MOVE" in {
-      val redisMove = RedisClient(port=port)
+      val redisMove = RedisClient(port = port)
       val r = for {
         _ <- redis.set("moveKey", "value")
         _ <- redisMove.select(1)
@@ -285,7 +286,6 @@ class KeysSpec extends RedisStandaloneServer {
       Await.result(r, timeOut)
     }
 
-
     "PEXPIREAT" in {
       val r = for {
         s <- redis.set("pttlKey", "value")
@@ -376,17 +376,19 @@ class KeysSpec extends RedisStandaloneServer {
 
     // @see https://gist.github.com/jacqui/983051
     "SORT" in {
-      val init = Future.sequence(Seq(
-        redis.hset("bonds|1", "bid_price", 96.01),
-        redis.hset("bonds|1", "ask_price", 97.53),
-        redis.hset("bonds|2", "bid_price", 95.50),
-        redis.hset("bonds|2", "ask_price", 98.25),
-        redis.del("bond_ids"),
-        redis.sadd("bond_ids", 1),
-        redis.sadd("bond_ids", 2),
-        redis.del("sortAlpha"),
-        redis.rpush("sortAlpha", "abc", "xyz")
-      ))
+      val init = Future.sequence(
+        Seq(
+          redis.hset("bonds|1", "bid_price", 96.01),
+          redis.hset("bonds|1", "ask_price", 97.53),
+          redis.hset("bonds|2", "bid_price", 95.50),
+          redis.hset("bonds|2", "ask_price", 98.25),
+          redis.del("bond_ids"),
+          redis.sadd("bond_ids", 1),
+          redis.sadd("bond_ids", 2),
+          redis.del("sortAlpha"),
+          redis.rpush("sortAlpha", "abc", "xyz")
+        )
+      )
       val r = for {
         _ <- init
         sort <- redis.sort("bond_ids")

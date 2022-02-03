@@ -1,11 +1,12 @@
 package redis
 
 import redis.protocol.RedisReply
-import scala.concurrent.{ExecutionContext, Promise, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Promise
+import scala.concurrent.Future
 import scala.collection.immutable.Queue
 import akka.actor.ActorRef
 import java.util.concurrent.atomic.AtomicInteger
-
 
 trait Request {
   implicit val executionContext: ExecutionContext
@@ -36,7 +37,6 @@ trait BufferedRequest {
     promise.future
   }
 }
-
 
 trait RoundRobinPoolRequest {
   implicit val executionContext: ExecutionContext

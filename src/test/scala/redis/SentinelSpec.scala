@@ -11,29 +11,40 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
 
   "sentinel monitored test" should {
 
-
     "master auto failover" in {
       val port = sentinelMonitoredRedisClient.redisClient.port
 
-      awaitAssert({
-        Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-        sentinelClient.failover(masterName) must beTrue.await
-      }, 30.seconds.dilated)
+      awaitAssert(
+        {
+          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
+          sentinelClient.failover(masterName) must beTrue.await
+        },
+        30.seconds.dilated
+      )
 
-      awaitAssert({
-        Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-        sentinelMonitoredRedisClient.redisClient.port must beOneOf(slavePort1, slavePort2, port)
-      }, 30.seconds.dilated)
+      awaitAssert(
+        {
+          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
+          sentinelMonitoredRedisClient.redisClient.port must beOneOf(slavePort1, slavePort2, port)
+        },
+        30.seconds.dilated
+      )
 
       val firstFailover = sentinelMonitoredRedisClient.redisClient.port
 
-      awaitAssert({
-        Await.result(sentinelClient.failover(masterName), timeOut) must beTrue
-      }, 30.seconds.dilated)
+      awaitAssert(
+        {
+          Await.result(sentinelClient.failover(masterName), timeOut) must beTrue
+        },
+        30.seconds.dilated
+      )
 
-      awaitAssert({
-        Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-      }, 30.seconds.dilated)
+      awaitAssert(
+        {
+          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
+        },
+        30.seconds.dilated
+      )
       sentinelMonitoredRedisClient.redisClient.port must beOneOf(slavePort1, slavePort2, masterPort, port)
     }
 
@@ -49,9 +60,12 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
       awaitAssert(sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount + 1, 10 second)
 
       sentinel.stop()
-      awaitAssert({
-        sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount
-      }, 10 seconds)
+      awaitAssert(
+        {
+          sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount
+        },
+        10 seconds
+      )
       success
     }
   }
@@ -71,7 +85,9 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
       opt must beNone.setMessage("unexpected: master state should be unknown")
     }
     "master ok" in {
-      Await.result(sentinelClient.isMasterDown(masterName), timeOut) must beSome(false).setMessage(s"unexpected: master with name '$masterName' was not found")
+      Await.result(sentinelClient.isMasterDown(masterName), timeOut) must beSome(false).setMessage(
+        s"unexpected: master with name '$masterName' was not found"
+      )
     }
     "slaves" in {
       val r = Await.result(sentinelClient.slaves(masterName), timeOut)

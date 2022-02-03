@@ -3,7 +3,6 @@ package redis.commands
 import redis.Request
 import redis.actors.ReplyErrorException
 import redis.api._
-
 import scala.concurrent.Future
 
 trait Sentinel extends Request {

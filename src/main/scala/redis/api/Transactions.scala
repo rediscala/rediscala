@@ -1,6 +1,7 @@
 package redis.api.transactions
 
-import redis.{RedisCommandMultiBulk, RedisCommandStatusBoolean}
+import redis.RedisCommandMultiBulk
+import redis.RedisCommandStatusBoolean
 import akka.util.ByteString
 import redis.protocol.MultiBulk
 

@@ -1,6 +1,8 @@
 package redis.commands
 
-import redis.{ByteStringDeserializer, ByteStringSerializer, Request}
+import redis.ByteStringDeserializer
+import redis.ByteStringSerializer
+import redis.Request
 import scala.concurrent.Future
 import redis.protocol.Status
 import redis.api.connection._
@@ -25,4 +27,3 @@ trait Connection extends Request {
   def swapdb(index1: Int, index2: Int): Future[Boolean] =
     send(Swapdb(index1, index2))
 }
-

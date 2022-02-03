@@ -2,7 +2,6 @@ package redis.api
 
 import akka.util.ByteString
 
-
 trait Aggregate
 
 case object SUM extends Aggregate
@@ -25,7 +24,6 @@ case class LimitOffsetCount(offset: Long, count: Long) {
   def toByteString: Seq[ByteString] = Seq(ByteString("LIMIT"), ByteString(offset.toString), ByteString(count.toString))
 }
 
-
 sealed trait BitOperator
 
 case object AND extends BitOperator
@@ -36,20 +34,17 @@ case object XOR extends BitOperator
 
 case object NOT extends BitOperator
 
-
 sealed trait ListPivot
 
 case object AFTER extends ListPivot
 
 case object BEFORE extends ListPivot
 
-
 sealed trait ShutdownModifier
 
 case object SAVE extends ShutdownModifier
 
 case object NOSAVE extends ShutdownModifier
-
 
 sealed trait ZaddOption {
   def serialize: ByteString

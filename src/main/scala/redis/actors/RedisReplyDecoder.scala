@@ -2,7 +2,10 @@ package redis.actors
 
 import akka.actor.Actor
 import scala.collection.mutable
-import redis.protocol.{FullyDecoded, DecodeResult, RedisProtocolReply, RedisReply}
+import redis.protocol.FullyDecoded
+import redis.protocol.DecodeResult
+import redis.protocol.RedisProtocolReply
+import redis.protocol.RedisReply
 import akka.util.ByteString
 import akka.event.Logging
 import scala.annotation.tailrec
@@ -10,8 +13,7 @@ import redis.Operation
 
 class RedisReplyDecoder() extends Actor {
 
-
-  val queuePromises = mutable.Queue[Operation[_,_]]()
+  val queuePromises = mutable.Queue[Operation[_, _]]()
 
   val log = Logging(context.system, this)
 
@@ -63,10 +65,9 @@ class RedisReplyDecoder() extends Actor {
     if (operation.redisCommand.decodeRedisReply.isDefinedAt(bs)) {
       operation.decodeRedisReplyThenComplete(bs)
     } else if (RedisProtocolReply.decodeReplyError.isDefinedAt(bs)) {
-      RedisProtocolReply.decodeReplyError.apply(bs)
-        .foreach { error =>
-          operation.completeFailed(ReplyErrorException(error.toString))
-        }
+      RedisProtocolReply.decodeReplyError.apply(bs).foreach { error =>
+        operation.completeFailed(ReplyErrorException(error.toString))
+      }
     } else {
       operation.completeFailed(InvalidRedisReply)
       throw new Exception(s"Redis Protocol error: Got ${bs.head} as initial reply byte for Operation: $operation")

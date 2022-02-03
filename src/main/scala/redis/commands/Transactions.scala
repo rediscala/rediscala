@@ -1,15 +1,20 @@
 package redis.commands
 
 import redis._
-import scala.concurrent.{Promise, Future, ExecutionContext}
+import scala.concurrent.Promise
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import akka.actor._
 import scala.collection.immutable.Queue
 import redis.actors.ReplyErrorException
 import redis.protocol._
 import redis.protocol.MultiBulk
 import scala.Some
-import scala.util.{Failure, Success}
-import redis.api.transactions.{Watch, Exec, Multi}
+import scala.util.Failure
+import scala.util.Success
+import redis.api.transactions.Watch
+import redis.api.transactions.Exec
+import redis.api.transactions.Multi
 import akka.util.ByteString
 
 trait Transactions extends ActorRequest {
@@ -34,7 +39,7 @@ trait Transactions extends ActorRequest {
 
 case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionContext: ExecutionContext) extends BufferedRequest with RedisCommands {
 
-  //val operations = Queue.newBuilder[Operation[_, _]]
+  // val operations = Queue.newBuilder[Operation[_, _]]
   val watcher = Set.newBuilder[String]
 
   def unwatch(): Unit = {
@@ -46,9 +51,11 @@ case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionC
   }
 
   def discard(): Unit = {
-    operations.result().map(operation => {
-      operation.completeFailed(TransactionDiscardedException)
-    })
+    operations
+      .result()
+      .map(operation => {
+        operation.completeFailed(TransactionDiscardedException)
+      })
     operations.clear()
     unwatch()
   }
@@ -62,7 +69,9 @@ case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionC
   }
 }
 
-case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]], redisConnection: ActorRef)(implicit val executionContext: ExecutionContext) {
+case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]], redisConnection: ActorRef)(implicit
+  val executionContext: ExecutionContext
+) {
 
   def process(promise: Promise[MultiBulk]): Unit = {
     val multiOp = Operation(Multi, Promise[Boolean]())
@@ -111,18 +120,19 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]],
   }
 
   def dispatchExecReply(multiBulk: MultiBulk) = {
-    multiBulk.responses.map(replies => {
-      (replies, operations).zipped.map((reply, operation) => {
-        reply match {
-          case e: Error => operation.completeFailed(ReplyErrorException(e.toString()))
-          case _ => operation.tryCompleteSuccess(reply)
-        }
+    multiBulk.responses
+      .map(replies => {
+        (replies, operations).zipped.map((reply, operation) => {
+          reply match {
+            case e: Error => operation.completeFailed(ReplyErrorException(e.toString()))
+            case _ => operation.tryCompleteSuccess(reply)
+          }
+        })
       })
-    }).getOrElse({
-      operations.foreach(_.completeFailed(TransactionWatchException()))
-    })
+      .getOrElse {
+        operations.foreach(_.completeFailed(TransactionWatchException()))
+      }
   }
-
 
   def watchOperation(keys: Set[String]): Option[Operation[_, Boolean]] = {
     if (keys.nonEmpty) {
@@ -138,8 +148,3 @@ case class TransactionExecException(reply: RedisReply) extends Exception(s"Expec
 case object TransactionDiscardedException extends Exception
 
 case class TransactionWatchException(message: String = "One watched key has been modified, transaction has failed") extends Exception(message)
-
-
-
-
-

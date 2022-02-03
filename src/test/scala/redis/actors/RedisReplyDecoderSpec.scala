@@ -5,17 +5,20 @@ import org.specs2.mutable.SpecificationLike
 import akka.util.ByteString
 import redis.api.hashes.Hgetall
 import redis.protocol.MultiBulk
-import scala.concurrent.{Await, Promise}
+import scala.concurrent.Await
+import scala.concurrent.Promise
 import scala.collection.mutable
 import java.net.InetSocketAddress
 import com.typesafe.config.ConfigFactory
-import redis.{Redis, Operation}
+import redis.Redis
+import redis.Operation
 import redis.api.connection.Ping
 import akka.testkit._
 
 class RedisReplyDecoderSpec
-  extends TestKit(ActorSystem("testsystem", ConfigFactory.parseString( """akka.loggers = ["akka.testkit.TestEventListener"]""")))
-  with SpecificationLike with ImplicitSender {
+    extends TestKit(ActorSystem("testsystem", ConfigFactory.parseString("""akka.loggers = ["akka.testkit.TestEventListener"]""")))
+    with SpecificationLike
+    with ImplicitSender {
 
   import scala.concurrent.duration._
 
@@ -24,14 +27,13 @@ class RedisReplyDecoderSpec
   val timeout = 5.seconds dilated
 
   "RedisReplyDecoder" should {
-    "ok" in within(timeout){
+    "ok" in within(timeout) {
       val promise = Promise[String]()
       val operation = Operation(Ping, promise)
       val q = QueuePromises(mutable.Queue[Operation[_, _]]())
       q.queue.enqueue(operation)
 
-      val redisReplyDecoder = TestActorRef[RedisReplyDecoder](Props(classOf[RedisReplyDecoder])
-          .withDispatcher(Redis.dispatcher.name))
+      val redisReplyDecoder = TestActorRef[RedisReplyDecoder](Props(classOf[RedisReplyDecoder]).withDispatcher(Redis.dispatcher.name))
 
       redisReplyDecoder.underlyingActor.queuePromises must beEmpty
 
@@ -60,42 +62,47 @@ class RedisReplyDecoderSpec
       redisReplyDecoder.underlyingActor.queuePromises must beEmpty
     }
 
-    "can't decode" in within(timeout){
+    "can't decode" in within(timeout) {
       val probeMock = TestProbe()
 
-      val redisClientActor = TestActorRef[RedisClientActorMock2](
-        Props(classOf[RedisClientActorMock2], probeMock.ref).withDispatcher(Redis.dispatcher.name))
+      val redisClientActor =
+        TestActorRef[RedisClientActorMock2](Props(classOf[RedisClientActorMock2], probeMock.ref).withDispatcher(Redis.dispatcher.name))
       val promise = Promise[String]()
       redisClientActor ! Operation(Ping, promise)
-      awaitAssert({
-        redisClientActor.underlyingActor.queuePromises.length mustEqual 1
-        redisClientActor.underlyingActor.onWriteSent()
-        redisClientActor.underlyingActor.queuePromises must beEmpty
-      }, timeout)
+      awaitAssert(
+        {
+          redisClientActor.underlyingActor.queuePromises.length mustEqual 1
+          redisClientActor.underlyingActor.onWriteSent()
+          redisClientActor.underlyingActor.queuePromises must beEmpty
+        },
+        timeout
+      )
 
-      EventFilter[Exception](occurrences = 1, start = "Redis Protocol error: Got 110 as initial reply byte").intercept({
+      EventFilter[Exception](occurrences = 1, start = "Redis Protocol error: Got 110 as initial reply byte").intercept {
         redisClientActor.underlyingActor.onDataReceived(ByteString("not valid redis reply"))
-      })
+      }
       probeMock.expectMsg("restartConnection") mustEqual "restartConnection"
       Await.result(promise.future, timeout) must throwA(InvalidRedisReply)
 
-
       val promise2 = Promise[String]()
       redisClientActor ! Operation(Ping, promise2)
-      awaitAssert({
-        redisClientActor.underlyingActor.queuePromises.length mustEqual 1
-        redisClientActor.underlyingActor.onWriteSent()
-        redisClientActor.underlyingActor.queuePromises must beEmpty
-      }, timeout)
+      awaitAssert(
+        {
+          redisClientActor.underlyingActor.queuePromises.length mustEqual 1
+          redisClientActor.underlyingActor.onWriteSent()
+          redisClientActor.underlyingActor.queuePromises must beEmpty
+        },
+        timeout
+      )
 
-      EventFilter[Exception](occurrences = 1, start = "Redis Protocol error: Got 110 as initial reply byte").intercept({
+      EventFilter[Exception](occurrences = 1, start = "Redis Protocol error: Got 110 as initial reply byte").intercept {
         redisClientActor.underlyingActor.onDataReceived(ByteString("not valid redis reply"))
-      })
+      }
       probeMock.expectMsg("restartConnection") mustEqual "restartConnection"
       Await.result(promise2.future, timeout) must throwA(InvalidRedisReply)
     }
 
-    "redis reply in many chunks" in within(timeout){
+    "redis reply in many chunks" in within(timeout) {
       val promise1 = Promise[String]()
       val promise2 = Promise[String]()
       val promise3 = Promise[Map[String, String]]()
@@ -107,15 +114,17 @@ class RedisReplyDecoderSpec
       q.queue.enqueue(operation2)
       q.queue.enqueue(operation3)
 
-      val redisReplyDecoder = TestActorRef[RedisReplyDecoder](Props(classOf[RedisReplyDecoder])
-          .withDispatcher(Redis.dispatcher.name))
+      val redisReplyDecoder = TestActorRef[RedisReplyDecoder](Props(classOf[RedisReplyDecoder]).withDispatcher(Redis.dispatcher.name))
 
       redisReplyDecoder.underlyingActor.queuePromises must beEmpty
 
       redisReplyDecoder ! q
-      awaitAssert({
-        redisReplyDecoder.underlyingActor.queuePromises.size mustEqual 3
-      }, timeout)
+      awaitAssert(
+        {
+          redisReplyDecoder.underlyingActor.queuePromises.size mustEqual 3
+        },
+        timeout
+      )
 
       redisReplyDecoder ! ByteString("+P")
       awaitAssert(redisReplyDecoder.underlyingActor.partiallyDecoded.rest == ByteString("+P"))
@@ -163,7 +172,7 @@ class RedisReplyDecoderSpec
 }
 
 class RedisClientActorMock2(probeMock: ActorRef)
-  extends RedisClientActor(new InetSocketAddress("localhost", 6379), () => {Seq()}, (status:Boolean) => {()}, Redis.dispatcher.name) {
+    extends RedisClientActor(new InetSocketAddress("localhost", 6379), () => { Seq() }, (status: Boolean) => { () }, Redis.dispatcher.name) {
   override def preStart(): Unit = {
     // disable preStart of RedisWorkerIO
   }

@@ -3,9 +3,9 @@ package redis.api.geo
 /**
   * Created by avilevi on 08/12/2016.
   */
-object GeoOptions{
-  sealed trait WithOption{
-    def value:String = {
+object GeoOptions {
+  sealed trait WithOption {
+    def value: String = {
       this match {
         case WithDist => "WITHDIST"
         case WithCoord => "WITHCOORD"

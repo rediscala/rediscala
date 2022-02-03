@@ -4,7 +4,9 @@ import redis._
 import scala.concurrent.Await
 import akka.util.ByteString
 import redis.actors.ReplyErrorException
-import redis.protocol.{Bulk, Status, MultiBulk}
+import redis.protocol.Bulk
+import redis.protocol.Status
+import redis.protocol.MultiBulk
 
 class TransactionsSpec extends RedisStandaloneServer {
 

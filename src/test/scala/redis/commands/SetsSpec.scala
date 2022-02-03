@@ -75,7 +75,6 @@ class SetsSpec extends RedisStandaloneServer {
       Await.result(r, timeOut)
     }
 
-
     "SINTERSTORE" in {
       val r = for {
         _ <- redis.del("sinterstoreKey1")
@@ -180,7 +179,7 @@ class SetsSpec extends RedisStandaloneServer {
 
     "SSCAN" in {
       val r = for {
-        _ <- redis.sadd("sscan", (1 to 20).map(_.toString):_*)
+        _ <- redis.sadd("sscan", (1 to 20).map(_.toString): _*)
         scanResult <- redis.sscan[String]("sscan", count = Some(100))
       } yield {
         scanResult.index mustEqual 0
@@ -202,7 +201,6 @@ class SetsSpec extends RedisStandaloneServer {
       }
       Await.result(r, timeOut)
     }
-
 
     "SUNIONSTORE" in {
       val r = for {

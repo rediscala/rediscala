@@ -73,11 +73,14 @@ trait Strings extends Request {
   def psetex[V: ByteStringSerializer](key: String, milliseconds: Long, value: V): Future[Boolean] =
     send(Psetex(key, milliseconds, value))
 
-  def set[V: ByteStringSerializer](key: String, value: V,
-                                   exSeconds: Option[Long] = None,
-                                   pxMilliseconds: Option[Long] = None,
-                                   NX: Boolean = false,
-                                   XX: Boolean = false): Future[Boolean] = {
+  def set[V: ByteStringSerializer](
+    key: String,
+    value: V,
+    exSeconds: Option[Long] = None,
+    pxMilliseconds: Option[Long] = None,
+    NX: Boolean = false,
+    XX: Boolean = false
+  ): Future[Boolean] = {
     send(Set(key, value, exSeconds, pxMilliseconds, NX, XX))
   }
 
@@ -97,6 +100,3 @@ trait Strings extends Request {
     send(Strlen(key))
 
 }
-
-
-

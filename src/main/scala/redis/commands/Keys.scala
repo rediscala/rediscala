@@ -3,7 +3,8 @@ package redis.commands
 import redis._
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import redis.api.{Order, LimitOffsetCount}
+import redis.api.Order
+import redis.api.LimitOffsetCount
 import redis.api.keys._
 
 trait Keys extends Request {
@@ -29,11 +30,29 @@ trait Keys extends Request {
   def keys(pattern: String): Future[Seq[String]] =
     send(Keys(pattern))
 
-  def migrate(host: String, port: Int, key: String, destinationDB: Int, timeout: FiniteDuration, copy: Boolean = false, replace: Boolean = false, password: Option[String] = None): Future[Boolean] = {
+  def migrate(
+    host: String,
+    port: Int,
+    key: String,
+    destinationDB: Int,
+    timeout: FiniteDuration,
+    copy: Boolean = false,
+    replace: Boolean = false,
+    password: Option[String] = None
+  ): Future[Boolean] = {
     send(Migrate(host, port, Seq(key), destinationDB, timeout, copy, replace, password))
   }
 
-  def migrateMany(host: String, port: Int, keys: Seq[String], destinationDB: Int, timeout: FiniteDuration, copy: Boolean = false, replace: Boolean = false, password: Option[String] = None): Future[Boolean] = {
+  def migrateMany(
+    host: String,
+    port: Int,
+    keys: Seq[String],
+    destinationDB: Int,
+    timeout: FiniteDuration,
+    copy: Boolean = false,
+    replace: Boolean = false,
+    password: Option[String] = None
+  ): Future[Boolean] = {
     send(Migrate(host, port, keys, destinationDB, timeout, copy, replace, password))
   }
 
@@ -73,22 +92,26 @@ trait Keys extends Request {
   def restore[V: ByteStringSerializer](key: String, ttl: Long = 0, serializedValue: V): Future[Boolean] =
     send(Restore(key, ttl, serializedValue))
 
-  def sort[R: ByteStringDeserializer](key: String,
-                                    byPattern: Option[String] = None,
-                                    limit: Option[LimitOffsetCount] = None,
-                                    getPatterns: Seq[String] = Seq(),
-                                    order: Option[Order] = None,
-                                    alpha: Boolean = false): Future[Seq[R]] = {
+  def sort[R: ByteStringDeserializer](
+    key: String,
+    byPattern: Option[String] = None,
+    limit: Option[LimitOffsetCount] = None,
+    getPatterns: Seq[String] = Seq(),
+    order: Option[Order] = None,
+    alpha: Boolean = false
+  ): Future[Seq[R]] = {
     send(Sort(key, byPattern, limit, getPatterns, order, alpha))
   }
 
-  def sortStore(key: String,
-                                                                   byPattern: Option[String] = None,
-                                                                   limit: Option[LimitOffsetCount] = None,
-                                                                   getPatterns: Seq[String] = Seq(),
-                                                                   order: Option[Order] = None,
-                                                                   alpha: Boolean = false,
-                                                                   store: String): Future[Long] = {
+  def sortStore(
+    key: String,
+    byPattern: Option[String] = None,
+    limit: Option[LimitOffsetCount] = None,
+    getPatterns: Seq[String] = Seq(),
+    order: Option[Order] = None,
+    alpha: Boolean = false,
+    store: String
+  ): Future[Long] = {
     send(SortStore(key, byPattern, limit, getPatterns, order, alpha, store))
   }
 

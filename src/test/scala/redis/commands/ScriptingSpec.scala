@@ -1,13 +1,12 @@
 package redis.commands
 
 import java.io.File
-
 import redis._
-
 import scala.concurrent.Await
 import akka.util.ByteString
 import org.specs2.concurrent.ExecutionEnv
-import redis.protocol.{Bulk, MultiBulk}
+import redis.protocol.Bulk
+import redis.protocol.MultiBulk
 import redis.actors.ReplyErrorException
 import redis.api.scripting.RedisScript
 
@@ -32,9 +31,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
 
     "EVAL with type conversion" in {
       val dumbObject = new DumbClass("foo", "bar")
-      val r = redis.set("dumbKey", dumbObject).flatMap(_ => {
-        redis.eval[DumbClass](redisScriptConversionObject.script)
-      })
+      val r = redis
+        .set("dumbKey", dumbObject)
+        .flatMap(_ => {
+          redis.eval[DumbClass](redisScriptConversionObject.script)
+        })
 
       Await.result(r, timeOut) mustEqual dumbObject
     }
@@ -45,9 +46,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
 
     "EVALSHA with type conversion" in {
       val dumbObject = new DumbClass("foo2", "bar2")
-      val r = redis.set("dumbKey", dumbObject).flatMap(_ => {
-        redis.evalsha[DumbClass](redisScriptConversionObject.sha1)
-      })
+      val r = redis
+        .set("dumbKey", dumbObject)
+        .flatMap(_ => {
+          redis.evalsha[DumbClass](redisScriptConversionObject.sha1)
+        })
 
       Await.result(r, timeOut) mustEqual dumbObject
     }
@@ -56,9 +59,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
       Await.result(redis.scriptFlush(), timeOut) must beTrue
       val dumbObject = new DumbClass("foo3", "bar3")
 
-      val r = redis.set("dumbKey", dumbObject).flatMap(_ => {
-        redis.evalshaOrEval[DumbClass](redisScriptConversionObject)
-      })
+      val r = redis
+        .set("dumbKey", dumbObject)
+        .flatMap(_ => {
+          redis.evalshaOrEval[DumbClass](redisScriptConversionObject)
+        })
 
       Await.result(r, timeOut) mustEqual dumbObject
     }
@@ -75,8 +80,7 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
         Await.result(redisKiller.scriptKill(), timeOut) must throwA(ReplyErrorException("NOTBUSY No scripts in execution right now."))
 
         // infinite script (5 seconds)
-        val infiniteScript = redisScriptLauncher.eval(
-          """
+        val infiniteScript = redisScriptLauncher.eval("""
             |local i = 1
             |while(i > 0) do
             |end
@@ -85,7 +89,10 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
         Thread.sleep(1000)
         redisKiller.scriptKill() must beTrue.await(retries = 3, timeOut)
         Await.result(infiniteScript, timeOut) must throwA(
-          ReplyErrorException("ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL... "))
+          ReplyErrorException(
+            "ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL... "
+          )
+        )
       })
     }
 
@@ -96,9 +103,7 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
     "SCRIPT EXISTS" in {
       val redisScriptNotFound = RedisScript("return 'SCRIPT EXISTS not found'")
       val redisScriptFound = RedisScript("return 'SCRIPT EXISTS found'")
-      val scriptsLoaded = redis.scriptLoad(redisScriptFound.script).flatMap(_ =>
-        redis.scriptExists(redisScriptFound.sha1, redisScriptNotFound.sha1)
-      )
+      val scriptsLoaded = redis.scriptLoad(redisScriptFound.script).flatMap(_ => redis.scriptExists(redisScriptFound.sha1, redisScriptNotFound.sha1))
       Await.result(scriptsLoaded, timeOut) mustEqual Seq(true, false)
 
     }

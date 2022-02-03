@@ -4,14 +4,14 @@ import redis._
 import akka.util.ByteString
 import redis.protocol.MultiBulk
 
-case class SenMasters() extends RedisCommandMultiBulk[Seq[Map[String,String]]] {
+case class SenMasters() extends RedisCommandMultiBulk[Seq[Map[String, String]]] {
   val isMasterOnly = true
   val encodedRequest: ByteString = encode("SENTINEL MASTERS")
 
   def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqMapString(mb)
 }
 
-case class SenSlaves(master: String) extends RedisCommandMultiBulk[Seq[Map[String,String]]] {
+case class SenSlaves(master: String) extends RedisCommandMultiBulk[Seq[Map[String, String]]] {
   val isMasterOnly = true
   val encodedRequest: ByteString = encode(s"SENTINEL SLAVES $master")
 

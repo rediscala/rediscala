@@ -1,6 +1,9 @@
 package redis.commands
 
-import redis.{Cursor, ByteStringDeserializer, ByteStringSerializer, Request}
+import redis.Cursor
+import redis.ByteStringDeserializer
+import redis.ByteStringSerializer
+import redis.Request
 import scala.concurrent.Future
 import redis.api.hashes._
 
@@ -45,7 +48,12 @@ trait Hashes extends Request {
   def hvals[R: ByteStringDeserializer](key: String): Future[Seq[R]] =
     send(Hvals(key))
 
-  def hscan[R: ByteStringDeserializer](key: String, cursor: Int = 0, count: Option[Int] = None, matchGlob: Option[String] = None): Future[Cursor[Map[String, R]]] =
+  def hscan[R: ByteStringDeserializer](
+    key: String,
+    cursor: Int = 0,
+    count: Option[Int] = None,
+    matchGlob: Option[String] = None
+  ): Future[Cursor[Map[String, R]]] =
     send(HScan(key, cursor, count, matchGlob))
 
 }

@@ -39,13 +39,13 @@ class ParseNumberSpec extends Specification {
     }
 
     "limit min" in {
-      val l1 : Long = Integer.MIN_VALUE
+      val l1: Long = Integer.MIN_VALUE
       val l = l1 - 1
       ParseNumber.parseInt(ByteString(l.toString)) must throwA[NumberFormatException]
     }
 
     "limit max" in {
-      val l1 : Long = Integer.MAX_VALUE
+      val l1: Long = Integer.MAX_VALUE
       val l = l1 + 1
       ParseNumber.parseInt(ByteString(l.toString)) must throwA[NumberFormatException]
     }

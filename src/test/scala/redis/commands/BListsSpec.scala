@@ -10,7 +10,7 @@ class BListsSpec extends RedisStandaloneServer {
   "Blocking Lists commands" should {
     "BLPOP" in {
       "already containing elements" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val r = for {
           _ <- redis.del("blpop1", "blpop2")
           p <- redis.rpush("blpop1", "a", "b", "c")
@@ -24,14 +24,16 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("blpopBlock").flatMap(_ => {
-            val blpop = redisB.blpop(Seq("blpopBlock"))
-            Thread.sleep(1000)
-            redis.rpush("blpopBlock", "a", "b", "c")
-            blpop
-          })
+          val r = redis
+            .del("blpopBlock")
+            .flatMap(_ => {
+              val blpop = redisB.blpop(Seq("blpopBlock"))
+              Thread.sleep(1000)
+              redis.rpush("blpopBlock", "a", "b", "c")
+              blpop
+            })
           Await.result(r, timeOut) mustEqual Some("blpopBlock" -> ByteString("a"))
         }
         redisB.stop()
@@ -39,11 +41,13 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking timeout" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("blpopBlockTimeout").flatMap(_ => {
-            redisB.brpop(Seq("blpopBlockTimeout"), 1.seconds)
-          })
+          val r = redis
+            .del("blpopBlockTimeout")
+            .flatMap(_ => {
+              redisB.brpop(Seq("blpopBlockTimeout"), 1.seconds)
+            })
           Await.result(r, timeOut) must beNone
         }
         redisB.stop()
@@ -53,7 +57,7 @@ class BListsSpec extends RedisStandaloneServer {
 
     "BRPOP" in {
       "already containing elements" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val r = for {
           _ <- redis.del("brpop1", "brpop2")
           p <- redis.rpush("brpop1", "a", "b", "c")
@@ -66,14 +70,16 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("brpopBlock").flatMap(_ => {
-            val brpop = redisB.brpop(Seq("brpopBlock"))
-            Thread.sleep(1000)
-            redis.rpush("brpopBlock", "a", "b", "c")
-            brpop
-          })
+          val r = redis
+            .del("brpopBlock")
+            .flatMap(_ => {
+              val brpop = redisB.brpop(Seq("brpopBlock"))
+              Thread.sleep(1000)
+              redis.rpush("brpopBlock", "a", "b", "c")
+              brpop
+            })
           Await.result(r, timeOut) mustEqual Some("brpopBlock" -> ByteString("c"))
         }
         redisB.stop()
@@ -81,11 +87,13 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking timeout" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("brpopBlockTimeout").flatMap(_ => {
-            redisB.brpop(Seq("brpopBlockTimeout"), 1.seconds)
-          })
+          val r = redis
+            .del("brpopBlockTimeout")
+            .flatMap(_ => {
+              redisB.brpop(Seq("brpopBlockTimeout"), 1.seconds)
+            })
           Await.result(r, timeOut) must beNone
         }
         redisB.stop()
@@ -95,7 +103,7 @@ class BListsSpec extends RedisStandaloneServer {
 
     "BRPOPLPUSH" in {
       "already containing elements" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val r = for {
           _ <- redis.del("brpopplush1", "brpopplush2")
           p <- redis.rpush("brpopplush1", "a", "b", "c")
@@ -109,14 +117,16 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("brpopplushBlock1", "brpopplushBlock2").flatMap(_ => {
-            val brpopplush = redisB.brpoplpush("brpopplushBlock1", "brpopplushBlock2")
-            Thread.sleep(1000)
-            redis.rpush("brpopplushBlock1", "a", "b", "c")
-            brpopplush
-          })
+          val r = redis
+            .del("brpopplushBlock1", "brpopplushBlock2")
+            .flatMap(_ => {
+              val brpopplush = redisB.brpoplpush("brpopplushBlock1", "brpopplushBlock2")
+              Thread.sleep(1000)
+              redis.rpush("brpopplushBlock1", "a", "b", "c")
+              brpopplush
+            })
           Await.result(r, timeOut) mustEqual Some(ByteString("c"))
         }
         redisB.stop()
@@ -124,11 +134,13 @@ class BListsSpec extends RedisStandaloneServer {
       }
 
       "blocking timeout" in {
-        val redisB = RedisBlockingClient(port=port)
+        val redisB = RedisBlockingClient(port = port)
         val rr = within(1.seconds, 10.seconds) {
-          val r = redis.del("brpopplushBlockTimeout1", "brpopplushBlockTimeout2").flatMap(_ => {
-            redisB.brpoplpush("brpopplushBlockTimeout1", "brpopplushBlockTimeout2", 1.seconds)
-          })
+          val r = redis
+            .del("brpopplushBlockTimeout1", "brpopplushBlockTimeout2")
+            .flatMap(_ => {
+              redisB.brpoplpush("brpopplushBlockTimeout1", "brpopplushBlockTimeout2", 1.seconds)
+            })
           Await.result(r, timeOut) must beNone
         }
         redisB.stop()

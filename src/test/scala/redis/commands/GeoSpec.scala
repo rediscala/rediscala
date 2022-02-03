@@ -4,7 +4,7 @@ import redis._
 import redis.api.geo.DistUnits._
 import scala.concurrent.Await
 
-class GeoSpec extends RedisStandaloneServer  {
+class GeoSpec extends RedisStandaloneServer {
   import concurrent.duration._
 
   val testKey = "Sicily"
@@ -19,20 +19,20 @@ class GeoSpec extends RedisStandaloneServer  {
   "Geo commands " should {
 
     "GEOADD add key member" in {
-      val res =  Await.result(redis.geoAdd(testKey, 23.361389, 48.115556, "SomePlace"), 2 second)
+      val res = Await.result(redis.geoAdd(testKey, 23.361389, 48.115556, "SomePlace"), 2 second)
       res shouldEqual 1
     }
 
     "GEORADIUS By Member" in {
       addPlaces()
-      val res = Await.result(redis.geoRadius(testKey,15 , 37, 200, Kilometer), 2 second)
-      res shouldEqual Vector("Agrigento","Catania")
+      val res = Await.result(redis.geoRadius(testKey, 15, 37, 200, Kilometer), 2 second)
+      res shouldEqual Vector("Agrigento", "Catania")
     }
 
     "GEORADIUS By Member" in {
       addPlaces()
       val res = Await.result(redis.geoRadiusByMember(testKey, "Catania", 500, Kilometer), 2 second)
-      res shouldEqual Vector("Agrigento" ,"Palermo","Catania")
+      res shouldEqual Vector("Agrigento", "Palermo", "Catania")
     }
 
     "GEORADIUS By Member with opt" in {

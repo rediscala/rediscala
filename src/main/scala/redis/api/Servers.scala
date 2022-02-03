@@ -2,7 +2,8 @@ package redis.api.servers
 
 import redis._
 import akka.util.ByteString
-import redis.protocol.{MultiBulk, Bulk}
+import redis.protocol.MultiBulk
+import redis.protocol.Bulk
 import redis.api.ShutdownModifier
 
 case object Bgrewriteaof extends RedisCommandStatusString {
@@ -24,17 +25,25 @@ case object ClientList extends RedisCommandBulk[Seq[Map[String, String]]] {
   val isMasterOnly: Boolean = true
   val encodedRequest: ByteString = encode("CLIENT", Seq(ByteString("LIST")))
 
-  def decodeReply(r: Bulk): Seq[Map[String, String]] = r.asOptByteString.map(bs => {
-    val s = bs.utf8String
-    val r = s.split('\n').map(line => {
-      line.split(' ').map(kv => {
-        val keyValue = kv.split('=')
-        val value = if (keyValue.length > 1) keyValue(1) else ""
-        (keyValue(0), value)
-      }).toMap
-    }).toSeq
-    r
-  }).getOrElse(Seq.empty)
+  def decodeReply(r: Bulk): Seq[Map[String, String]] = r.asOptByteString
+    .map(bs => {
+      val s = bs.utf8String
+      val r = s
+        .split('\n')
+        .map(line => {
+          line
+            .split(' ')
+            .map(kv => {
+              val keyValue = kv.split('=')
+              val value = if (keyValue.length > 1) keyValue(1) else ""
+              (keyValue(0), value)
+            })
+            .toMap
+        })
+        .toSeq
+      r
+    })
+    .getOrElse(Seq.empty)
 }
 
 case object ClientGetname extends RedisCommandBulkOptionByteString[String] {
@@ -42,7 +51,6 @@ case object ClientGetname extends RedisCommandBulkOptionByteString[String] {
   val encodedRequest: ByteString = encode("CLIENT", Seq(ByteString("GETNAME")))
   val deserializer: ByteStringDeserializer[String] = ByteStringDeserializer.String
 }
-
 
 case class ClientSetname(connectionName: String) extends RedisCommandStatusBoolean {
   val isMasterOnly: Boolean = true
@@ -128,9 +136,11 @@ case object Time extends RedisCommandMultiBulk[(Long, Long)] {
   val encodedRequest: ByteString = encode("TIME")
 
   def decodeReply(mb: MultiBulk): (Long, Long) = {
-    mb.responses.map(r => {
-      (r.head.toByteString.utf8String.toLong, r.tail.head.toByteString.utf8String.toLong)
-    }).get
+    mb.responses
+      .map(r => {
+        (r.head.toByteString.utf8String.toLong, r.tail.head.toByteString.utf8String.toLong)
+      })
+      .get
   }
 }
 

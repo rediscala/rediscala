@@ -63,17 +63,20 @@ class ParseParse extends Specification {
       val result = r3.run(multibulkStringEnd ++ nextBS)
       result.isFullyDecoded should beTrue
 
-      val multibulk = Some(Vector(Bulk(Some(ByteString("foo"))), Bulk(Some(ByteString("bar"))), Bulk(Some(ByteString("Hello"))), Bulk(Some(ByteString("World")))))
+      val multibulk =
+        Some(Vector(Bulk(Some(ByteString("foo"))), Bulk(Some(ByteString("bar"))), Bulk(Some(ByteString("Hello"))), Bulk(Some(ByteString("World")))))
       result shouldEqual FullyDecoded(MultiBulk(multibulk), nextBS)
-
 
       val bs = ByteString("*4\r\n$3\r\none\r\n$1\r\n2\r\n$3\r\ntwo\r\n$1\r\n4\r\n*2\r\n$3\r\ntwo\r\n$5\r\nthree")
       val nextBS2 = ByteString("*2\r\n$3\r\ntwo\r\n$5\r\nthree")
 
       val r10 = RedisProtocolReply.decodeReplyMultiBulk(bs)
-      r10 shouldEqual FullyDecoded(MultiBulk(Some(
-        Vector(Bulk(Some(ByteString("one"))), Bulk(Some(ByteString("2"))),
-          Bulk(Some(ByteString("two"))), Bulk(Some(ByteString("4")))))), nextBS2)
+      r10 shouldEqual FullyDecoded(
+        MultiBulk(
+          Some(Vector(Bulk(Some(ByteString("one"))), Bulk(Some(ByteString("2"))), Bulk(Some(ByteString("two"))), Bulk(Some(ByteString("4")))))
+        ),
+        nextBS2
+      )
     }
   }
 }

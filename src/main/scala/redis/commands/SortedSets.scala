@@ -2,8 +2,10 @@ package redis.commands
 
 import redis.api._
 import redis.api.sortedsets._
-import redis.{ByteStringDeserializer, ByteStringSerializer, Cursor, Request}
-
+import redis.ByteStringDeserializer
+import redis.ByteStringSerializer
+import redis.Cursor
+import redis.Request
 import scala.concurrent.Future
 
 trait SortedSets extends Request {
@@ -23,8 +25,7 @@ trait SortedSets extends Request {
   def zincrby[V: ByteStringSerializer](key: String, increment: Double, member: V): Future[Double] =
     send(Zincrby(key, increment, member))
 
-  def zinterstore
-  (destination: String, key: String, keys: Seq[String], aggregate: Aggregate = SUM): Future[Long] =
+  def zinterstore(destination: String, key: String, keys: Seq[String], aggregate: Aggregate = SUM): Future[Long] =
     send(Zinterstore(destination, key, keys, aggregate))
 
   def zinterstoreWeighted(destination: String, keys: Map[String, Double], aggregate: Aggregate = SUM): Future[Long] =
@@ -39,7 +40,12 @@ trait SortedSets extends Request {
   def zrangebyscore[R: ByteStringDeserializer](key: String, min: Limit, max: Limit, limit: Option[(Long, Long)] = None): Future[Seq[R]] =
     send(Zrangebyscore(key, min, max, limit))
 
-  def zrangebyscoreWithscores[R: ByteStringDeserializer](key: String, min: Limit, max: Limit, limit: Option[(Long, Long)] = None): Future[Seq[(R, Double)]] =
+  def zrangebyscoreWithscores[R: ByteStringDeserializer](
+    key: String,
+    min: Limit,
+    max: Limit,
+    limit: Option[(Long, Long)] = None
+  ): Future[Seq[(R, Double)]] =
     send(ZrangebyscoreWithscores(key, min, max, limit))
 
   def zrank[V: ByteStringSerializer](key: String, member: V): Future[Option[Long]] =
@@ -66,7 +72,12 @@ trait SortedSets extends Request {
   def zrevrangebyscore[R: ByteStringDeserializer](key: String, min: Limit, max: Limit, limit: Option[(Long, Long)] = None): Future[Seq[R]] =
     send(Zrevrangebyscore(key, min, max, limit))
 
-  def zrevrangebyscoreWithscores[R: ByteStringDeserializer](key: String, min: Limit, max: Limit, limit: Option[(Long, Long)] = None): Future[Seq[(R, Double)]] =
+  def zrevrangebyscoreWithscores[R: ByteStringDeserializer](
+    key: String,
+    min: Limit,
+    max: Limit,
+    limit: Option[(Long, Long)] = None
+  ): Future[Seq[(R, Double)]] =
     send(ZrevrangebyscoreWithscores(key, min, max, limit))
 
   def zrevrank[V: ByteStringSerializer](key: String, member: V): Future[Option[Long]] =
@@ -75,22 +86,34 @@ trait SortedSets extends Request {
   def zscore[V: ByteStringSerializer](key: String, member: V): Future[Option[Double]] =
     send(Zscore(key, member))
 
-  def zunionstore
-  (destination: String, key: String, keys: Seq[String], aggregate: Aggregate = SUM): Future[Long] =
+  def zunionstore(destination: String, key: String, keys: Seq[String], aggregate: Aggregate = SUM): Future[Long] =
     send(Zunionstore(destination, key, keys, aggregate))
 
-  def zunionstoreWeighted
-  (destination: String, keys: Map[String, Double], aggregate: Aggregate = SUM): Future[Long] =
+  def zunionstoreWeighted(destination: String, keys: Map[String, Double], aggregate: Aggregate = SUM): Future[Long] =
     send(ZunionstoreWeighted(destination, keys, aggregate))
 
-  def zrangebylex[R: ByteStringDeserializer](key: String, min: Option[String], max: Option[String], limit: Option[(Long, Long)] = None): Future[Seq[R]] =
+  def zrangebylex[R: ByteStringDeserializer](
+    key: String,
+    min: Option[String],
+    max: Option[String],
+    limit: Option[(Long, Long)] = None
+  ): Future[Seq[R]] =
     send(Zrangebylex(key, min.getOrElse("-"), max.getOrElse("+"), limit))
 
-  def zrevrangebylex[R: ByteStringDeserializer](key: String, max: Option[String], min: Option[String], limit: Option[(Long, Long)] = None): Future[Seq[R]] =
+  def zrevrangebylex[R: ByteStringDeserializer](
+    key: String,
+    max: Option[String],
+    min: Option[String],
+    limit: Option[(Long, Long)] = None
+  ): Future[Seq[R]] =
     send(Zrevrangebylex(key, max.getOrElse("+"), max.getOrElse("-"), limit))
 
-  def zscan[R: ByteStringDeserializer](key: String, cursor: Int = 0, count: Option[Int] = None, matchGlob: Option[String] = None): Future[Cursor[Seq[(Double, R)]]] =
+  def zscan[R: ByteStringDeserializer](
+    key: String,
+    cursor: Int = 0,
+    count: Option[Int] = None,
+    matchGlob: Option[String] = None
+  ): Future[Cursor[Seq[(Double, R)]]] =
     send(Zscan(key, cursor, count, matchGlob))
 
 }
-

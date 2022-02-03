@@ -1,6 +1,7 @@
 package redis.commands
 
-import redis.{ByteStringSerializer, Request}
+import redis.ByteStringSerializer
+import redis.Request
 import scala.concurrent.Future
 import redis.api.publish.{Publish => PublishCommand}
 
