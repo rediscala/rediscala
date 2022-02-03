@@ -104,7 +104,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
 
       redisWorkerIO ! "PING 2"
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result mustEqual ByteString("PING 2"))
+      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result() mustEqual ByteString("PING 2"))
       // ConnectionClosed
       probeTcpWorker.send(redisWorkerIO, ErrorClosed("test"))
       probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
@@ -245,7 +245,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
 
       redisWorkerIO ! "PING1"
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result mustEqual ByteString("PING1"))
+      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result() mustEqual ByteString("PING1"))
 
       // ConnectionClosed
       probeTcpWorker.send(redisWorkerIO, ErrorClosed("test"))
