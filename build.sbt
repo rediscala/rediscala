@@ -104,8 +104,10 @@ lazy val standardSettings = Def.settings(
   },
   autoAPIMappings := true,
   Compile / doc / scalacOptions ++= {
-    val v = (LocalProject("rediscala") / version).value
-    val branch = if (v.trim.endsWith("SNAPSHOT")) "main" else v
+    val branch = {
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      else version.value
+    }
     Seq[String](
       "-doc-source-url",
       baseSourceUrl + branch + "€{FILE_PATH}.scala"
