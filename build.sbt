@@ -6,7 +6,7 @@ val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
 
 val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.8.0"
+val specs2 = "org.specs2" %% "specs2-core" % "4.8.3"
 
 val stm = "org.scala-stm" %% "scala-stm" % "0.9.1"
 
