@@ -1,4 +1,3 @@
-import com.typesafe.sbt.SbtGit.{GitKeys => git}
 import sbt.Tests.{InProcess, Group}
 
 val akkaVersion = "2.5.25"
@@ -54,7 +53,6 @@ lazy val standardSettings = Def.settings(
     ),
   publishTo := sonatypePublishTo.value,
   publishMavenStyle := true,
-  git.gitRemoteRepo := "git@github.com:etaty/rediscala.git",
 
   scalacOptions ++= Seq(
     "-encoding", "UTF-8",
@@ -78,35 +76,6 @@ lazy val standardSettings = Def.settings(
       "-doc-source-url", baseSourceUrl + branch +"€{FILE_PATH}.scala"
     )
   },
-  siteMappings ++= {
-    for((f, d) <- (mappings in packageDoc in Compile).value) yield (f, (version in LocalProject("rediscala")).value + "/api/" + d)
-  },
-  ghpagesCleanSite := {
-    val dir = ghpagesUpdatedRepository.value
-    val v = (version in LocalProject("rediscala")).value
-    val toClean = IO.listFiles(dir).filter{ f =>
-      val p = f.getName
-      p.startsWith("latest") || p.startsWith(v)
-    }.map(_.getAbsolutePath).toList
-    val log = streams.value.log
-    val gitRunner = git.gitRunner.value
-    if(toClean.nonEmpty)
-      gitRunner.apply(("rm" :: "-r" :: "-f" :: "--ignore-unmatch" :: toClean) :_*)(dir, log)
-    ()
-  },
-  ghpagesSynchLocal := {
-    val clean = ghpagesCleanSite.value
-    val repo = ghpagesUpdatedRepository.value
-    // TODO - an sbt.Synch with cache of previous mappings to make this more efficient. */
-    val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, repo / target) }
-    // First, remove 'stale' files.
-    //cleanSite.
-    // Now copy files.
-    IO.copy(betterMappings)
-    if(ghpagesNoJekyll.value) IO.touch(repo / ".nojekyll")
-    repo
-  },
-  siteSubdirName in SiteScaladoc := "latest/api"
 )
 
 lazy val BenchTest = config("bench") extend Test
@@ -127,8 +96,6 @@ lazy val root = Project(id = "rediscala",
   libraryDependencies ++= rediscalaDependencies
 ).configs(
   BenchTest
-).enablePlugins(
-  SiteScaladocPlugin, GhpagesPlugin
 )
 
 lazy val benchmark = {
