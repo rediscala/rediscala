@@ -75,9 +75,9 @@ object Main {
 
 ### Basic Example
 
-https://github.com/etaty/rediscala-demo
+https://github.com/rediscala/rediscala-demo
 
-You can fork with : `git clone git@github.com:etaty/rediscala-demo.git` then run it, with `sbt run`
+You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
 
 ### Redis Commands
@@ -112,9 +112,9 @@ All commands are supported :
     })
   })
 ```
-Full example: [ExampleRediscalaBlocking](https://github.com/etaty/rediscala-demo/blob/master/src/main/scala/ExampleRediscalaBlocking.scala)
+Full example: [ExampleRediscalaBlocking](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExampleRediscalaBlocking.scala)
 
-You can fork with: `git clone git@github.com:etaty/rediscala-demo.git` then run it, with `sbt run`
+You can fork with: `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
 
 ### Transactions
@@ -133,11 +133,11 @@ By doing that we can use a normal connection with pipelining, and avoiding to tr
   redisTransaction.exec()
 ```
 
-Full example: [ExampleTransaction](https://github.com/etaty/rediscala-demo/blob/master/src/main/scala/ExampleTransaction.scala)
+Full example: [ExampleTransaction](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExampleTransaction.scala)
 
-You can fork with : `git clone git@github.com:etaty/rediscala-demo.git` then run it, with `sbt run`
+You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
-[TransactionsSpec](https://github.com/etaty/rediscala/blob/master/src/test/scala/redis/commands/TransactionsSpec.scala) will reveal even more gems of the API.
+[TransactionsSpec](https://github.com/etaty/rediscala/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/test/scala/redis/commands/TransactionsSpec.scala) will reveal even more gems of the API.
 
 ### Pub/Sub
 
@@ -177,9 +177,9 @@ class SubscribeActor(channels: Seq[String] = Nil, patterns: Seq[String] = Nil) e
 }
 ```
 
-Full example: [ExamplePubSub](https://github.com/etaty/rediscala-demo/blob/master/src/main/scala/ExamplePubSub.scala)
+Full example: [ExamplePubSub](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExamplePubSub.scala)
 
-You can fork with : `git clone git@github.com:etaty/rediscala-demo.git` then run it, with `sbt run`
+You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
 [RedisPubSubSpec](https://github.com/etaty/rediscala/blob/master/src/test/scala/redis/RedisPubSubSpec.scala) will reveal even more gems of the API.
 
@@ -199,7 +199,7 @@ You can use it with `evalshaOrEval` which run your script even if it wasn't alre
   Await.result(r, 5 seconds)
 ```
 
-Full example: [ExampleScripting](https://github.com/etaty/rediscala-demo/blob/master/src/main/scala/ExampleScripting.scala)
+Full example: [ExampleScripting](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExampleScripting.scala)
 
 ### Redis Sentinel
 
@@ -264,7 +264,7 @@ object DumbClass {
   }
 ```
 
-Full example: [ExampleByteStringFormatter](https://github.com/etaty/rediscala-demo/blob/master/src/main/scala/ExampleByteStringFormatter.scala)
+Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExampleByteStringFormatter.scala)
 
 ### Scaladoc
 
