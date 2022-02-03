@@ -14,6 +14,14 @@ A worker actor handles I/O operations (I/O bounds), another handles decoding of 
 
 If you use SBT, you just have to edit `build.sbt` and add the following:
 
+If you use SBT, you just have to edit `build.sbt` and add the following:
+
+```scala
+libraryDependencies += "io.github.rediscala" %% "rediscala" % "<version>"
+```
+
+<details><summary>old versions</summary>
+
 From version 1.9.0: 
  * use akka 2.5.23
  * released for scala
@@ -37,6 +45,8 @@ From version 1.3.1:
 ```scala
 libraryDependencies += "com.github.etaty" %% "rediscala" % "1.7.0"
 ```
+
+</details>
 
 ### Connect to the database
 
