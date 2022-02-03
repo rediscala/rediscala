@@ -110,7 +110,7 @@ class KeysSpec extends RedisStandaloneServer {
         val key = "migrateKey-" + System.currentTimeMillis()
         val r = for {
           _ <- redis.set(key, "value")
-          m <- redis.migrate("localhost", port, key, 0, 10 seconds)
+          m <- redis.migrate("localhost", port, key, 0, 10.seconds)
           getSource <- redis.get(key)
           getTarget <- redisMigrate.get(key)
         } yield {
@@ -130,7 +130,7 @@ class KeysSpec extends RedisStandaloneServer {
         val key = "migrateCopyKey-" + System.currentTimeMillis()
         val r = for {
           _ <- redis.set(key, "value")
-          m <- redis.migrate("localhost", port, key, 0, 10 seconds, copy = true)
+          m <- redis.migrate("localhost", port, key, 0, 10.seconds, copy = true)
           getSource <- redis.get(key)
           getTarget <- redisMigrate.get(key)
         } yield {
@@ -152,7 +152,7 @@ class KeysSpec extends RedisStandaloneServer {
         val r = for {
           _ <- redis.set(key1, "value")
           _ <- redis.set(key2, "value")
-          m <- redis.migrateMany("localhost", port, Seq(key1, key2), 0, 10 seconds)
+          m <- redis.migrateMany("localhost", port, Seq(key1, key2), 0, 10.seconds)
           get1 <- redisMigrate.get(key1)
           get2 <- redisMigrate.get(key2)
         } yield {
@@ -173,7 +173,7 @@ class KeysSpec extends RedisStandaloneServer {
         val r = for {
           _ <- redis.set(key, "value1")
           _ <- redisMigrate.set(key, "value2")
-          m2 <- redis.migrate("localhost", port, key, 0, 10 seconds, replace = true)
+          m2 <- redis.migrate("localhost", port, key, 0, 10.seconds, replace = true)
           get <- redisMigrate.get(key)
         } yield {
           m2 must beTrue

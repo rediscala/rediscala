@@ -23,7 +23,7 @@ class ServerSpec extends RedisStandaloneServer {
     "CLIENT LIST" in {
       val list = Await.result(redis.clientList(), timeOut)
       list must beAnInstanceOf[Seq[Map[String, String]]]
-      list must not beEmpty
+      list must not be empty
     }
 
     "CLIENT GETNAME" in {
@@ -37,7 +37,7 @@ class ServerSpec extends RedisStandaloneServer {
     "CONFIG GET" in {
       val map = Await.result(redis.configGet("*"), timeOut)
       map must beAnInstanceOf[Map[String, String]]
-      map must not beEmpty
+      map must not be empty
 
     }
     "CONFIG SET" in {

@@ -31,7 +31,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
   override val redisServerConnections = {
     redisServers.map { server =>
       makeRedisConnection(server, defaultActive = true)
-    } toMap
+    }.toMap
   }
   refreshConnections()
 

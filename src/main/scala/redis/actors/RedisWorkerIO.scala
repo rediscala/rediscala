@@ -182,7 +182,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     }
   }
 
-  def reconnectDuration: FiniteDuration = 2 seconds
+  def reconnectDuration: FiniteDuration = 2.seconds
 
   private def writeWorker(byteString: ByteString): Unit = {
     onWriteSent()

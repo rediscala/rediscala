@@ -93,7 +93,6 @@ lazy val standardSettings = Def.settings(
     "-Xlint",
     "-deprecation",
     "-feature",
-    "-language:postfixOps",
     "-unchecked"
   ),
   Compile / doc / scalacOptions ++= {

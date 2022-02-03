@@ -39,7 +39,7 @@ class RedisPoolSpec extends RedisStandaloneServer {
         RedisClientPool(Seq(RedisServer(port = port, db = Some(0)), RedisServer(port = port, db = Some(1)), RedisServer(port = 3333, db = Some(3))))
       val key = "keyPoolDb0"
 
-      awaitAssert(redisPool.redisConnectionPool.size mustEqual 2, 20 second)
+      awaitAssert(redisPool.redisConnectionPool.size mustEqual 2, 20.second)
       redisPool.set(key, 0)
       val r = for {
         getDb1 <- redisPool.get(key)

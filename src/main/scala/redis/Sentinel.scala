@@ -188,7 +188,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
       }.getOrElse(throw new Exception(s"No such master '$master'"))
     }
 
-    Await.result(ff, 15 seconds)
+    Await.result(ff, 15.seconds)
   }
 
   def withSlavesAddr[T](initFunction: Seq[(String, Int)] => T): T = {
@@ -207,7 +207,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
       initFunction(ipPortBuilder.result().toSeq)
     }
 
-    Await.result(fslaves, 15 seconds)
+    Await.result(fslaves, 15.seconds)
   }
 }
 

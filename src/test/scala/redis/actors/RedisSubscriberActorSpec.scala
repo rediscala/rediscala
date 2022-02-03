@@ -43,7 +43,7 @@ class RedisSubscriberActorSpec extends TestKit(ActorSystem()) with Specification
         {
           subscriberActor.underlyingActor.channelsSubscribed must containTheSameElementsAs(newChannels)
         },
-        5.seconds dilated
+        5.seconds.dilated
       )
       probeTcpWorker.expectMsgType[Write] mustEqual Write(RedisProtocolRequest.multiBulk("SUBSCRIBE", Seq(ByteString("channel2"))), WriteAck)
       probeTcpWorker.reply(WriteAck)

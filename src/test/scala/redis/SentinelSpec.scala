@@ -57,14 +57,14 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
       val sentinelCount = sentinelMonitoredRedisClient.sentinelClients.size
       val sentinel = newSentinelProcess()
 
-      awaitAssert(sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount + 1, 10 second)
+      awaitAssert(sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount + 1, 10.second)
 
       sentinel.stop()
       awaitAssert(
         {
           sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount
         },
-        10 seconds
+        10.seconds
       )
       success
     }

@@ -24,7 +24,7 @@ class RedisReplyDecoderSpec
 
   sequential
 
-  val timeout = 5.seconds dilated
+  val timeout = 5.seconds.dilated
 
   "RedisReplyDecoder" should {
     "ok" in within(timeout) {

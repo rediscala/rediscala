@@ -21,7 +21,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
     Seq()
   }
 
-  val timeout = 120.seconds dilated
+  val timeout = 120.seconds.dilated
 
   val onConnectStatus: (Boolean) => Unit = (status: Boolean) => {}
 
@@ -77,7 +77,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       val deathWatcher = TestProbe()
       deathWatcher.watch(probeReplyDecoder.ref)
       redisClientActor.underlyingActor.onConnectionClosed()
-      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30 seconds) must beAnInstanceOf[Terminated]
+      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds) must beAnInstanceOf[Terminated]
     }
 
     "onConnectionClosed with promises queued" in {
@@ -98,8 +98,8 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       deathWatcher.watch(probeReplyDecoder.ref)
 
       redisClientActor.onConnectionClosed()
-      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30 seconds) must beAnInstanceOf[Terminated]
-      Await.result(promise3.future, 10 seconds) must throwA(NoConnectionException)
+      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds) must beAnInstanceOf[Terminated]
+      Await.result(promise3.future, 10.seconds) must throwA(NoConnectionException)
     }
 
     "replyDecoder died -> reset connection" in {

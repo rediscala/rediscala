@@ -57,9 +57,9 @@ class RedisPubSubSpec extends RedisStandaloneServer {
       )
       import scala.concurrent.duration._
 
-      system.scheduler.scheduleOnce(2 seconds)(redis.publish("channel", "value"))
+      system.scheduler.scheduleOnce(2.seconds)(redis.publish("channel", "value"))
 
-      probeMock.expectMsgType[Message](5 seconds) mustEqual Message("channel", ByteString("value"))
+      probeMock.expectMsgType[Message](5.seconds) mustEqual Message("channel", ByteString("value"))
 
       redis.publish("pattern.1", "value")
 
@@ -68,44 +68,44 @@ class RedisPubSubSpec extends RedisStandaloneServer {
       subscriberActor.underlyingActor.subscribe("channel2")
       subscriberActor.underlyingActor.unsubscribe("channel")
 
-      system.scheduler.scheduleOnce(2 seconds) {
+      system.scheduler.scheduleOnce(2.seconds) {
         redis.publish("channel", "value")
         redis.publish("channel2", "value")
       }
-      probeMock.expectMsgType[Message](5 seconds) mustEqual Message("channel2", ByteString("value"))
+      probeMock.expectMsgType[Message](5.seconds) mustEqual Message("channel2", ByteString("value"))
 
       subscriberActor.underlyingActor.unsubscribe("channel2")
-      system.scheduler.scheduleOnce(1 second) {
+      system.scheduler.scheduleOnce(1.second) {
         redis.publish("channel2", ByteString("value"))
       }
-      probeMock.expectNoMessage(3 seconds)
+      probeMock.expectNoMessage(3.seconds)
 
       subscriberActor.underlyingActor.subscribe("channel2")
-      system.scheduler.scheduleOnce(1 second) {
+      system.scheduler.scheduleOnce(1.second) {
         redis.publish("channel2", ByteString("value"))
       }
-      probeMock.expectMsgType[Message](5 seconds) mustEqual Message("channel2", ByteString("value"))
+      probeMock.expectMsgType[Message](5.seconds) mustEqual Message("channel2", ByteString("value"))
 
       subscriberActor.underlyingActor.psubscribe("pattern2.*")
       subscriberActor.underlyingActor.punsubscribe("pattern.*")
 
-      system.scheduler.scheduleOnce(2 seconds) {
+      system.scheduler.scheduleOnce(2.seconds) {
         redis.publish("pattern2.match", ByteString("value"))
         redis.publish("pattern.*", ByteString("value"))
       }
-      probeMock.expectMsgType[PMessage](5 seconds) mustEqual PMessage("pattern2.*", "pattern2.match", ByteString("value"))
+      probeMock.expectMsgType[PMessage](5.seconds) mustEqual PMessage("pattern2.*", "pattern2.match", ByteString("value"))
 
       subscriberActor.underlyingActor.punsubscribe("pattern2.*")
-      system.scheduler.scheduleOnce(2 seconds) {
+      system.scheduler.scheduleOnce(2.seconds) {
         redis.publish("pattern2.match", ByteString("value"))
       }
-      probeMock.expectNoMessage(3 seconds)
+      probeMock.expectNoMessage(3.seconds)
 
       subscriberActor.underlyingActor.psubscribe("pattern.*")
-      system.scheduler.scheduleOnce(2 seconds) {
+      system.scheduler.scheduleOnce(2.seconds) {
         redis.publish("pattern.*", ByteString("value"))
       }
-      probeMock.expectMsgType[PMessage](5 seconds) mustEqual PMessage("pattern.*", "pattern.*", ByteString("value"))
+      probeMock.expectMsgType[PMessage](5.seconds) mustEqual PMessage("pattern.*", "pattern.*", ByteString("value"))
     }
   }
 

@@ -19,7 +19,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
 
   import scala.concurrent.duration._
 
-  val timeout = 120.seconds dilated
+  val timeout = 120.seconds.dilated
 
   "RedisWorkerIO" should {
 
@@ -38,7 +38,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
 
       // should reconnect in 2s
-      within(1 second, 4 seconds) {
+      within(1.second, 4.seconds) {
         val connectMsg = probeTcp.expectMsgType[Connect]
         connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
         connectMsg.remoteAddress must not beTheSameAs address
@@ -77,7 +77,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
 
       redisWorkerIO ! "PING"
-      probeTcpWorker.expectNoMessage(1 seconds)
+      probeTcpWorker.expectNoMessage(1.seconds)
       probeTcpWorker.send(redisWorkerIO, WriteAck)
       probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING"), WriteAck)
       probeMock.expectMsg(WriteSent) mustEqual WriteSent

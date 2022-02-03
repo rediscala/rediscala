@@ -50,9 +50,9 @@ abstract class RedisHelper extends TestKit(ActorSystem()) with SpecificationLike
 
   implicit val executionContext: ExecutionContext = system.dispatchers.lookup(Redis.dispatcher.name)
 
-  implicit val timeout: Timeout = Timeout(10 seconds)
-  val timeOut = 10 seconds
-  val longTimeOut = 100 seconds
+  implicit val timeout: Timeout = Timeout(10.seconds)
+  val timeOut = 10.seconds
+  val longTimeOut = 100.seconds
 
   override def map(fs: => Fragments) = {
     setup()

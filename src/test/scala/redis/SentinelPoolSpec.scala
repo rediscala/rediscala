@@ -29,16 +29,16 @@ class SentinelMutablePoolSpec extends RedisSentinelClients("SentinelMutablePoolS
       val r = redisClient.set(key, "hello")
 
       Await.result(r, timeOut)
-      within(500 millisecond) {
+      within(500.millisecond) {
         Await.result(redisPool.get[String](key), timeOut) must beSome("hello")
         Await.result(redisPool.get[String](key), timeOut) must beSome("hello")
       }
 
-      within(1 second) {
+      within(1.second) {
         redisPool.removeServer(RedisServer(redisHost, slavePort2))
       }
 
-      awaitAssert(redisPool.redisConnectionPool.size mustEqual 1, 5 second)
+      awaitAssert(redisPool.redisConnectionPool.size mustEqual 1, 5.second)
 
       Await.result(redisPool.get[String](key), timeOut) must beSome("hello")
       Await.result(redisPool.get[String](key), timeOut) must beSome("hello")
@@ -60,24 +60,24 @@ class SentinelMonitoredRedisClientMasterSlavesSpec extends RedisSentinelClients(
       } else {
         Thread.sleep(10000)
         Await.result(redisMasterSlavesPool.set("test", "value"), timeOut)
-        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 2, 20 second)
+        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 2, 20.second)
 
         val newSlave = newSlaveProcess()
 
-        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 3, 20 second)
+        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 3, 20.second)
         newSlave.stop()
 
         Await.result(redisMasterSlavesPool.get[String]("test"), timeOut) mustEqual Some("value")
         slave1.stop()
         slave2.stop()
 
-        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 0, 20 second)
+        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 0, 20.second)
         Await.result(redisMasterSlavesPool.get[String]("test"), timeOut) mustEqual Some("value")
         newSlaveProcess()
         // println("************************** newSlaveProcess "+RedisServerHelper.portNumber.get())
 
-        // within(30 second) {
-        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 1, 20 second)
+        // within(30.second) {
+        awaitAssert(redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 1, 20.second)
         redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 1
         // }
       }
@@ -85,7 +85,7 @@ class SentinelMonitoredRedisClientMasterSlavesSpec extends RedisSentinelClients(
     /*
    "changemaster" in {
      Try(Await.result(redisMasterSlavesPool.masterClient.shutdown(), timeOut))
-       awaitAssert( redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 0, 20 second )
+       awaitAssert( redisMasterSlavesPool.slavesClients.redisConnectionPool.size mustEqual 0, 20.second )
        Await.result(redisMasterSlavesPool.get[String]("test"), timeOut) mustEqual Some("value")
    }*/
 

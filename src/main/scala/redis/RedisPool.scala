@@ -145,7 +145,7 @@ case class RedisClientPool(redisServers: Seq[RedisServer], name: String = "Redis
   override val redisServerConnections = {
     redisServers.map { server =>
       makeRedisConnection(server, defaultActive = true)
-    } toMap
+    }.toMap
   }
 
   refreshConnections()

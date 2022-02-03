@@ -70,7 +70,7 @@ object Main {
     futurePong.map(pong => {
       println(s"Redis replied with a $pong")
     })
-    Await.result(futurePong, 5 seconds)
+    Await.result(futurePong, 5.seconds)
 
     akkaSystem.shutdown()
   }
@@ -110,7 +110,7 @@ All commands are supported :
 * brpopplush
 
 ```scala
-  redisBlocking.blpop(Seq("workList", "otherKeyWithWork"), 5 seconds).map(result => {
+  redisBlocking.blpop(Seq("workList", "otherKeyWithWork"), 5.seconds).map(result => {
     result.map({
       case (key, work) => println(s"list $key has work : ${work.utf8String}")
     })
@@ -156,10 +156,10 @@ object ExamplePubSub {
     val redis = RedisClient()
 
     // publish after 2 seconds every 2 or 5 seconds
-    akkaSystem.scheduler.schedule(2 seconds, 2 seconds)(redis.publish("time", System.currentTimeMillis()))
-    akkaSystem.scheduler.schedule(2 seconds, 5 seconds)(redis.publish("pattern.match", "pattern value"))
+    akkaSystem.scheduler.schedule(2.seconds, 2.seconds)(redis.publish("time", System.currentTimeMillis()))
+    akkaSystem.scheduler.schedule(2.seconds, 5.seconds)(redis.publish("pattern.match", "pattern value"))
     // shutdown Akka in 20 seconds
-    akkaSystem.scheduler.scheduleOnce(20 seconds)(akkaSystem.shutdown())
+    akkaSystem.scheduler.scheduleOnce(20.seconds)(akkaSystem.shutdown())
 
     val channels = Seq("time")
     val patterns = Seq("pattern.*")
@@ -200,7 +200,7 @@ You can use it with `evalshaOrEval` which run your script even if it wasn't alre
   val r = redis.evalshaOrEval(redisScript).map({
     case b: Bulk => println(b.toString())
   })
-  Await.result(r, 5 seconds)
+  Await.result(r, 5.seconds)
 ```
 
 Full example: [ExampleScripting](https://github.com/rediscala/rediscala-demo/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/main/scala/ExampleScripting.scala)
