@@ -117,7 +117,7 @@ case class RedisPubSub(
       onMessage,
       onPMessage,
       authPassword,
-      onConnectStatus
+      onConnectStatus()
     ).withDispatcher(redisDispatcher.name),
     name + '-' + Redis.tempName()
   )

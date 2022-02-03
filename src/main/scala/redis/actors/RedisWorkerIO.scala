@@ -68,8 +68,8 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   }
 
   def onConnected(cmd: Connected) = {
-    sender ! Register(self)
-    tcpWorker = sender
+    sender() ! Register(self)
+    tcpWorker = sender()
     initConnectedBuffer()
     tryInitialWrite() // TODO write something in head buffer
     become(connected)
@@ -87,14 +87,14 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   private def reading: Receive = {
     case WriteAck => tryWrite()
     case Received(dataByteString) => {
-      if (sender == tcpWorker)
+      if (sender() == tcpWorker)
         onDataReceived(dataByteString)
       else
         onDataReceivedOnClosingConnection(dataByteString)
     }
     case a: InetSocketAddress => onAddressChanged(a)
     case c: ConnectionClosed => {
-      if (sender == tcpWorker)
+      if (sender() == tcpWorker)
         onConnectionClosed(c)
       else {
         onConnectStatus(false)
