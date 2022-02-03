@@ -56,15 +56,15 @@ lazy val standardSettings = Def.settings(
     "-language:postfixOps",
     "-unchecked"
   ),
-  scalacOptions in (Compile, doc) ++= {
+  Compile / doc / scalacOptions ++= {
     Seq(
       "-sourcepath",
-      (baseDirectory in LocalProject("rediscala")).value.getAbsolutePath
+      (LocalProject("rediscala") / baseDirectory).value.getAbsolutePath
     )
   },
   autoAPIMappings := true,
-  scalacOptions in (Compile, doc) ++= {
-    val v = (version in LocalProject("rediscala")).value
+  Compile / doc / scalacOptions ++= {
+    val v = (LocalProject("rediscala") / version).value
     val branch = if (v.trim.endsWith("SNAPSHOT")) "main" else v
     Seq[String](
       "-doc-source-url",
