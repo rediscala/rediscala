@@ -1,10 +1,12 @@
 package redis.commands
 
 import redis.Request
-import redis.api.geo.DistUnits.{Kilometer, Measurement, Meter}
-import redis.api.geo.GeoOptions.{WithDist, WithOption}
+import redis.api.geo.DistUnits.Kilometer
+import redis.api.geo.DistUnits.Measurement
+import redis.api.geo.DistUnits.Meter
+import redis.api.geo.GeoOptions.WithDist
+import redis.api.geo.GeoOptions.WithOption
 import redis.api.geo._
-
 import scala.concurrent.Future
 
 trait Geo extends Request {
@@ -15,18 +17,24 @@ trait Geo extends Request {
   def geoRadius[K](key: String, lat: Double, lng: Double, radius: Double, dim: Measurement = Kilometer): Future[Seq[String]] =
     send(GeoRadius(key, lat, lng, radius, dim))
 
-  def geoRadiusByMember[K](key: String, member: String, dist:Int, dim: Measurement = Meter): Future[Seq[String]] =
+  def geoRadiusByMember[K](key: String, member: String, dist: Int, dim: Measurement = Meter): Future[Seq[String]] =
     send(GeoRadiusByMember(key, member, dist, dim))
 
-  def geoRadiusByMemberWithOpt[K](key: String, member: String, dist:Int, dim: Measurement = Meter, opt: WithOption = WithDist,
-                                  count: Int = Int.MaxValue)=
-    send(GeoRadiusByMemberWithOpt(key, member, dist, dim, opt,count))
+  def geoRadiusByMemberWithOpt[K](
+    key: String,
+    member: String,
+    dist: Int,
+    dim: Measurement = Meter,
+    opt: WithOption = WithDist,
+    count: Int = Int.MaxValue
+  ) =
+    send(GeoRadiusByMemberWithOpt(key, member, dist, dim, opt, count))
 
-  def geoDist[K] (key: String ,member1: String, member2: String, unit: Measurement = Meter ): Future[Double] =
+  def geoDist[K](key: String, member1: String, member2: String, unit: Measurement = Meter): Future[Double] =
     send(GeoDist(key, member1, member2, unit))
 
-  def geoHash[K] (key: String ,members: String *): Future[Seq[String]] = send(GeoHash(key, members))
+  def geoHash[K](key: String, members: String*): Future[Seq[String]] = send(GeoHash(key, members))
 
-  def geoPos[K] (key: String ,members: String *): Future[Seq[String]] = send(GeoPos(key, members))
+  def geoPos[K](key: String, members: String*): Future[Seq[String]] = send(GeoPos(key, members))
 
 }

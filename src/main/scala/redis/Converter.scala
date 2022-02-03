@@ -3,7 +3,8 @@ package redis
 import akka.util.ByteString
 import redis.protocol._
 import scala.util.Try
-import scala.annotation.{tailrec, implicitNotFound}
+import scala.annotation.tailrec
+import scala.annotation.implicitNotFound
 import scala.collection.mutable
 
 trait MultiBulkConverter[A] {
@@ -13,56 +14,61 @@ trait MultiBulkConverter[A] {
 object MultiBulkConverter {
 
   def toSeqString(reply: MultiBulk): Seq[String] = {
-    reply.responses.map(r => {
-      r.map(_.toString)
-    }).getOrElse(Seq.empty)
+    reply.responses
+      .map(r => {
+        r.map(_.toString)
+      })
+      .getOrElse(Seq.empty)
   }
 
   def toSeqByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[R] = {
-    reply.responses.map(r => {
-      r.map(reply => deserializer.deserialize(reply.toByteString))
-    }).getOrElse(Seq.empty)
+    reply.responses
+      .map(r => {
+        r.map(reply => deserializer.deserialize(reply.toByteString))
+      })
+      .getOrElse(Seq.empty)
   }
 
   def toSeqOptionByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[Option[R]] = {
-    reply.responses.map(r => {
-      r.map(_.asOptByteString.map(deserializer.deserialize))
-    }).getOrElse(Seq.empty)
+    reply.responses
+      .map(r => {
+        r.map(_.asOptByteString.map(deserializer.deserialize))
+      })
+      .getOrElse(Seq.empty)
   }
 
   def toSeqTuple2ByteStringDouble[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[(R, Double)] = {
-    reply.responses.map {
-      r => {
+    reply.responses.map { r =>
+      {
         val s = r.map(_.toByteString)
         val builder = Seq.newBuilder[(R, Double)]
-        s.grouped(2).foreach {
-          case Seq(a, b) => builder += ((deserializer.deserialize(a), b.utf8String.toDouble))
+        s.grouped(2).foreach { case Seq(a, b) =>
+          builder += ((deserializer.deserialize(a), b.utf8String.toDouble))
         }
         builder.result()
       }
     }.getOrElse(Seq.empty)
   }
 
-
   def toClusterSlots(reply: MultiBulk) = {
-    reply.responses.map{
-      slot => {
+    reply.responses.map { slot =>
+      {
         val elementSeq = slot.toSeq
         val begin = elementSeq(0).toByteString
         val end = elementSeq(1).toByteString
-        (begin,end)
+        (begin, end)
       }
     }
   }
 
-
-
   def toMapString(reply: MultiBulk): Map[String, String] = {
-    reply.responses.map(bs => {
-      val builder = Map.newBuilder[String, String]
-      seqtoMapString(bs, builder)
-      builder.result()
-    }).getOrElse(Map.empty)
+    reply.responses
+      .map(bs => {
+        val builder = Map.newBuilder[String, String]
+        seqtoMapString(bs, builder)
+        builder.result()
+      })
+      .getOrElse(Map.empty)
   }
 
   @tailrec
@@ -74,39 +80,41 @@ object MultiBulkConverter {
   }
 
   def toSeqMapString(reply: MultiBulk): Seq[Map[String, String]] = {
-    reply.responses.map {
-      s =>
-        s.map({
-          case m: MultiBulk =>
-            m.responses.map {
-              s =>
-                val builder = Seq.newBuilder[(String, String)]
-                s.grouped(2).foreach {
-                  case Seq(a, b) => builder += ((a.toString, b.toString))
-                }
-                builder.result()
-            }.getOrElse(Seq())
+    reply.responses.map { s =>
+      s.map {
+        case m: MultiBulk =>
+          m.responses.map { s =>
+            val builder = Seq.newBuilder[(String, String)]
+            s.grouped(2).foreach { case Seq(a, b) =>
+              builder += ((a.toString, b.toString))
+            }
+            builder.result()
+          }.getOrElse(Seq())
 
-          case _ => Seq()
-        }).map {
-          _.toMap
-        }
+        case _ => Seq()
+      }.map {
+        _.toMap
+      }
     }.getOrElse(Seq.empty)
   }
 
   def toOptionStringByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Option[(String, R)] = {
-    reply.responses.map(r => {
-      Some(r.head.toString -> deserializer.deserialize(r.tail.head.toByteString))
-    }).getOrElse(None)
+    reply.responses
+      .map(r => {
+        Some(r.head.toString -> deserializer.deserialize(r.tail.head.toByteString))
+      })
+      .getOrElse(None)
   }
 
   def toSeqBoolean(reply: MultiBulk): Seq[Boolean] = {
-    reply.responses.map(r => {
-      r.map(_.toString == "1")
-    }).getOrElse(Seq.empty)
+    reply.responses
+      .map(r => {
+        r.map(_.toString == "1")
+      })
+      .getOrElse(Seq.empty)
   }
 
-  def toStringsSeq(rd : RedisReply ): Seq[String] = rd match {
+  def toStringsSeq(rd: RedisReply): Seq[String] = rd match {
     case MultiBulk(Some(v)) => v.flatMap(r => toStringsSeq(r))
     case Bulk(b) => b.map(_.decodeString("US-ASCII")).toSeq
     case Integer(i) => Seq(i.decodeString("US-ASCII"))
@@ -217,9 +225,9 @@ trait ByteStringDeserializerDefault {
 
 trait ByteStringFormatter[T] extends ByteStringSerializer[T] with ByteStringDeserializer[T]
 
-
-
-@implicitNotFound(msg = "No RedisReplyDeserializer deserializer found for type ${T}. Try to implement an implicit RedisReplyDeserializer for this type.")
+@implicitNotFound(
+  msg = "No RedisReplyDeserializer deserializer found for type ${T}. Try to implement an implicit RedisReplyDeserializer for this type."
+)
 trait RedisReplyDeserializer[T] {
   def deserialize: PartialFunction[RedisReply, T]
 }
@@ -229,8 +237,8 @@ object RedisReplyDeserializer extends RedisReplyDeserializerLowPriority
 trait RedisReplyDeserializerLowPriority extends RedisReplyDeserializerDefault {
 
   implicit object RedisReply extends RedisReplyDeserializer[RedisReply] {
-    def deserialize: PartialFunction[RedisReply, RedisReply] = {
-      case reply => reply
+    def deserialize: PartialFunction[RedisReply, RedisReply] = { case reply =>
+      reply
     }
   }
 
@@ -239,8 +247,8 @@ trait RedisReplyDeserializerLowPriority extends RedisReplyDeserializerDefault {
 trait RedisReplyDeserializerDefault {
 
   implicit object String extends RedisReplyDeserializer[String] {
-    def deserialize : PartialFunction[RedisReply, String] = {
-      case Bulk(Some(bs)) => bs.utf8String
+    def deserialize: PartialFunction[RedisReply, String] = { case Bulk(Some(bs)) =>
+      bs.utf8String
     }
   }
 

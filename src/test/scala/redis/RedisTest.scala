@@ -1,7 +1,6 @@
 package redis
 
 import akka.ConfigurationException
-
 import scala.concurrent._
 import akka.util.ByteString
 

@@ -1,27 +1,31 @@
 package redis
 
 import redis.commands.Sentinel
-import akka.actor.{ActorSystem, Props, ActorRef}
+import akka.actor.ActorSystem
+import akka.actor.Props
+import akka.actor.ActorRef
 import akka.event.Logging
-import redis.api.pubsub.{PMessage, Message}
+import redis.api.pubsub.PMessage
+import redis.api.pubsub.Message
 import redis.actors.RedisSubscriberActorWithCallback
 import java.net.InetSocketAddress
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
+import scala.concurrent.Future
 
-trait SentinelCommands
-  extends Sentinel
+trait SentinelCommands extends Sentinel
 
-case class SentinelClient(var host: String = "localhost",
-                          var port: Int = 26379,
-                          onMasterChange: (String, String, Int) => Unit = (masterName: String, ip: String, port: Int) => {},
-                          onNewSentinel: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
-                          onSentinelDown: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
-                          onNewSlave: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
-                          onSlaveDown: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
-                          name: String = "SentinelClient")
-                         (implicit _system: ActorSystem,
-                          redisDispatcher: RedisDispatcher = Redis.dispatcher
-                         ) extends RedisClientActorLike(_system, redisDispatcher) with SentinelCommands {
+case class SentinelClient(
+  var host: String = "localhost",
+  var port: Int = 26379,
+  onMasterChange: (String, String, Int) => Unit = (masterName: String, ip: String, port: Int) => {},
+  onNewSentinel: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
+  onSentinelDown: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
+  onNewSlave: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
+  onSlaveDown: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
+  name: String = "SentinelClient"
+)(implicit _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
+    extends RedisClientActorLike(_system, redisDispatcher)
+    with SentinelCommands {
   val system: ActorSystem = _system
 
   val log = Logging.getLogger(system, this)
@@ -89,9 +93,16 @@ case class SentinelClient(var host: String = "localhost",
   }
 
   val redisPubSubConnection: ActorRef = system.actorOf(
-    Props(classOf[RedisSubscriberActorWithCallback],
-      new InetSocketAddress(host, port), channels, Seq(), onMessage, (pmessage: PMessage) => {}, None, (status: Boolean) => {})
-      .withDispatcher(redisDispatcher.name),
+    Props(
+      classOf[RedisSubscriberActorWithCallback],
+      new InetSocketAddress(host, port),
+      channels,
+      Seq(),
+      onMessage,
+      (pmessage: PMessage) => {},
+      None,
+      (status: Boolean) => {}
+    ).withDispatcher(redisDispatcher.name),
     name + '-' + Redis.tempName()
   )
 
@@ -118,14 +129,10 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
 
   val sentinelClients =
     collection.mutable.Map(
-      sentinels.map(
-        hp =>
-          (makeSentinelClientKey(hp._1, hp._2), makeSentinelClient(hp._1, hp._2))
-      ): _*
+      sentinels.map(hp => (makeSentinelClientKey(hp._1, hp._2), makeSentinelClient(hp._1, hp._2))): _*
     )
 
   def makeSentinelClientKey(host: String, port: Int) = s"$host:$port"
-
 
   def internalOnNewSlave(masterName: String, ip: String, port: Int): Unit = {
     if (master == masterName)
@@ -175,11 +182,9 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
 
     val f = sentinelClients.values.map(_.getMasterAddr(master))
     val ff = Future.sequence(f).map { listAddr =>
-      listAddr.flatten
-        .headOption
-        .map {
-          case (ip: String, port: Int) => initFunction(ip, port)
-        }.getOrElse(throw new Exception(s"No such master '$master'"))
+      listAddr.flatten.headOption.map { case (ip: String, port: Int) =>
+        initFunction(ip, port)
+      }.getOrElse(throw new Exception(s"No such master '$master'"))
     }
 
     Await.result(ff, 15 seconds)
@@ -188,26 +193,26 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
   def withSlavesAddr[T](initFunction: Seq[(String, Int)] => T): T = {
     import scala.concurrent.duration._
 
-    val fslaves = Future.sequence(sentinelClients.values.map(_.slaves(master)))
-      .map { lm =>
-        val ipPortBuilder = Set.newBuilder[(String, Int)]
-        for {
-          slaves <- lm
-          slave <- slaves
-          ip <- slave.get("ip")
-          port <- slave.get("port")
-        } yield {
-          ipPortBuilder += ip -> port.toInt
-        }
-        initFunction(ipPortBuilder.result().toSeq)
+    val fslaves = Future.sequence(sentinelClients.values.map(_.slaves(master))).map { lm =>
+      val ipPortBuilder = Set.newBuilder[(String, Int)]
+      for {
+        slaves <- lm
+        slave <- slaves
+        ip <- slave.get("ip")
+        port <- slave.get("port")
+      } yield {
+        ipPortBuilder += ip -> port.toInt
       }
+      initFunction(ipPortBuilder.result().toSeq)
+    }
 
     Await.result(fslaves, 15 seconds)
   }
 }
 
-abstract class SentinelMonitoredRedisClientLike(system: ActorSystem, redisDispatcher: RedisDispatcher
-                                               ) extends SentinelMonitored(system, redisDispatcher) with ActorRequest {
+abstract class SentinelMonitoredRedisClientLike(system: ActorSystem, redisDispatcher: RedisDispatcher)
+    extends SentinelMonitored(system, redisDispatcher)
+    with ActorRequest {
   val redisClient: RedisClientActorLike
   val onMasterChange = (ip: String, port: Int) => {
     log.info(s"onMasterChange: $ip:$port")
@@ -226,8 +231,9 @@ abstract class SentinelMonitoredRedisClientLike(system: ActorSystem, redisDispat
 
 }
 
-abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, redisDispatcher: RedisDispatcher
-                                                       ) extends SentinelMonitored(system, redisDispatcher) with ActorRequest {
+abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, redisDispatcher: RedisDispatcher)
+    extends SentinelMonitored(system, redisDispatcher)
+    with ActorRequest {
   val redisClient: RedisClientActorLike
 
   val onMasterChange = (ip: String, port: Int) => {
@@ -244,4 +250,3 @@ abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, red
   }
 
 }
-

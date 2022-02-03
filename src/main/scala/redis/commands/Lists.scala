@@ -1,9 +1,13 @@
 package redis.commands
 
-import redis.{ByteStringDeserializer, ByteStringSerializer, Request}
+import redis.ByteStringDeserializer
+import redis.ByteStringSerializer
+import redis.Request
 import scala.concurrent.Future
 import redis.api.lists._
-import redis.api.{AFTER, BEFORE, ListPivot}
+import redis.api.AFTER
+import redis.api.BEFORE
+import redis.api.ListPivot
 
 trait Lists extends Request {
 

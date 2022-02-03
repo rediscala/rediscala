@@ -1,6 +1,9 @@
 package redis.commands
 
-import redis.{Cursor, ByteStringDeserializer, ByteStringSerializer, Request}
+import redis.Cursor
+import redis.ByteStringDeserializer
+import redis.ByteStringSerializer
+import redis.Request
 import scala.concurrent.Future
 import redis.api.sets._
 
@@ -51,6 +54,11 @@ trait Sets extends Request {
   def sunionstore(destination: String, key: String, keys: String*): Future[Long] =
     send(Sunionstore(destination, key, keys))
 
-  def sscan[R: ByteStringDeserializer](key: String, cursor: Int = 0, count: Option[Int] = None, matchGlob: Option[String] = None): Future[Cursor[Seq[R]]] =
+  def sscan[R: ByteStringDeserializer](
+    key: String,
+    cursor: Int = 0,
+    count: Option[Int] = None,
+    matchGlob: Option[String] = None
+  ): Future[Cursor[Seq[R]]] =
     send(Sscan(key, cursor, count, matchGlob))
 }

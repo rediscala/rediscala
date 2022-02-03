@@ -1,7 +1,9 @@
 package redis.actors
 
 import akka.testkit._
-import akka.actor.{ActorRef, Props, ActorSystem}
+import akka.actor.ActorRef
+import akka.actor.Props
+import akka.actor.ActorSystem
 import org.specs2.mutable.SpecificationLike
 import java.net.InetSocketAddress
 import akka.io.Tcp._
@@ -22,11 +24,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
   "RedisWorkerIO" should {
 
     val address = new InetSocketAddress("localhost", 6379)
-    "connect CommandFailed then reconnect" in within(timeout){
+    "connect CommandFailed then reconnect" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       val connectMsg = probeTcp.expectMsgType[Connect]
       connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
@@ -37,7 +41,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       within(1 second, 4 seconds) {
         val connectMsg = probeTcp.expectMsgType[Connect]
         connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
-        connectMsg.remoteAddress must not beTheSameAs(address)
+        connectMsg.remoteAddress must not beTheSameAs address
 
         val probeTcpWorker = TestProbe()
         probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
@@ -46,11 +50,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       }
     }
 
-    "ok" in within(timeout){
+    "ok" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       redisWorkerIO ! "PING1"
 
@@ -77,11 +83,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
     }
 
-    "reconnect : connected <-> disconnected" in within(timeout){
+    "reconnect : connected <-> disconnected" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       redisWorkerIO ! "PING1"
 
@@ -114,11 +122,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
     }
 
-    "onConnectedCommandFailed" in within(timeout){
+    "onConnectedCommandFailed" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       redisWorkerIO ! "PING1"
 
@@ -137,11 +147,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
     }
 
-    "received" in within(timeout){
+    "received" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       redisWorkerIO ! "PING1"
 
@@ -159,11 +171,13 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsgType[ByteString] mustEqual ByteString("PONG")
     }
 
-    "Address Changed" in within(timeout){
+    "Address Changed" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name))
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, ByteString.empty).withDispatcher(Redis.dispatcher.name)
+      )
 
       redisWorkerIO ! "PING1"
 
@@ -211,13 +225,14 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(ClosingConnectionClosed) mustEqual ClosingConnectionClosed
     }
 
-    "on connect write" in within(timeout){
+    "on connect write" in within(timeout) {
       val probeTcp = TestProbe()
       val probeMock = TestProbe()
       val onConnectByteString = ByteString("on connect write")
 
-      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, onConnectByteString).withDispatcher(Redis.dispatcher.name))
-
+      val redisWorkerIO = TestActorRef[RedisWorkerIOMock](
+        Props(classOf[RedisWorkerIOMock], probeTcp.ref, address, probeMock.ref, onConnectByteString).withDispatcher(Redis.dispatcher.name)
+      )
 
       val connectMsg = probeTcp.expectMsgType[Connect]
       connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
@@ -251,12 +266,12 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
   }
 }
 
-
-class RedisWorkerIOMock(probeTcp: ActorRef, address: InetSocketAddress, probeMock: ActorRef, _onConnectWrite: ByteString) extends RedisWorkerIO(address, (status:Boolean) =>{()} ) {
+class RedisWorkerIOMock(probeTcp: ActorRef, address: InetSocketAddress, probeMock: ActorRef, _onConnectWrite: ByteString)
+    extends RedisWorkerIO(address, (status: Boolean) => { () }) {
   override val tcp = probeTcp
 
-  def writing: Receive = {
-    case s: String => write(ByteString(s))
+  def writing: Receive = { case s: String =>
+    write(ByteString(s))
   }
 
   def onConnectionClosed(): Unit = {

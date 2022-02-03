@@ -2,9 +2,11 @@ package redis.commands
 
 import redis._
 import redis.api._
-import redis.api.ZaddOption.{CH, NX, XX}
-
-import scala.concurrent.{Await, Future}
+import redis.api.ZaddOption.CH
+import redis.api.ZaddOption.NX
+import redis.api.ZaddOption.XX
+import scala.concurrent.Await
+import scala.concurrent.Future
 import akka.util.ByteString
 
 class SortedSetsSpec extends RedisStandaloneServer {
@@ -260,7 +262,7 @@ class SortedSetsSpec extends RedisStandaloneServer {
     "ZSCAN" in {
       val r = for {
         _ <- redis.del("zscan")
-        _ <- redis.zadd("zscan", (1 to 20).map(x => x.toDouble -> x.toString):_*)
+        _ <- redis.zadd("zscan", (1 to 20).map(x => x.toDouble -> x.toString): _*)
         scanResult <- redis.zscan[String]("zscan", count = Some(100))
       } yield {
         scanResult.index mustEqual 0
@@ -273,7 +275,14 @@ class SortedSetsSpec extends RedisStandaloneServer {
     "ZSCORE" in {
       val r = for {
         _ <- redis.del("zscoreKey")
-        z1 <- redis.zadd("zscoreKey", 1.1 -> "one", (2, "two"), (3, "three"), Double.PositiveInfinity -> "positiveinf", Double.NegativeInfinity -> "negativeinf")
+        z1 <- redis.zadd(
+          "zscoreKey",
+          1.1 -> "one",
+          (2, "two"),
+          (3, "three"),
+          Double.PositiveInfinity -> "positiveinf",
+          Double.NegativeInfinity -> "negativeinf"
+        )
         zr1 <- redis.zscore("zscoreKey", "one")
         zr2 <- redis.zscore("zscoreKey", "notexisting")
         zr3 <- redis.zscore("zscoreKey", "positiveinf")

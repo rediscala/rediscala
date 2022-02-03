@@ -6,13 +6,18 @@ import redis.api.scripting._
 import redis.actors.ReplyErrorException
 
 trait Scripting extends Request {
+
   /**
    * Try EVALSHA, if NOSCRIPT returned, fallback to EVAL
    */
-  def evalshaOrEval[R: RedisReplyDeserializer](redisScript: RedisScript, keys: Seq[String] = Seq.empty[String], args: Seq[String] = Seq.empty[String]): Future[R] = {
-    evalsha(redisScript.sha1, keys, args).recoverWith({
+  def evalshaOrEval[R: RedisReplyDeserializer](
+    redisScript: RedisScript,
+    keys: Seq[String] = Seq.empty[String],
+    args: Seq[String] = Seq.empty[String]
+  ): Future[R] = {
+    evalsha(redisScript.sha1, keys, args).recoverWith {
       case ReplyErrorException(message) if message.startsWith("NOSCRIPT") => eval(redisScript.script, keys, args)
-    })
+    }
   }
 
   def eval[R: RedisReplyDeserializer](script: String, keys: Seq[String] = Seq.empty[String], args: Seq[String] = Seq.empty[String]): Future[R] = {
@@ -39,6 +44,3 @@ trait Scripting extends Request {
     send(ScriptExists(sha1))
   }
 }
-
-
-

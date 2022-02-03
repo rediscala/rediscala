@@ -1,7 +1,8 @@
 package redis.commands
 
 import redis._
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
+import scala.concurrent.Future
 import akka.util.ByteString
 import redis.actors.ReplyErrorException
 
@@ -10,22 +11,28 @@ class StringsSpec extends RedisStandaloneServer {
   sequential
   "Strings commands" should {
     "APPEND" in {
-      val r = redis.set("appendKey", "Hello").flatMap(_ => {
-        redis.append("appendKey", " World").flatMap(length => {
-          length mustEqual "Hello World".length
-          redis.get("appendKey")
+      val r = redis
+        .set("appendKey", "Hello")
+        .flatMap(_ => {
+          redis
+            .append("appendKey", " World")
+            .flatMap(length => {
+              length mustEqual "Hello World".length
+              redis.get("appendKey")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual Some(ByteString("Hello World"))
     }
 
     "BITCOUNT" in {
-      val r = redis.set("bitcountKey", "foobar").flatMap(_ => {
-        val a = redis.bitcount("bitcountKey")
-        val b = redis.bitcount("bitcountKey", 0, 0)
-        val c = redis.bitcount("bitcountKey", 1, 1)
-        Future.sequence(Seq(a, b, c))
-      })
+      val r = redis
+        .set("bitcountKey", "foobar")
+        .flatMap(_ => {
+          val a = redis.bitcount("bitcountKey")
+          val b = redis.bitcount("bitcountKey", 0, 0)
+          val c = redis.bitcount("bitcountKey", 1, 1)
+          Future.sequence(Seq(a, b, c))
+        })
       Await.result(r, timeOut) mustEqual Seq(26, 4, 6)
     }
 
@@ -76,28 +83,36 @@ class StringsSpec extends RedisStandaloneServer {
     }
 
     "DECR" in {
-      val r = redis.set("decrKey", "10").flatMap(_ => {
-        redis.decr("decrKey")
-      })
-      val r2 = redis.set("decrKeyError", "234293482390480948029348230948").flatMap(_ => {
-        redis.decr("decrKeyError")
-      })
+      val r = redis
+        .set("decrKey", "10")
+        .flatMap(_ => {
+          redis.decr("decrKey")
+        })
+      val r2 = redis
+        .set("decrKeyError", "234293482390480948029348230948")
+        .flatMap(_ => {
+          redis.decr("decrKeyError")
+        })
       Await.result(r, timeOut) mustEqual 9
       Await.result(r2, timeOut) must throwA[ReplyErrorException]("ERR value is not an integer or out of range")
     }
 
     "DECRBY" in {
-      val r = redis.set("decrbyKey", "10").flatMap(_ => {
-        redis.decrby("decrbyKey", 5)
-      })
+      val r = redis
+        .set("decrbyKey", "10")
+        .flatMap(_ => {
+          redis.decrby("decrbyKey", 5)
+        })
       Await.result(r, timeOut) mustEqual 5
     }
 
     "GET" in {
       val r = redis.get("getKeyNonexisting")
-      val r2 = redis.set("getKey", "Hello").flatMap(_ => {
-        redis.get("getKey")
-      })
+      val r2 = redis
+        .set("getKey", "Hello")
+        .flatMap(_ => {
+          redis.get("getKey")
+        })
       Await.result(r, timeOut) mustEqual None
       Await.result(r2, timeOut) mustEqual Some(ByteString("Hello"))
 
@@ -111,61 +126,79 @@ class StringsSpec extends RedisStandaloneServer {
 
     "GET with conversion" in {
       val dumbObject = new DumbClass("foo", "bar")
-      val r = redis.set("getDumbKey", dumbObject).flatMap(_ => {
-        redis.get[DumbClass]("getDumbKey")
-      })
+      val r = redis
+        .set("getDumbKey", dumbObject)
+        .flatMap(_ => {
+          redis.get[DumbClass]("getDumbKey")
+        })
       Await.result(r, timeOut) mustEqual Some(dumbObject)
     }
 
     "GETBIT" in {
       val r = redis.getbit("getbitKeyNonexisting", 0)
-      val r2 = redis.set("getbitKey", "Hello").flatMap(_ => {
-        redis.getbit("getbitKey", 1)
-      })
+      val r2 = redis
+        .set("getbitKey", "Hello")
+        .flatMap(_ => {
+          redis.getbit("getbitKey", 1)
+        })
       Await.result(r, timeOut) mustEqual false
       Await.result(r2, timeOut) mustEqual true
     }
 
     "GETRANGE" in {
-      val r = redis.set("getrangeKey", "This is a string").flatMap(_ => {
-        Future.sequence(Seq(
-          redis.getrange("getrangeKey", 0, 3),
-          redis.getrange("getrangeKey", -3, -1),
-          redis.getrange("getrangeKey", 0, -1),
-          redis.getrange("getrangeKey", 10, 100)
-        ).map(_.map(_.map(_.utf8String).get)))
-      })
+      val r = redis
+        .set("getrangeKey", "This is a string")
+        .flatMap(_ => {
+          Future.sequence(
+            Seq(
+              redis.getrange("getrangeKey", 0, 3),
+              redis.getrange("getrangeKey", -3, -1),
+              redis.getrange("getrangeKey", 0, -1),
+              redis.getrange("getrangeKey", 10, 100)
+            ).map(_.map(_.map(_.utf8String).get))
+          )
+        })
       Await.result(r, timeOut) mustEqual Seq("This", "ing", "This is a string", "string")
     }
 
     "GETSET" in {
-      val r = redis.set("getsetKey", "Hello").flatMap(_ => {
-        redis.getset("getsetKey", "World").flatMap(hello => {
-          hello mustEqual Some(ByteString("Hello"))
-          redis.get("getsetKey")
+      val r = redis
+        .set("getsetKey", "Hello")
+        .flatMap(_ => {
+          redis
+            .getset("getsetKey", "World")
+            .flatMap(hello => {
+              hello mustEqual Some(ByteString("Hello"))
+              redis.get("getsetKey")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual Some(ByteString("World"))
     }
 
     "INCR" in {
-      val r = redis.set("incrKey", "10").flatMap(_ => {
-        redis.incr("incrKey")
-      })
+      val r = redis
+        .set("incrKey", "10")
+        .flatMap(_ => {
+          redis.incr("incrKey")
+        })
       Await.result(r, timeOut) mustEqual 11
     }
 
     "INCRBY" in {
-      val r = redis.set("incrbyKey", "10").flatMap(_ => {
-        redis.incrby("incrbyKey", 5)
-      })
+      val r = redis
+        .set("incrbyKey", "10")
+        .flatMap(_ => {
+          redis.incrby("incrbyKey", 5)
+        })
       Await.result(r, timeOut) mustEqual 15
     }
 
     "INCRBYFLOAT" in {
-      val r = redis.set("incrbyfloatKey", "10.50").flatMap(_ => {
-        redis.incrbyfloat("incrbyfloatKey", 0.15)
-      })
+      val r = redis
+        .set("incrbyfloatKey", "10.50")
+        .flatMap(_ => {
+          redis.incrbyfloat("incrbyfloatKey", 0.15)
+        })
       Await.result(r, timeOut) mustEqual Some(10.65)
     }
 
@@ -183,13 +216,17 @@ class StringsSpec extends RedisStandaloneServer {
     }
 
     "MSET" in {
-      val r = redis.mset(Map("msetKey" -> "Hello", "msetKey2" -> "World")).flatMap(ok => {
-        ok mustEqual true
-        Future.sequence(Seq(
-          redis.get("msetKey"),
-          redis.get("msetKey2")
-        ))
-      })
+      val r = redis
+        .mset(Map("msetKey" -> "Hello", "msetKey2" -> "World"))
+        .flatMap(ok => {
+          ok mustEqual true
+          Future.sequence(
+            Seq(
+              redis.get("msetKey"),
+              redis.get("msetKey2")
+            )
+          )
+        })
       Await.result(r, timeOut) mustEqual Seq(Some(ByteString("Hello")), Some(ByteString("World")))
     }
 
@@ -206,14 +243,18 @@ class StringsSpec extends RedisStandaloneServer {
     }
 
     "PSETEX" in {
-      val r = redis.psetex("psetexKey", 2000, "temp value").flatMap(x => {
-        x mustEqual true
-        redis.get("psetexKey").flatMap(v => {
-          v mustEqual Some(ByteString("temp value"))
-          Thread.sleep(2000)
-          redis.get("psetexKey")
+      val r = redis
+        .psetex("psetexKey", 2000, "temp value")
+        .flatMap(x => {
+          x mustEqual true
+          redis
+            .get("psetexKey")
+            .flatMap(v => {
+              v mustEqual Some(ByteString("temp value"))
+              Thread.sleep(2000)
+              redis.get("psetexKey")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual None
     }
 
@@ -265,14 +306,18 @@ class StringsSpec extends RedisStandaloneServer {
     }
 
     "SETEX" in {
-      val r = redis.setex("setexKey", 1, "temp value").flatMap(x => {
-        x mustEqual true
-        redis.get("setexKey").flatMap(v => {
-          v mustEqual Some(ByteString("temp value"))
-          Thread.sleep(2000)
-          redis.get("setexKey")
+      val r = redis
+        .setex("setexKey", 1, "temp value")
+        .flatMap(x => {
+          x mustEqual true
+          redis
+            .get("setexKey")
+            .flatMap(v => {
+              v mustEqual Some(ByteString("temp value"))
+              Thread.sleep(2000)
+              redis.get("setexKey")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual None
     }
 
@@ -289,22 +334,30 @@ class StringsSpec extends RedisStandaloneServer {
     }
 
     "SETRANGE" in {
-      val r = redis.set("setrangeKey", "Hello World").flatMap(d => {
-        redis.setrange("setrangeKey", 6, "Redis").flatMap(length => {
-          length mustEqual "Hello Redis".length
-          redis.get("setrangeKey")
+      val r = redis
+        .set("setrangeKey", "Hello World")
+        .flatMap(d => {
+          redis
+            .setrange("setrangeKey", 6, "Redis")
+            .flatMap(length => {
+              length mustEqual "Hello Redis".length
+              redis.get("setrangeKey")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual Some(ByteString("Hello Redis"))
     }
 
     "STRLEN" in {
-      val r = redis.set("strlenKey", "Hello World").flatMap(d => {
-        redis.strlen("strlenKey").flatMap(length => {
-          length mustEqual "Hello World".length
-          redis.strlen("strlenKeyNonexisting")
+      val r = redis
+        .set("strlenKey", "Hello World")
+        .flatMap(d => {
+          redis
+            .strlen("strlenKey")
+            .flatMap(length => {
+              length mustEqual "Hello World".length
+              redis.strlen("strlenKeyNonexisting")
+            })
         })
-      })
       Await.result(r, timeOut) mustEqual 0
     }
   }

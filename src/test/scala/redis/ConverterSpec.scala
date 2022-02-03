@@ -2,7 +2,8 @@ package redis
 
 import org.specs2.mutable.Specification
 import akka.util.ByteString
-import redis.protocol.{Bulk, RedisReply}
+import redis.protocol.Bulk
+import redis.protocol.RedisReply
 
 case class DumbClass(s1: String, s2: String)
 
@@ -18,9 +19,9 @@ object DumbClass {
     }
   }
 
-  implicit val redisReplyDeserializer =  new RedisReplyDeserializer[DumbClass] {
-    override def deserialize: PartialFunction[RedisReply, DumbClass] = {
-      case Bulk(Some(bs)) => byteStringFormatter.deserialize(bs)
+  implicit val redisReplyDeserializer = new RedisReplyDeserializer[DumbClass] {
+    override def deserialize: PartialFunction[RedisReply, DumbClass] = { case Bulk(Some(bs)) =>
+      byteStringFormatter.deserialize(bs)
     }
   }
 }

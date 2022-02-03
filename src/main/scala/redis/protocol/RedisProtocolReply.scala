@@ -117,7 +117,6 @@ object DecodeResult {
   val unit: DecodeResult[Unit] = FullyDecoded((), ByteString.empty)
 }
 
-
 object RedisProtocolReply {
   val ERROR = '-'
   val STATUS = '+'
@@ -137,7 +136,7 @@ object RedisProtocolReply {
         case STATUS => decodeString(bs.tail).map(Status(_))
         case BULK => decodeBulk(bs.tail)
         case MULTIBULK => decodeMultiBulk(bs.tail)
-        case _ => throw new Exception("Redis Protocol error: Got " + bs.head + " as initial reply byte >>"+ bs.tail.utf8String)
+        case _ => throw new Exception("Redis Protocol error: Got " + bs.head + " as initial reply byte >>" + bs.tail.utf8String)
       }
     }
   }
@@ -170,7 +169,7 @@ object RedisProtocolReply {
   }
 
   def decodeInteger(bs: ByteString): DecodeResult[Integer] = {
-    decodeString(bs).map { (string) => Integer(string) }
+    decodeString(bs).map { string => Integer(string) }
   }
 
   def decodeString(bs: ByteString): DecodeResult[ByteString] = {
@@ -220,11 +219,10 @@ object RedisProtocolReply {
     @tailrec
     def helper(i: Int, bs: ByteString): DecodeResult[Int] = {
       if (i > 0) {
-        val reply = decodeReply(bs)
-          .map { r =>
-            builder += r
-            i - 1
-          }
+        val reply = decodeReply(bs).map { r =>
+          builder += r
+          i - 1
+        }
         if (reply.isFullyDecoded)
           helper(i - 1, reply.rest)
         else

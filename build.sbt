@@ -18,7 +18,6 @@ val rediscalaDependencies = Seq(
   scalacheck % "test"
 )
 
-
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 val Scala211 = "2.11.12"
@@ -44,12 +43,13 @@ lazy val standardSettings = Def.settings(
         <url>https://github.com/xuwei-k</url>
       </developer>
     </developers>
-    ),
+  ),
   publishTo := sonatypePublishTo.value,
   publishMavenStyle := true,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
-    "-encoding", "UTF-8",
+    "-encoding",
+    "UTF-8",
     "-Xlint",
     "-deprecation",
     "-feature",
@@ -58,22 +58,22 @@ lazy val standardSettings = Def.settings(
   ),
   scalacOptions in (Compile, doc) ++= {
     Seq(
-      "-sourcepath", (baseDirectory in LocalProject("rediscala")).value.getAbsolutePath
+      "-sourcepath",
+      (baseDirectory in LocalProject("rediscala")).value.getAbsolutePath
     )
   },
   autoAPIMappings := true,
   scalacOptions in (Compile, doc) ++= {
     val v = (version in LocalProject("rediscala")).value
-    val branch = if(v.trim.endsWith("SNAPSHOT")) "main" else v
+    val branch = if (v.trim.endsWith("SNAPSHOT")) "main" else v
     Seq[String](
-      "-doc-source-url", baseSourceUrl + branch +"€{FILE_PATH}.scala"
+      "-doc-source-url",
+      baseSourceUrl + branch + "€{FILE_PATH}.scala"
     )
   },
 )
 
-lazy val root = Project(id = "rediscala",
-  base = file(".")
-).settings(
+lazy val root = Project(id = "rediscala", base = file(".")).settings(
   standardSettings,
   libraryDependencies ++= rediscalaDependencies
 )

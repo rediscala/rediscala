@@ -1,27 +1,34 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-
 import akka.actor.SupervisorStrategy.Stop
 import akka.actor._
-import akka.util.{ByteString, ByteStringBuilder}
-import redis.{Operation, Transaction}
-
+import akka.util.ByteString
+import akka.util.ByteStringBuilder
+import redis.Operation
+import redis.Transaction
 import scala.collection.mutable
 import scala.concurrent.duration.FiniteDuration
 
 object RedisClientActor {
 
-  def props( address: InetSocketAddress, getConnectOperations: () => Seq[Operation[_, _]],
-             onConnectStatus: Boolean => Unit,
-             dispatcherName: String,
-             connectTimeout: Option[FiniteDuration] = None) =
+  def props(
+    address: InetSocketAddress,
+    getConnectOperations: () => Seq[Operation[_, _]],
+    onConnectStatus: Boolean => Unit,
+    dispatcherName: String,
+    connectTimeout: Option[FiniteDuration] = None
+  ) =
     Props(new RedisClientActor(address, getConnectOperations, onConnectStatus, dispatcherName, connectTimeout))
 }
 
-class RedisClientActor(override val address: InetSocketAddress, getConnectOperations: () =>
-  Seq[Operation[_, _]], onConnectStatus: Boolean => Unit, dispatcherName: String, connectTimeout: Option[FiniteDuration] = None) extends RedisWorkerIO(address, onConnectStatus, connectTimeout) {
-
+class RedisClientActor(
+  override val address: InetSocketAddress,
+  getConnectOperations: () => Seq[Operation[_, _]],
+  onConnectStatus: Boolean => Unit,
+  dispatcherName: String,
+  connectTimeout: Option[FiniteDuration] = None
+) extends RedisWorkerIO(address, onConnectStatus, connectTimeout) {
 
   import context._
 

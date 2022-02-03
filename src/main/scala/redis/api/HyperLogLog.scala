@@ -1,9 +1,12 @@
 package redis.api.hyperloglog
 
 import akka.util.ByteString
-import redis.{RedisCommandIntegerLong, RedisCommandStatusBoolean, ByteStringSerializer}
+import redis.RedisCommandIntegerLong
+import redis.RedisCommandStatusBoolean
+import redis.ByteStringSerializer
 
-case class Pfadd[K, V](key: K, values: Seq[V])(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V]) extends RedisCommandIntegerLong {
+case class Pfadd[K, V](key: K, values: Seq[V])(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
+    extends RedisCommandIntegerLong {
   val isMasterOnly = true
   val encodedRequest: ByteString = encode("PFADD", redisKey.serialize(key) +: values.map(convert.serialize))
 }

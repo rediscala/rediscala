@@ -1,6 +1,7 @@
 package redis.commands
 
-import redis.{ByteStringDeserializer, Request}
+import redis.ByteStringDeserializer
+import redis.Request
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import redis.api.blists._

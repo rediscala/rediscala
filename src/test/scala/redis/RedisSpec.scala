@@ -1,25 +1,25 @@
 package redis
 
-import java.io.{InputStream, OutputStream}
+import java.io.InputStream
+import java.io.OutputStream
 import java.net.Socket
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
-
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
 import akka.util.Timeout
 import org.specs2.concurrent.FutureAwait
 import org.specs2.mutable.SpecificationLike
 import org.specs2.specification.core.Fragments
-
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 import scala.io.Source
 import scala.reflect.io.File
-import scala.sys.process.{ProcessIO, _}
+import scala.sys.process.ProcessIO
+import scala.sys.process._
 import scala.util.Try
 import scala.util.control.NonFatal
-
+import redis.RedisServerHelper._
 
 object RedisServerHelper {
   val redisHost = "127.0.0.1"
@@ -27,23 +27,21 @@ object RedisServerHelper {
   // remove stacktrace when we stop the process
   val processLogger = ProcessLogger(line => println(line), line => Console.err.println(line))
   val redisServerPath = {
-    val tmp = if (Option(System.getenv("REDIS_HOME")).isEmpty || System.getenv("REDIS_HOME") == "")
-      "/usr/local/bin"
-    else
-      System.getenv("REDIS_HOME")
+    val tmp =
+      if (Option(System.getenv("REDIS_HOME")).isEmpty || System.getenv("REDIS_HOME") == "")
+        "/usr/local/bin"
+      else
+        System.getenv("REDIS_HOME")
     val absolutePath = File(tmp).toAbsolute.path
     println("redisServerPath: " + absolutePath)
     absolutePath
   }
 
-
   val redisServerCmd = s"$redisServerPath/redis-server"
   val redisServerLogLevel = ""
 
-
   val portNumber = new AtomicInteger(10500)
 }
-
 
 abstract class RedisHelper extends TestKit(ActorSystem()) with SpecificationLike with FutureAwait {
 
@@ -55,20 +53,18 @@ abstract class RedisHelper extends TestKit(ActorSystem()) with SpecificationLike
   val timeOut = 10 seconds
   val longTimeOut = 100 seconds
 
-
   override def map(fs: => Fragments) = {
     setup()
     fs ^
-      step({
+      step {
         TestKit.shutdownActorSystem(system)
         cleanup()
-      })
+      }
   }
 
   def setup(): Unit
 
   def cleanup(): Unit
-
 
 }
 
@@ -89,12 +85,16 @@ abstract class RedisStandaloneServer extends RedisHelper {
   lazy val redis = RedisClient(port = port)
 
   def redisVersion(): Future[Option[RedisVersion]] = redis.info("Server").map { info =>
-    info.split("\r\n").drop(1).flatMap { line =>
-      line.split(":") match {
-        case Array(key, value) => List(key -> value)
-        case _ => List.empty
+    info
+      .split("\r\n")
+      .drop(1)
+      .flatMap { line =>
+        line.split(":") match {
+          case Array(key, value) => List(key -> value)
+          case _ => List.empty
+        }
       }
-    }.find(_._1 == "redis_version")
+      .find(_._1 == "redis_version")
       .map(_._2.split("\\.") match {
         case Array(major, minor, patch) => RedisVersion(major.toInt, minor.toInt, patch.toInt)
       })
@@ -109,7 +109,6 @@ abstract class RedisStandaloneServer extends RedisHelper {
     result.get
   }
 
-
   override def setup() = {
     Thread.sleep(3000)
   }
@@ -118,7 +117,6 @@ abstract class RedisStandaloneServer extends RedisHelper {
     redisManager.stopAll()
   }
 }
-
 
 abstract class RedisSentinelClients(val masterName: String = "mymaster") extends RedisHelper {
 
@@ -135,9 +133,7 @@ abstract class RedisSentinelClients(val masterName: String = "mymaster") extends
   lazy val redisClient = RedisClient(port = masterPort)
   lazy val sentinelClient = SentinelClient(port = sentinelPort1)
   lazy val sentinelMonitoredRedisClient =
-    SentinelMonitoredRedisClient(master = masterName,
-      sentinels = Seq((redisHost, sentinelPort1), (redisHost, sentinelPort2)))
-
+    SentinelMonitoredRedisClient(master = masterName, sentinels = Seq((redisHost, sentinelPort1), (redisHost, sentinelPort2)))
 
   val redisManager = new RedisManager()
 
@@ -165,7 +161,6 @@ abstract class RedisSentinelClients(val masterName: String = "mymaster") extends
     redisManager.stopAll()
   }
 
-
 }
 
 class RedisManager {
@@ -181,7 +176,6 @@ class RedisManager {
     sentinelProcess
   }
 
-
   def newSlaveProcess(masterPort: Int, port: Int = portNumber.getAndIncrement()) = {
     val slaveProcess = new SlaveProcess(masterPort, port)
     slaveProcess.start()
@@ -196,20 +190,16 @@ class RedisManager {
     redisProcess
   }
 
-
   def stopAll() = {
     processes.foreach(_.stop())
     Thread.sleep(5000)
   }
 
-
 }
-
 
 abstract class RedisClusterClients() extends RedisHelper {
 
   import RedisServerHelper._
-
 
   var processes: Seq[Process] = Seq.empty
   val fileDir = new java.io.File("/tmp/redis" + System.currentTimeMillis())
@@ -217,7 +207,7 @@ abstract class RedisClusterClients() extends RedisHelper {
   def newNode(port: Int) =
     s"$redisServerCmd --port $port --cluster-enabled yes --cluster-config-file nodes-${port}.conf --cluster-node-timeout 30000 --appendonly yes --appendfilename appendonly-${port}.aof --dbfilename dump-${port}.rdb --logfile ${port}.log --daemonize yes"
 
-  val nodePorts = ((0 to 5).map(_ => portNumber.getAndIncrement()))
+  val nodePorts = (0 to 5).map(_ => portNumber.getAndIncrement())
 
   override def setup() = {
     println("Setup")
@@ -228,44 +218,43 @@ abstract class RedisClusterClients() extends RedisHelper {
     val nodes = nodePorts.map(s => redisHost + ":" + s).mkString(" ")
 
     println(s"$redisServerPath/redis-trib.rb create --replicas 1 ${nodes}")
-    val redisTrib = Process(s"$redisServerPath/redis-trib.rb create --replicas 1 ${nodes}").run(
-
-      new ProcessIO(
-        (writeInput: OutputStream) => {
-          //
-          Thread.sleep(2000)
-          println("yes")
-          writeInput.write("yes\n".getBytes)
-          writeInput.flush
-        },
-        (processOutput: InputStream) => {
-          Source.fromInputStream(processOutput).getLines().foreach { l => println(l) }
-        },
-        (processError: InputStream) => {
-          Source.fromInputStream(processError).getLines().foreach { l => println(l) }
-        },
-        daemonizeThreads = false
+    val redisTrib = Process(s"$redisServerPath/redis-trib.rb create --replicas 1 ${nodes}")
+      .run(
+        new ProcessIO(
+          (writeInput: OutputStream) => {
+            //
+            Thread.sleep(2000)
+            println("yes")
+            writeInput.write("yes\n".getBytes)
+            writeInput.flush
+          },
+          (processOutput: InputStream) => {
+            Source.fromInputStream(processOutput).getLines().foreach { l => println(l) }
+          },
+          (processError: InputStream) => {
+            Source.fromInputStream(processError).getLines().foreach { l => println(l) }
+          },
+          daemonizeThreads = false
+        )
       )
-
-    ).exitValue()
+      .exitValue()
     Thread.sleep(5000)
-
 
   }
 
   override def cleanup() = {
     println("Stop begin")
-    //cluster shutdown
+    // cluster shutdown
     nodePorts.map { port =>
       val out = new Socket(redisHost, port).getOutputStream
       out.write("SHUTDOWN NOSAVE\n".getBytes)
       out.flush
     }
     Thread.sleep(6000)
-    //Await.ready(RedisClient(port = port).shutdown(redis.api.NOSAVE),timeOut) }
+    // Await.ready(RedisClient(port = port).shutdown(redis.api.NOSAVE),timeOut) }
     processes.foreach(_.destroy())
 
-    //deleteDirectory()
+    // deleteDirectory()
 
     println("Stop end")
   }
@@ -277,9 +266,6 @@ abstract class RedisClusterClients() extends RedisHelper {
   }
 }
 
-
-import redis.RedisServerHelper._
-
 class RedisProcess(val port: Int) {
   var server: Process = null
   val cmd = s"${redisServerCmd} --port $port ${redisServerLogLevel}"
@@ -288,7 +274,6 @@ class RedisProcess(val port: Int) {
     if (server == null)
       server = Process(cmd).run(processLogger)
   }
-
 
   def stop() = {
     if (server != null) {
@@ -310,7 +295,6 @@ class RedisProcess(val port: Int) {
 
   }
 }
-
 
 class SentinelProcess(masterName: String, masterPort: Int, port: Int) extends RedisProcess(port) {
 
@@ -334,4 +318,3 @@ class SentinelProcess(masterName: String, masterPort: Int, port: Int) extends Re
 class SlaveProcess(masterPort: Int, port: Int) extends RedisProcess(port) {
   override val cmd = s"$redisServerCmd --port $port --slaveof $redisHost $masterPort $redisServerLogLevel"
 }
-

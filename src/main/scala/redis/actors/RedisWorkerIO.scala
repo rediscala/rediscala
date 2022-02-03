@@ -1,8 +1,11 @@
 package redis.actors
 
-import akka.actor.{ActorLogging, ActorRef, Actor}
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
+import akka.actor.Actor
 import akka.io.Tcp
-import akka.util.{ByteStringBuilder, ByteString}
+import akka.util.ByteStringBuilder
+import akka.util.ByteString
 import java.net.InetSocketAddress
 import akka.io.Tcp._
 import akka.io.Tcp.Connected
@@ -12,11 +15,15 @@ import akka.io.Tcp.CommandFailed
 import akka.io.Tcp.Received
 import scala.concurrent.duration.FiniteDuration
 
-abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Boolean => Unit, connectTimeout: Option[FiniteDuration] = None) extends Actor with ActorLogging {
+abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Boolean => Unit, connectTimeout: Option[FiniteDuration] = None)
+    extends Actor
+    with ActorLogging {
 
   private var currAddress = address
 
   import context._
+  import scala.concurrent.duration.DurationInt
+  import scala.concurrent.duration.FiniteDuration
 
   val tcp = akka.io.IO(Tcp)(context.system)
 
@@ -80,14 +87,14 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   private def reading: Receive = {
     case WriteAck => tryWrite()
     case Received(dataByteString) => {
-      if(sender == tcpWorker)
+      if (sender == tcpWorker)
         onDataReceived(dataByteString)
       else
         onDataReceivedOnClosingConnection(dataByteString)
     }
     case a: InetSocketAddress => onAddressChanged(a)
     case c: ConnectionClosed => {
-      if(sender == tcpWorker)
+      if (sender == tcpWorker)
         onConnectionClosed(c)
       else {
         onConnectStatus(false)
@@ -175,8 +182,6 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     }
   }
 
-  import scala.concurrent.duration.{DurationInt, FiniteDuration}
-
   def reconnectDuration: FiniteDuration = 2 seconds
 
   private def writeWorker(byteString: ByteString): Unit = {
@@ -186,7 +191,6 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   }
 
 }
-
 
 object WriteAck extends Event
 

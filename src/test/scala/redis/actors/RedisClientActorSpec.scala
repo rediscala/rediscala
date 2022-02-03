@@ -1,17 +1,17 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-
 import akka.actor._
 import akka.testkit._
 import akka.util.ByteString
 import org.specs2.mutable.SpecificationLike
 import redis.api.connection.Ping
 import redis.api.strings.Get
-import redis.{Operation, Redis}
-
+import redis.Operation
+import redis.Redis
 import scala.collection.mutable
-import scala.concurrent.{Await, Promise}
+import scala.concurrent.Await
+import scala.concurrent.Promise
 
 class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike with ImplicitSender {
 
@@ -23,14 +23,13 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
 
   val timeout = 120.seconds dilated
 
-  val onConnectStatus: (Boolean) => Unit = (status:Boolean) => {}
+  val onConnectStatus: (Boolean) => Unit = (status: Boolean) => {}
 
   "RedisClientActor" should {
 
-    "ok" in within(timeout){
+    "ok" in within(timeout) {
       val probeReplyDecoder = TestProbe()
       val probeMock = TestProbe()
-
 
       val promiseConnect1 = Promise[String]()
       val opConnectPing = Operation(Ping, promiseConnect1)
@@ -42,9 +41,10 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
         Seq(opConnectPing, opConnectGet)
       }
 
-
-      val redisClientActor = TestActorRef[RedisClientActorMock](Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus)
-        .withDispatcher(Redis.dispatcher.name))
+      val redisClientActor = TestActorRef[RedisClientActorMock](
+        Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus)
+          .withDispatcher(Redis.dispatcher.name)
+      )
 
       val promise = Promise[String]()
       val op1 = Operation(Ping, promise)
@@ -56,24 +56,24 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       probeMock.expectMsg(WriteMock) mustEqual WriteMock
       awaitAssert(redisClientActor.underlyingActor.queuePromises.length mustEqual 2)
 
-      //onConnectWrite
+      // onConnectWrite
       redisClientActor.underlyingActor.onConnectWrite()
       awaitAssert(redisClientActor.underlyingActor.queuePromises.toSeq mustEqual Seq(opConnectPing, opConnectGet, op1, op2))
       awaitAssert(redisClientActor.underlyingActor.queuePromises.length mustEqual 4)
 
-      //onWriteSent
+      // onWriteSent
       redisClientActor.underlyingActor.onWriteSent()
       probeReplyDecoder.expectMsgType[QueuePromises] mustEqual QueuePromises(mutable.Queue(opConnectPing, opConnectGet, op1, op2))
       awaitAssert(redisClientActor.underlyingActor.queuePromises must beEmpty)
 
-      //onDataReceived
+      // onDataReceived
       awaitAssert(redisClientActor.underlyingActor.onDataReceived(ByteString.empty))
       probeReplyDecoder.expectMsgType[ByteString] mustEqual ByteString.empty
 
       awaitAssert(redisClientActor.underlyingActor.onDataReceived(ByteString("bytestring")))
       probeReplyDecoder.expectMsgType[ByteString] mustEqual ByteString("bytestring")
 
-      //onConnectionClosed
+      // onConnectionClosed
       val deathWatcher = TestProbe()
       deathWatcher.watch(probeReplyDecoder.ref)
       redisClientActor.underlyingActor.onConnectionClosed()
@@ -84,9 +84,11 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       val probeReplyDecoder = TestProbe()
       val probeMock = TestProbe()
 
-      val redisClientActor = TestActorRef[RedisClientActorMock](Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus)
-        .withDispatcher(Redis.dispatcher.name))
-        .underlyingActor
+      val redisClientActor = TestActorRef[RedisClientActorMock](
+        Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus).withDispatcher(
+          Redis.dispatcher.name
+        )
+      ).underlyingActor
 
       val promise3 = Promise[String]()
       redisClientActor.receive(Operation(Ping, promise3))
@@ -104,8 +106,10 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       val probeReplyDecoder = TestProbe()
       val probeMock = TestProbe()
 
-      val redisClientActorRef = TestActorRef[RedisClientActorMock](Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus)
-        .withDispatcher(Redis.dispatcher.name))
+      val redisClientActorRef = TestActorRef[RedisClientActorMock](
+        Props(classOf[RedisClientActorMock], probeReplyDecoder.ref, probeMock.ref, getConnectOperations, onConnectStatus)
+          .withDispatcher(Redis.dispatcher.name)
+      )
       val redisClientActor = redisClientActorRef.underlyingActor
 
       val promiseSent = Promise[String]()
@@ -132,8 +136,12 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
   }
 }
 
-class RedisClientActorMock(probeReplyDecoder: ActorRef, probeMock: ActorRef, getConnectOperations: () => Seq[Operation[_, _]], onConnectStatus: Boolean => Unit )
-  extends RedisClientActor(new InetSocketAddress("localhost", 6379), getConnectOperations, onConnectStatus, Redis.dispatcher.name) {
+class RedisClientActorMock(
+  probeReplyDecoder: ActorRef,
+  probeMock: ActorRef,
+  getConnectOperations: () => Seq[Operation[_, _]],
+  onConnectStatus: Boolean => Unit
+) extends RedisClientActor(new InetSocketAddress("localhost", 6379), getConnectOperations, onConnectStatus, Redis.dispatcher.name) {
   override def initRepliesDecoder() = probeReplyDecoder
 
   override def preStart(): Unit = {

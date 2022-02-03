@@ -1,32 +1,35 @@
 package redis.actors
 
 import akka.util.ByteString
-import redis.protocol.{Error, MultiBulk, RedisReply}
+import redis.protocol.Error
+import redis.protocol.MultiBulk
+import redis.protocol.RedisReply
 import redis.api.pubsub._
 import java.net.InetSocketAddress
 import redis.api.connection.Auth
 
 class RedisSubscriberActorWithCallback(
-                                        address: InetSocketAddress,
-                                        channels: Seq[String],
-                                        patterns: Seq[String],
-                                        messageCallback: Message => Unit,
-                                        pmessageCallback: PMessage => Unit,
-                                        authPassword: Option[String] = None,
-                                        onConnectStatus: Boolean => Unit 
-                                        ) extends RedisSubscriberActor(address, channels, patterns, authPassword,onConnectStatus) {
+  address: InetSocketAddress,
+  channels: Seq[String],
+  patterns: Seq[String],
+  messageCallback: Message => Unit,
+  pmessageCallback: PMessage => Unit,
+  authPassword: Option[String] = None,
+  onConnectStatus: Boolean => Unit
+) extends RedisSubscriberActor(address, channels, patterns, authPassword, onConnectStatus) {
   def onMessage(m: Message) = messageCallback(m)
 
   def onPMessage(pm: PMessage) = pmessageCallback(pm)
 }
 
 abstract class RedisSubscriberActor(
-                                     address: InetSocketAddress,
-                                     channels: Seq[String],
-                                     patterns: Seq[String],
-                                     authPassword: Option[String] = None,
-                                     onConnectStatus: Boolean => Unit 
-                                     ) extends RedisWorkerIO(address,onConnectStatus) with DecodeReplies {
+  address: InetSocketAddress,
+  channels: Seq[String],
+  patterns: Seq[String],
+  authPassword: Option[String] = None,
+  onConnectStatus: Boolean => Unit
+) extends RedisWorkerIO(address, onConnectStatus)
+    with DecodeReplies {
   def onConnectWrite(): ByteString = {
     authPassword.map(Auth(_).encodedRequest).getOrElse(ByteString.empty)
   }
@@ -43,17 +46,17 @@ abstract class RedisSubscriberActor(
 
   override def preStart(): Unit = {
     super.preStart()
-    if(channelsSubscribed.nonEmpty){
+    if (channelsSubscribed.nonEmpty) {
       write(SUBSCRIBE(channelsSubscribed.toSeq: _*).toByteString)
     }
-    if(patternsSubscribed.nonEmpty){
+    if (patternsSubscribed.nonEmpty) {
       write(PSUBSCRIBE(patternsSubscribed.toSeq: _*).toByteString)
     }
   }
 
   def writing: Receive = {
     case message: SubscribeMessage => {
-      if(message.params.nonEmpty){
+      if (message.params.nonEmpty) {
         write(message.toByteString)
         message match {
           case s: SUBSCRIBE => channelsSubscribed ++= s.channel

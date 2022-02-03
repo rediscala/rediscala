@@ -27,7 +27,7 @@ jobs:
     - uses: coursier/cache-action@v6
     - run: ./install-redis.sh
     - run: sudo gem install redis
-    - run: sbt "SetScala${{ matrix.scala }}" Test/compile
+    - run: sbt scalafmtSbtCheck "SetScala${{ matrix.scala }}" scalafmtCheckAll Test/compile
     - uses: nick-invision/retry@v2
       with:
         timeout_minutes: 20

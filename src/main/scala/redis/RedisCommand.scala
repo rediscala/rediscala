@@ -3,7 +3,6 @@ package redis
 import akka.util.ByteString
 import redis.protocol._
 
-
 trait RedisCommand[RedisReplyT <: RedisReply, +T] {
   val isMasterOnly: Boolean
   val encodedRequest: ByteString
@@ -16,7 +15,6 @@ trait RedisCommand[RedisReplyT <: RedisReply, +T] {
 
   def encode(command: String, args: Seq[ByteString]) = RedisProtocolRequest.multiBulk(command, args)
 }
-
 
 trait RedisCommandStatus[T] extends RedisCommand[Status, T] {
   val decodeRedisReply: PartialFunction[ByteString, DecodeResult[Status]] = RedisProtocolReply.decodeReplyStatus
