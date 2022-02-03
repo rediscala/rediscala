@@ -83,24 +83,24 @@ You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then
 ### Redis Commands
 
 All commands are supported :
-* [Keys](http://redis.io/commands#generic) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Keys))
-* [Strings](http://redis.io/commands#string) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Strings))
-* [Hashes](http://redis.io/commands#hash) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Hashes))
-* [Lists](http://redis.io/commands#list) 
-  * non-blocking ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Lists))
-  * blocking ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.BLists))
-* [Sets](http://redis.io/commands#set) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Sets))
-* [Sorted Sets](http://redis.io/commands#sorted_set) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.SortedSets))
-* [Pub/Sub](http://redis.io/commands#pubsub) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Publish))
-* [Transactions](http://redis.io/commands#transactions) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Transactions))
-* [Connection](http://redis.io/commands#connection) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Connection))
-* [Scripting](http://redis.io/commands#scripting) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Scripting))
-* [Server](http://redis.io/commands#server) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.Server))
-* [HyperLogLog](http://redis.io/commands#hyperloglog) ([scaladoc](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.HyperLogLog))
+* [Keys](https://redis.io/commands#generic) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Keys.html))
+* [Strings](https://redis.io/commands#string) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Strings.html))
+* [Hashes](https://redis.io/commands#hash) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Hashes.html))
+* [Lists](https://redis.io/commands#list)
+  * non-blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Lists.html))
+  * blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/BLists.html))
+* [Sets](https://redis.io/commands#set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Sets.html))
+* [Sorted Sets](https://redis.io/commands#sorted_set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/SortedSets.html))
+* [Pub/Sub](https://redis.io/commands#pubsub) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Publish.html))
+* [Transactions](https://redis.io/commands#transactions) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Transactions.html))
+* [Connection](https://redis.io/commands#connection) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Connection.html))
+* [Scripting](https://redis.io/commands#scripting) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Scripting.html))
+* [Server](https://redis.io/commands#server) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Server.html))
+* [HyperLogLog](https://redis.io/commands#hyperloglog) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/HyperLogLog.html))
 
 ### Blocking commands
 
-[RedisBlockingClient](http://etaty.github.io/rediscala/latest/api/index.html#redis.RedisBlockingClient) is the instance allowing access to blocking commands :
+[RedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisBlockingClient.html) is the instance allowing access to blocking commands :
 * blpop
 * brpop
 * brpopplush
@@ -120,7 +120,7 @@ You can fork with: `git clone git@github.com:rediscala/rediscala-demo.git` then 
 ### Transactions
 
 The idea behind transactions in Rediscala is to start a transaction outside of a redis connection.
-We use the [TransactionBuilder](http://etaty.github.io/rediscala/latest/api/index.html#redis.commands.TransactionBuilder) to store call to redis commands (and for each command we give back a future).
+We use the [TransactionBuilder](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/TransactionBuilder.html) to store call to redis commands (and for each command we give back a future).
 When `exec` is called, `TransactionBuilder` will build and send all the commands together to the server. Then the futures will be completed.
 By doing that we can use a normal connection with pipelining, and avoiding to trap a command from outside, in the transaction...
 
