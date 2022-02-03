@@ -19,7 +19,7 @@ val rediscalaDependencies = Seq(
 )
 
 
-val baseSourceUrl = "https://github.com/etaty/rediscala/tree/"
+val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 val Scala211 = "2.11.12"
 val Scala212 = "2.12.15"
@@ -27,22 +27,21 @@ val Scala213 = "2.13.8"
 
 lazy val standardSettings = Def.settings(
   name := "rediscala",
-  organization := "com.github.etaty",
+  organization := "io.github.rediscala",
   scalaVersion := Scala211,
   crossScalaVersions := Seq(Scala211, Scala212, Scala213),
   addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
   addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
   addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-  homepage := Some(url("https://github.com/etaty/rediscala")),
-  scmInfo := Some(ScmInfo(url("https://github.com/etaty/rediscala"), "scm:git:git@github.com:etaty/rediscala.git")),
-  apiURL := Some(url("http://etaty.github.io/rediscala/latest/api/")),
+  homepage := Some(url("https://github.com/rediscala/rediscala")),
+  scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
   pomExtra := (
     <developers>
       <developer>
-        <id>etaty</id>
-        <name>Valerian Barbot</name>
-        <url>http://github.com/etaty/</url>
+        <id>xuwei-k</id>
+        <name>Kenji Yoshida</name>
+        <url>https://github.com/xuwei-k</url>
       </developer>
     </developers>
     ),
@@ -63,10 +62,9 @@ lazy val standardSettings = Def.settings(
     )
   },
   autoAPIMappings := true,
-  apiURL := Some(url("http://etaty.github.io/rediscala/")),
   scalacOptions in (Compile, doc) ++= {
     val v = (version in LocalProject("rediscala")).value
-    val branch = if(v.trim.endsWith("SNAPSHOT")) "master" else v
+    val branch = if(v.trim.endsWith("SNAPSHOT")) "main" else v
     Seq[String](
       "-doc-source-url", baseSourceUrl + branch +"€{FILE_PATH}.scala"
     )
