@@ -1,3 +1,25 @@
+import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+
+releaseTagName := (ThisBuild / version).value
+
+releaseCrossBuild := true
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+ publishSigned"),
+  releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+  setNextVersion,
+  commitNextVersion,
+  pushChanges,
+)
+
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+
 val akka = Def.setting(
   scalaBinaryVersion.value match {
     case "2.11" =>
@@ -62,7 +84,7 @@ lazy val standardSettings = Def.settings(
       </developer>
     </developers>
   ),
-  publishTo := sonatypePublishTo.value,
+  publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
