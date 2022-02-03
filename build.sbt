@@ -1,4 +1,4 @@
-val akkaVersion = "2.5.25"
+val akkaVersion = "2.5.32"
 
 val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
 
