@@ -1,24 +1,19 @@
-import sbt.Tests.{InProcess, Group}
-
 val akkaVersion = "2.5.32"
 
 val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
 
 val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.8.0"
+val specs2 = "org.specs2" %% "specs2-core" % "4.8.3"
 
 val stm = "org.scala-stm" %% "scala-stm" % "0.9.1"
 
-val scalacheck = "org.scalacheck" %% "scalacheck" % "1.14.2"
-
-//val scalameter = "com.github.axel22" %% "scalameter" % "0.4"
+val scalacheck = "org.scalacheck" %% "scalacheck" % "1.14.3"
 
 val rediscalaDependencies = Seq(
   akkaActor,
   stm,
   akkaTestkit % "test",
-  //scalameter % "test",
   specs2 % "test",
   scalacheck % "test"
 )
@@ -78,40 +73,9 @@ lazy val standardSettings = Def.settings(
   },
 )
 
-lazy val BenchTest = config("bench") extend Test
-
-lazy val benchTestSettings = inConfig(BenchTest)(Defaults.testSettings ++ Seq(
-  sourceDirectory in BenchTest := baseDirectory.value / "src/benchmark",
-  //testOptions in BenchTest += Tests.Argument("-preJDK7"),
-  testFrameworks in BenchTest := Seq(new TestFramework("org.scalameter.ScalaMeterFramework")),
-
-  //https://github.com/sbt/sbt/issues/539 => bug fixed in sbt 0.13.x
-  testGrouping in BenchTest := (definedTests in BenchTest map partitionTests).value
-))
-
 lazy val root = Project(id = "rediscala",
   base = file(".")
 ).settings(
   standardSettings,
   libraryDependencies ++= rediscalaDependencies
-).configs(
-  BenchTest
 )
-
-lazy val benchmark = {
-  import pl.project13.scala.sbt.JmhPlugin
-
-  Project(
-    id = "benchmark",
-    base = file("benchmark")
-  ).settings(Seq(
-    scalaVersion := Scala211,
-    libraryDependencies += "net.debasishg" %% "redisclient" % "3.0"
-  ))
-    .enablePlugins(JmhPlugin)
-    .dependsOn(root)
-}
-
-def partitionTests(tests: Seq[TestDefinition]) = {
-  Seq(new Group("inProcess", tests, InProcess))
-}
