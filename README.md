@@ -283,9 +283,3 @@ More than 250 000 requests/second
 
 The hardware used is a macbook retina (Intel Core i7, 2.6 GHz, 4 cores, 8 threads, 8GB) running the sun/oracle jvm 1.6
 
-You can run the bench with :
-
-1. clone the repo `git clone git@github.com:etaty/rediscala.git`
-2. run `sbt bench:test`
-3. open the bench report `rediscala/tmp/report/index.html`
-
