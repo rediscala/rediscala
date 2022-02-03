@@ -137,7 +137,7 @@ Full example: [ExampleTransaction](https://github.com/rediscala/rediscala-demo/b
 
 You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
-[TransactionsSpec](https://github.com/etaty/rediscala/blob/ee95652c8b14ce3e7014db1be3c5fabfa00cd7c6/src/test/scala/redis/commands/TransactionsSpec.scala) will reveal even more gems of the API.
+[TransactionsSpec](https://github.com/rediscala/rediscala/blob/8b4ff3bb686d03397401f30da4858f108b9f6dec/src/test/scala/redis/commands/TransactionsSpec.scala) will reveal even more gems of the API.
 
 ### Pub/Sub
 
@@ -181,7 +181,7 @@ Full example: [ExamplePubSub](https://github.com/rediscala/rediscala-demo/blob/e
 
 You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then run it, with `sbt run`
 
-[RedisPubSubSpec](https://github.com/etaty/rediscala/blob/master/src/test/scala/redis/RedisPubSubSpec.scala) will reveal even more gems of the API.
+[RedisPubSubSpec](https://github.com/rediscala/rediscala/blob/8b4ff3bb686d03397401f30da4858f108b9f6dec/src/test/scala/redis/RedisPubSubSpec.scala) will reveal even more gems of the API.
 
 ### Scripting
 
