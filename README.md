@@ -35,23 +35,7 @@ From version 1.3.1:
  * use akka 2.3
  * released for scala 2.10 & 2.11
 ```scala
-// new repo on maven.org
 libraryDependencies += "com.github.etaty" %% "rediscala" % "1.7.0"
-
-
-// old repo on bintray (1.5.0 and inferior version)
-resolvers += "rediscala" at "http://dl.bintray.com/etaty/maven"
-libraryDependencies += "com.etaty.rediscala" %% "rediscala" % "1.5.0"
-```
-
-For older rediscala versions (<= 1.3):
- * use akka 2.2
- * released for scala 2.10 only
- * use github "repo"
-```scala
-resolvers += "rediscala" at "https://raw.github.com/etaty/rediscala-mvn/master/releases/"
-
-libraryDependencies += "com.etaty.rediscala" %% "rediscala" % "1.3"
 ```
 
 ### Connect to the database
