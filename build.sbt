@@ -28,12 +28,17 @@ val rediscalaDependencies = Seq(
 val baseSourceUrl = "https://github.com/etaty/rediscala/tree/"
 
 val Scala211 = "2.11.12"
+val Scala212 = "2.12.15"
+val Scala213 = "2.13.8"
 
 lazy val standardSettings = Def.settings(
   name := "rediscala",
   organization := "com.github.etaty",
   scalaVersion := Scala211,
-  crossScalaVersions := Seq(Scala211, "2.12.10", "2.13.0"),
+  crossScalaVersions := Seq(Scala211, Scala212, Scala213),
+  addCommandAlias("SetScala2_11", s"++ ${Scala211}! -v"),
+  addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
+  addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/etaty/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/etaty/rediscala"), "scm:git:git@github.com:etaty/rediscala.git")),
