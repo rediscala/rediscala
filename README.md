@@ -268,6 +268,10 @@ Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscal
 
 ### Scaladoc
 
+[![Scaladoc](https://javadoc.io/badge2/io.github.rediscala/rediscala_3/javadoc.svg)](https://javadoc.io/doc/io.github.rediscala/rediscala_3)
+
+<details><summary>old versions</summary>
+  
 [Rediscala scaladoc API (version 1.9)](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/etaty/rediscala_2.12/1.9.0/rediscala_2.12-1.9.0-javadoc.jar/!/redis/index.html)
 
 [Rediscala scaladoc API (version 1.8)](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/etaty/rediscala_2.11/1.8.0/rediscala_2.11-1.8.0-javadoc.jar/!/index.html#package)
@@ -287,6 +291,8 @@ Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscal
 [Rediscala scaladoc API (version 1.1)](http://etaty.github.io/rediscala/1.1/api/index.html#package)
 
 [Rediscala scaladoc API (version 1.0)](http://etaty.github.io/rediscala/1.0/api/index.html#package)
+
+<details>
 
 ### Performance
 
