@@ -16,6 +16,7 @@ jobs:
           - 2_11
           - 2_12
           - 2_13
+          - 3
     env:
       REDIS_HOME: "redis-4.0.14/src"
     steps:
