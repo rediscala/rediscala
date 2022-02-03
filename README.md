@@ -1,6 +1,8 @@
 rediscala
 =========
 
+[![scaladex](https://index.scala-lang.org/rediscala/rediscala/rediscala/latest-by-scala-version.svg)](https://index.scala-lang.org/rediscala/rediscala/rediscala)
+
 A [Redis](https://redis.io/) client for Scala with non-blocking and asynchronous I/O operations.
 
  * Reactive : Redis requests/replies are wrapped in Futures.
