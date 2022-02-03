@@ -99,7 +99,7 @@ lazy val standardSettings = Def.settings(
   Compile / doc / scalacOptions ++= {
     Seq(
       "-sourcepath",
-      (LocalProject("rediscala") / baseDirectory).value.getAbsolutePath
+      (LocalRootProject / baseDirectory).value.getAbsolutePath
     )
   },
   autoAPIMappings := true,
