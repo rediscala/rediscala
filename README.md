@@ -53,20 +53,23 @@ import redis.RedisClient
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import akka.actor.ActorSystem
 
-object Main extends App {
-  implicit val akkaSystem = akka.actor.ActorSystem()
+object Main {
+  def main(args: Array[String]): Unit = {
+    implicit val akkaSystem: ActorSystem = ActorSystem()
 
-  val redis = RedisClient()
+    val redis = RedisClient()
 
-  val futurePong = redis.ping()
-  println("Ping sent!")
-  futurePong.map(pong => {
-    println(s"Redis replied with a $pong")
-  })
-  Await.result(futurePong, 5 seconds)
+    val futurePong = redis.ping()
+    println("Ping sent!")
+    futurePong.map(pong => {
+      println(s"Redis replied with a $pong")
+    })
+    Await.result(futurePong, 5 seconds)
 
-  akkaSystem.shutdown()
+    akkaSystem.shutdown()
+  }
 }
 ```
 
@@ -142,22 +145,23 @@ You can use a case class with callbacks [RedisPubSub](http://etaty.github.io/red
 or extend the actor [RedisSubscriberActor](http://etaty.github.io/rediscala/latest/api/index.html#redis.actors.RedisSubscriberActor) as shown in the example below
 
 ```scala
-object ExamplePubSub extends App {
-  implicit val akkaSystem = akka.actor.ActorSystem()
+object ExamplePubSub {
+  def main(args: Array[String]): Unit = {
+    implicit val akkaSystem: ActorSystem = akka.actor.ActorSystem()
 
-  val redis = RedisClient()
+    val redis = RedisClient()
 
-  // publish after 2 seconds every 2 or 5 seconds
-  akkaSystem.scheduler.schedule(2 seconds, 2 seconds)(redis.publish("time", System.currentTimeMillis()))
-  akkaSystem.scheduler.schedule(2 seconds, 5 seconds)(redis.publish("pattern.match", "pattern value"))
-  // shutdown Akka in 20 seconds
-  akkaSystem.scheduler.scheduleOnce(20 seconds)(akkaSystem.shutdown())
+    // publish after 2 seconds every 2 or 5 seconds
+    akkaSystem.scheduler.schedule(2 seconds, 2 seconds)(redis.publish("time", System.currentTimeMillis()))
+    akkaSystem.scheduler.schedule(2 seconds, 5 seconds)(redis.publish("pattern.match", "pattern value"))
+    // shutdown Akka in 20 seconds
+    akkaSystem.scheduler.scheduleOnce(20 seconds)(akkaSystem.shutdown())
 
-  val channels = Seq("time")
-  val patterns = Seq("pattern.*")
-  // create SubscribeActor instance
-  akkaSystem.actorOf(Props(classOf[SubscribeActor], channels, patterns).withDispatcher("rediscala.rediscala-client-worker-dispatcher"))
-
+    val channels = Seq("time")
+    val patterns = Seq("pattern.*")
+    // create SubscribeActor instance
+    akkaSystem.actorOf(Props(classOf[SubscribeActor], channels, patterns).withDispatcher("rediscala.rediscala-client-worker-dispatcher"))
+  }
 }
 
 class SubscribeActor(channels: Seq[String] = Nil, patterns: Seq[String] = Nil) extends RedisSubscriberActor(channels, patterns) {
@@ -234,15 +238,16 @@ implicit val redisDispatcher = RedisDispatcher("akka.actor.default-dispatcher")
 case class DumbClass(s1: String, s2: String)
 
 object DumbClass {
-  implicit val byteStringFormatter = new ByteStringFormatter[DumbClass] {
-    def serialize(data: DumbClass): ByteString = {
-      //...
-    }
+  implicit val byteStringFormatter: ByteStringFormatter[DumbClass] =
+    new ByteStringFormatter[DumbClass] {
+      def serialize(data: DumbClass): ByteString = {
+        //...
+      }
 
-    def deserialize(bs: ByteString): DumbClass = {
-      //...
+      def deserialize(bs: ByteString): DumbClass = {
+        //...
+      }
     }
-  }
 }
 //...
 
