@@ -141,8 +141,8 @@ You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then
 
 ### Pub/Sub
 
-You can use a case class with callbacks [RedisPubSub](http://etaty.github.io/rediscala/latest/api/index.html#redis.RedisPubSub)
-or extend the actor [RedisSubscriberActor](http://etaty.github.io/rediscala/latest/api/index.html#redis.actors.RedisSubscriberActor) as shown in the example below
+You can use a case class with callbacks [RedisPubSub](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisPubSub.html)
+or extend the actor [RedisSubscriberActor](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/actors/RedisSubscriberActor.html) as shown in the example below
 
 ```scala
 object ExamplePubSub {
@@ -203,20 +203,20 @@ Full example: [ExampleScripting](https://github.com/rediscala/rediscala-demo/blo
 
 ### Redis Sentinel
 
-[SentinelClient](http://etaty.github.io/rediscala/latest/api/index.html#redis.SentinelClient) connect to a redis sentinel server.
+[SentinelClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelClient.html) connect to a redis sentinel server.
 
-[SentinelMonitoredRedisClient](http://etaty.github.io/rediscala/latest/api/index.html#redis.SentinelMonitoredRedisClient) connect to a sentinel server to find the master addresse then start a connection. In case the master change your RedisClient connection will automatically connect to the new master server.
-If you are using a blocking client, you can use [SentinelMonitoredRedisBlockingClient](http://etaty.github.io/rediscala/latest/api/index.html#redis.SentinelMonitoredRedisBlockingClient)
+[SentinelMonitoredRedisClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelMonitoredRedisClient.html) connect to a sentinel server to find the master addresse then start a connection. In case the master change your RedisClient connection will automatically connect to the new master server.
+If you are using a blocking client, you can use [SentinelMonitoredRedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelMonitoredRedisBlockingClient.html)
 
 ### Pool
 
-[RedisClientPool](http://etaty.github.io/rediscala/latest/api/index.html#redis.RedisClientPool) connect to a pool of redis servers.
+[RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientPool.html) connect to a pool of redis servers.
 Redis commands are dispatched to redis connection in a round robin way.
 
 ### Master Slave
 
-[RedisClientMasterSlaves](http://etaty.github.io/rediscala/latest/api/index.html#redis.RedisClientMasterSlaves) connect to a master and a pool of slaves.
-The `write` commands are sent to the master, while the read commands are sent to the slaves in the [RedisClientPool](http://etaty.github.io/rediscala/latest/api/index.html#redis.RedisClientPool)
+[RedisClientMasterSlaves](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientMasterSlaves.html) connect to a master and a pool of slaves.
+The `write` commands are sent to the master, while the read commands are sent to the slaves in the [RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientPool.html)
 
 ### Config Which Dispatcher to Use
 
@@ -228,11 +228,11 @@ implicit val redisDispatcher = RedisDispatcher("akka.actor.default-dispatcher")
 
 ### ByteStringSerializer ByteStringDeserializer ByteStringFormatter
 
-[ByteStringSerializer](http://etaty.github.io/rediscala/latest/api/index.html#redis.ByteStringSerializer)
+[ByteStringSerializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringSerializer.html)
 
-[ByteStringDeserializer](http://etaty.github.io/rediscala/latest/api/index.html#redis.ByteStringDeserializer)
+[ByteStringDeserializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringDeserializer.html)
 
-[ByteStringFormatter](http://etaty.github.io/rediscala/latest/api/index.html#redis.ByteStringFormatter)
+[ByteStringFormatter](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringFormatter.html)
 
 ```scala
 case class DumbClass(s1: String, s2: String)
