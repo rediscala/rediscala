@@ -1,7 +1,7 @@
 rediscala
 =========
 
-A [Redis](http://redis.io/) client for Scala with non-blocking and asynchronous I/O operations.
+A [Redis](https://redis.io/) client for Scala with non-blocking and asynchronous I/O operations.
 
  * Reactive : Redis requests/replies are wrapped in Futures.
 
