@@ -14,8 +14,6 @@ A worker actor handles I/O operations (I/O bounds), another handles decoding of 
 
 If you use SBT, you just have to edit `build.sbt` and add the following:
 
-If you use SBT, you just have to edit `build.sbt` and add the following:
-
 ```scala
 libraryDependencies += "io.github.rediscala" %% "rediscala" % "<version>"
 ```
