@@ -68,7 +68,7 @@ class RedisClusterTest extends RedisClusterClients {
       Await.result(redisCluster.exists("foo"), timeOut) mustEqual true
 
       println("get")
-      val value = Await.result(redisCluster.get[String]("foo"), timeOut) mustEqual Some("FOO")
+      Await.result(redisCluster.get[String]("foo"), timeOut) mustEqual Some("FOO")
 
       println("del")
       Await.result(redisCluster.del("foo", "foo"), timeOut)

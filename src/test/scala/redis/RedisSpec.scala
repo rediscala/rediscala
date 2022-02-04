@@ -220,7 +220,7 @@ abstract class RedisClusterClients() extends RedisHelper {
 
     val command = s"$redisServerPath/redis-cli --cluster create ${nodes} --cluster-replicas 1"
     println(command)
-    val redisTrib = Process(command)
+    Process(command)
       .run(
         new ProcessIO(
           (writeInput: OutputStream) => {

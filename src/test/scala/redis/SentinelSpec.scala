@@ -30,8 +30,6 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
         30.seconds.dilated
       )
 
-      val firstFailover = sentinelMonitoredRedisClient.redisClient.port
-
       awaitAssert(
         {
           Await.result(sentinelClient.failover(masterName), timeOut) must beTrue
