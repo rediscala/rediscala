@@ -218,8 +218,9 @@ abstract class RedisClusterClients() extends RedisHelper {
     Thread.sleep(2000)
     val nodes = nodePorts.map(s => redisHost + ":" + s).mkString(" ")
 
-    println(s"$redisServerPath/redis-trib.rb create --replicas 1 ${nodes}")
-    val redisTrib = Process(s"$redisServerPath/redis-trib.rb create --replicas 1 ${nodes}")
+    val command = s"$redisServerPath/redis-cli --cluster create ${nodes} --cluster-replicas 1"
+    println(command)
+    val redisTrib = Process(command)
       .run(
         new ProcessIO(
           (writeInput: OutputStream) => {
