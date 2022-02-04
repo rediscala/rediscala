@@ -31,7 +31,6 @@ jobs:
         distribution: adopt
     - uses: coursier/cache-action@v6
     - run: ./install-redis.sh
-    - run: sudo gem install redis
     - run: sbt scalafmtSbtCheck "SetScala${{ matrix.scala }}" scalafmtCheckAll Test/compile
     - uses: nick-invision/retry@v2
       with:
