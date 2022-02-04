@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -ex
-wget http://download.redis.io/releases/redis-4.0.14.tar.gz
-tar -xzvf redis-4.0.14.tar.gz
-cd redis-4.0.14 && make
+REDIS_VERSION="4.0.14"
+wget https://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz
+tar -xzvf redis-${REDIS_VERSION}.tar.gz
+cd redis-${REDIS_VERSION} && make
