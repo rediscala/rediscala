@@ -100,22 +100,14 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]],
 
   def execPromise(promise: Promise[MultiBulk]): Promise[MultiBulk] = {
     val p = Promise[MultiBulk]()
-    p.future.onComplete(reply => {
-      reply match {
-        case Success(m: MultiBulk) => {
-          promise.success(m)
-          dispatchExecReply(m)
-        }
-        case Success(r) => {
-          promise.failure(TransactionExecException(r))
-          operations.foreach(_.completeFailed(TransactionExecException(r)))
-        }
-        case Failure(f) => {
-          promise.failure(f)
-          operations.foreach(_.completeFailed(f))
-        }
-      }
-    })
+    p.future.onComplete {
+      case Success(m) =>
+        promise.success(m)
+        dispatchExecReply(m)
+      case Failure(f) =>
+        promise.failure(f)
+        operations.foreach(_.completeFailed(f))
+    }
     p
   }
 

@@ -85,23 +85,23 @@ sealed trait DecodeResult[+A] {
   def isFullyDecoded: Boolean
 
   def foreach[B](f: A => Unit): DecodeResult[Unit] = this match {
-    case p: PartiallyDecoded[A] => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).foreach(f))
-    case fd: FullyDecoded[A] => FullyDecoded(f(fd.result), fd.rest)
+    case p @ PartiallyDecoded(_, _) => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).foreach(f))
+    case fd @ FullyDecoded(_, _) => FullyDecoded(f(fd.result), fd.rest)
   }
 
   def map[B](f: A => B): DecodeResult[B] = this match {
-    case p: PartiallyDecoded[A] => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).map(f))
-    case fd: FullyDecoded[A] => FullyDecoded(f(fd.result), fd.rest)
+    case p @ PartiallyDecoded(_, _) => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).map(f))
+    case fd @ FullyDecoded(_, _) => FullyDecoded(f(fd.result), fd.rest)
   }
 
   def flatMap[B](f: (A, ByteString) => DecodeResult[B]): DecodeResult[B] = this match {
-    case p: PartiallyDecoded[A] => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).flatMap(f))
-    case fd: FullyDecoded[A] => f(fd.result, fd.rest)
+    case p @ PartiallyDecoded(_, _) => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).flatMap(f))
+    case fd @ FullyDecoded(_, _) => f(fd.result, fd.rest)
   }
 
   def run(next: ByteString): DecodeResult[A] = this match {
-    case p: PartiallyDecoded[A] => p.f(p.rest ++ next)
-    case fd: FullyDecoded[A] => FullyDecoded(fd.result, fd.rest ++ next)
+    case p @ PartiallyDecoded(_, _) => p.f(p.rest ++ next)
+    case fd @ FullyDecoded(_, _) => FullyDecoded(fd.result, fd.rest ++ next)
   }
 }
 

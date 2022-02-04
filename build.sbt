@@ -90,11 +90,16 @@ lazy val standardSettings = Def.settings(
   scalacOptions ++= Seq(
     "-encoding",
     "UTF-8",
-    "-Xlint",
     "-deprecation",
     "-feature",
     "-unchecked"
   ),
+  scalacOptions ++= PartialFunction
+    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) { case Some((2, _)) =>
+      Seq("-Xlint")
+    }
+    .toList
+    .flatten,
   Compile / doc / scalacOptions ++= {
     Seq(
       "-sourcepath",
