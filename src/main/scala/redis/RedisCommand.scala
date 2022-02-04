@@ -4,7 +4,7 @@ import akka.util.ByteString
 import redis.protocol._
 
 trait RedisCommand[RedisReplyT <: RedisReply, +T] {
-  val isMasterOnly: Boolean
+  def isMasterOnly: Boolean
   val encodedRequest: ByteString
 
   def decodeReply(r: RedisReplyT): T

@@ -16,7 +16,7 @@ case class ClusterSlot(begin: Int, end: Int, master: ClusterNode, slaves: Seq[Cl
 }
 
 case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
-  val isMasterOnly = false
+  def isMasterOnly = false
   val encodedRequest: ByteString = encode("CLUSTER SLOTS")
 
   def buildClusterNode(vect: Seq[RedisReply]): ClusterNode = {
@@ -76,7 +76,7 @@ case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
 }
 
 case class ClusterInfo() extends RedisCommand[Bulk, Map[String, String]] {
-  val isMasterOnly = false
+  def isMasterOnly = false
   val encodedRequest: ByteString = encode("CLUSTER INFO")
   def decodeReply(b: Bulk): Map[String, String] = {
     b.response.map(_.utf8String.split("\r\n").map(_.split(":")).map(s => (s(0), s(1))).toMap).getOrElse(Map.empty)
@@ -97,7 +97,7 @@ case class ClusterNodeInfo(
   slots: Array[String]
 )
 case class ClusterNodes() extends RedisCommand[Bulk, Array[ClusterNodeInfo]] {
-  val isMasterOnly = false
+  def isMasterOnly = false
   val encodedRequest: ByteString = encode("CLUSTER NODES")
   def decodeReply(b: Bulk): Array[ClusterNodeInfo] = {
     b.response

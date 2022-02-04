@@ -33,7 +33,7 @@ case class RedisScript(script: String) {
 }
 
 trait EvaledScript {
-  val isMasterOnly = true
+  def isMasterOnly = true
   def encodeRequest[KK, KA](
     encoder: ((String, Seq[ByteString]) => ByteString),
     command: String,
@@ -73,24 +73,24 @@ case class Evalsha[R, KK, KA](sha1: String, keys: Seq[KK] = Seq(), args: Seq[KA]
 }
 
 case object ScriptFlush extends RedisCommandStatusBoolean {
-  val isMasterOnly = true
+  def isMasterOnly = true
   val encodedRequest: ByteString = encode("SCRIPT", Seq(ByteString("FLUSH")))
 }
 
 case object ScriptKill extends RedisCommandStatusBoolean {
-  val isMasterOnly = true
+  def isMasterOnly = true
   val encodedRequest: ByteString = encode("SCRIPT", Seq(ByteString("KILL")))
 }
 
 case class ScriptLoad(script: String) extends RedisCommandBulk[String] {
-  val isMasterOnly = true
+  def isMasterOnly = true
   val encodedRequest: ByteString = encode("SCRIPT", Seq(ByteString("LOAD"), ByteString(script)))
 
   def decodeReply(bulk: Bulk) = bulk.toString
 }
 
 case class ScriptExists(sha1: Seq[String]) extends RedisCommandMultiBulk[Seq[Boolean]] {
-  val isMasterOnly = true
+  def isMasterOnly = true
   val encodedRequest: ByteString = encode("SCRIPT", ByteString("EXISTS") +: sha1.map(ByteString(_)))
 
   def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqBoolean(mb)
