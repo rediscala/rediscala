@@ -296,7 +296,7 @@ Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscal
 
 [Rediscala scaladoc API (version 1.0)](http://etaty.github.io/rediscala/1.0/api/index.html#package)
 
-<details>
+</details>
 
 ### Performance
 
