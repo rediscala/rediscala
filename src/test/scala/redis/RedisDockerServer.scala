@@ -8,7 +8,7 @@ abstract class RedisDockerServer extends RedisHelper with AfterAll {
 
   private[this] def exportPort = 6379
   private[this] val container = GenericContainer(
-    dockerImage = "redis:5.0.14",
+    dockerImage = "redis:6.2.6",
     exposedPorts = Seq(exportPort)
   )
 

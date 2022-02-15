@@ -90,7 +90,7 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
         redisKiller.scriptKill() must beTrue.await(retries = 3, timeOut)
         Await.result(infiniteScript, timeOut) must throwA(
           ReplyErrorException(
-            "ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL... "
+            "ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL..."
           )
         )
       })

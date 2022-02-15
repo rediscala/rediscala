@@ -11,7 +11,9 @@ class ConnectionSpec extends RedisDockerServer {
 
   "Connection commands" should {
     "AUTH" in {
-      Await.result(redis.auth("no password"), timeOut) must throwA[ReplyErrorException]("ERR Client sent AUTH, but no password is set")
+      val expectMessage =
+        "ERR AUTH <password> called without any password configured for the default user. Are you sure your configuration is correct?"
+      Await.result(redis.auth("no password"), timeOut) must throwA[ReplyErrorException](expectMessage)
     }
     "ECHO" in {
       val hello = "Hello World!"
