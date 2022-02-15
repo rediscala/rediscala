@@ -10,7 +10,7 @@ import redis.protocol.MultiBulk
 import redis.actors.ReplyErrorException
 import redis.api.scripting.RedisScript
 
-class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisStandaloneServer {
+class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
 
   sequential
 

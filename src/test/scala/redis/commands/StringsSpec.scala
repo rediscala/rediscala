@@ -6,7 +6,7 @@ import scala.concurrent.Future
 import akka.util.ByteString
 import redis.actors.ReplyErrorException
 
-class StringsSpec extends RedisStandaloneServer {
+class StringsSpec extends RedisDockerServer {
 
   sequential
   "Strings commands" should {

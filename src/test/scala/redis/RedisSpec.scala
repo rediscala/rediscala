@@ -13,7 +13,6 @@ import org.specs2.mutable.SpecificationLike
 import org.specs2.specification.core.Fragments
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Future
 import scala.io.Source
 import scala.reflect.io.File
 import scala.sys.process.ProcessIO
@@ -84,22 +83,6 @@ abstract class RedisStandaloneServer extends RedisHelper {
 
   val port = server.port
   lazy val redis = RedisClient(port = port)
-
-  def redisVersion(): Future[Option[RedisVersion]] = redis.info("Server").map { info =>
-    info
-      .split("\r\n")
-      .drop(1)
-      .flatMap { line =>
-        line.split(":") match {
-          case Array(key, value) => List(key -> value)
-          case _ => List.empty
-        }
-      }
-      .find(_._1 == "redis_version")
-      .map(_._2.split("\\.") match {
-        case Array(major, minor, patch) => RedisVersion(major.toInt, minor.toInt, patch.toInt)
-      })
-  }
 
   def withRedisServer[T](block: (Int) => T): T = {
     val serverProcess = redisManager.newRedisProcess()

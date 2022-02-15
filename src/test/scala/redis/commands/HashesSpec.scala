@@ -4,7 +4,7 @@ import redis._
 import scala.concurrent.Await
 import akka.util.ByteString
 
-class HashesSpec extends RedisStandaloneServer {
+class HashesSpec extends RedisDockerServer {
 
   "Hashes commands" should {
     "HDEL" in {

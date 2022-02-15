@@ -4,7 +4,7 @@ import scala.concurrent._
 import redis.api.connection.Select
 import scala.concurrent.duration._
 
-class RedisPoolSpec extends RedisStandaloneServer {
+class RedisPoolSpec extends RedisDockerServer {
 
   sequential
 

@@ -1,9 +1,9 @@
 package redis.commands
 
-import redis.RedisStandaloneServer
+import redis.RedisDockerServer
 import scala.concurrent.Await
 
-class HyperLogLogSpec extends RedisStandaloneServer {
+class HyperLogLogSpec extends RedisDockerServer {
 
   sequential
 

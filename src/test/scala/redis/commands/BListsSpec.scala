@@ -5,7 +5,7 @@ import scala.concurrent.Await
 import akka.util.ByteString
 import scala.concurrent.duration._
 
-class BListsSpec extends RedisStandaloneServer {
+class BListsSpec extends RedisDockerServer {
 
   "Blocking Lists commands" should {
     "BLPOP" in {

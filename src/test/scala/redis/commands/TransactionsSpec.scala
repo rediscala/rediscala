@@ -8,7 +8,7 @@ import redis.protocol.Bulk
 import redis.protocol.Status
 import redis.protocol.MultiBulk
 
-class TransactionsSpec extends RedisStandaloneServer {
+class TransactionsSpec extends RedisDockerServer {
 
   "Transactions commands" should {
     "basic" in {

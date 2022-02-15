@@ -5,7 +5,7 @@ import scala.concurrent.Await
 import akka.util.ByteString
 import redis.actors.ReplyErrorException
 
-class ConnectionSpec extends RedisStandaloneServer {
+class ConnectionSpec extends RedisDockerServer {
 
   sequential
 

@@ -10,7 +10,7 @@ import akka.testkit.TestActorRef
 import akka.testkit.TestProbe
 import akka.util.ByteString
 
-class RedisPubSubSpec extends RedisStandaloneServer {
+class RedisPubSubSpec extends RedisDockerServer {
 
   sequential
 

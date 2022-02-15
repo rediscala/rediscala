@@ -4,7 +4,7 @@ import redis._
 import redis.api.geo.DistUnits._
 import scala.concurrent.Await
 
-class GeoSpec extends RedisStandaloneServer {
+class GeoSpec extends RedisDockerServer {
   import concurrent.duration._
 
   val testKey = "Sicily"
