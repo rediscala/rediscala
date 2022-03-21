@@ -29,8 +29,8 @@ val akka = Def.setting(
       )
     case _ =>
       Seq(
-        "com.typesafe.akka" %% "akka-actor" % "2.6.18",
-        "com.typesafe.akka" %% "akka-testkit" % "2.6.18" % "test"
+        "com.typesafe.akka" %% "akka-actor" % "2.6.19",
+        "com.typesafe.akka" %% "akka-testkit" % "2.6.19" % "test"
       )
   }
 )
