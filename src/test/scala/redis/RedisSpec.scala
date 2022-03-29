@@ -14,7 +14,6 @@ import org.specs2.specification.core.Fragments
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
 import scala.io.Source
-import scala.reflect.io.File
 import scala.sys.process.ProcessIO
 import scala.sys.process._
 import scala.util.Try
@@ -32,7 +31,7 @@ object RedisServerHelper {
         "/usr/local/bin"
       else
         System.getenv("REDIS_HOME")
-    val absolutePath = File(tmp).toAbsolute.path
+    val absolutePath = new java.io.File(tmp).getAbsolutePath
     println("redisServerPath: " + absolutePath)
     absolutePath
   }
@@ -292,9 +291,9 @@ class SentinelProcess(masterName: String, masterPort: Int, port: Int) extends Re
          |sentinel failover-timeout $masterName 10000
             """.stripMargin
 
-    val sentinelConfFile = File.makeTemp("rediscala-sentinel", ".conf")
-    sentinelConfFile.writeAll(sentinelConf)
-    sentinelConfFile.path
+    val sentinelConfFile = java.nio.file.Files.createTempFile("rediscala-sentinel", ".conf")
+    java.nio.file.Files.write(sentinelConfFile, sentinelConf.getBytes("UTF-8"))
+    sentinelConfFile.toFile.getAbsolutePath
   }
 
   override val cmd = s"${redisServerCmd} $sentinelConfPath --port $port --sentinel $redisServerLogLevel"
