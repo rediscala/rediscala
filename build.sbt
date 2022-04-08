@@ -32,7 +32,7 @@ val specs2 = "org.specs2" %% "specs2-core" % "4.15.0" cross CrossVersion.for3Use
 val stm = "org.scala-stm" %% "scala-stm" % "0.11.1"
 
 val scalacheck = Def.setting(
-  "org.scalacheck" %% "scalacheck" % "1.15.4"
+  "org.scalacheck" %% "scalacheck" % "1.16.0"
 )
 
 val rediscalaDependencies = Def.setting(
