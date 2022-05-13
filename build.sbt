@@ -61,15 +61,14 @@ lazy val standardSettings = Def.settings(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
-  pomExtra := (
+  pomExtra :=
     <developers>
       <developer>
         <id>xuwei-k</id>
         <name>Kenji Yoshida</name>
         <url>https://github.com/xuwei-k</url>
       </developer>
-    </developers>
-  ),
+    </developers>,
   publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
@@ -81,7 +80,7 @@ lazy val standardSettings = Def.settings(
     "-unchecked"
   ),
   scalacOptions ++= PartialFunction
-    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) { case Some((2, _)) =>
+    .condOpt(CrossVersion.partialVersion(scalaVersion.value)) { case Some(2, _) =>
       Seq("-Xlint")
     }
     .toList

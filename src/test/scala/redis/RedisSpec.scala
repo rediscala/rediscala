@@ -76,7 +76,7 @@ case class RedisVersion(major: Int, minor: Int, patch: Int) extends Ordered[Redi
 
 abstract class RedisStandaloneServer extends RedisHelper {
 
-  val redisManager = new RedisManager()
+  val redisManager = new RedisManager
 
   val server = redisManager.newRedisProcess()
 
@@ -118,7 +118,7 @@ abstract class RedisSentinelClients(val masterName: String = "mymaster") extends
   lazy val sentinelMonitoredRedisClient =
     SentinelMonitoredRedisClient(master = masterName, sentinels = Seq((redisHost, sentinelPort1), (redisHost, sentinelPort2)))
 
-  val redisManager = new RedisManager()
+  val redisManager = new RedisManager
 
   val master = redisManager.newRedisProcess(masterPort)
   Thread.sleep(1000)

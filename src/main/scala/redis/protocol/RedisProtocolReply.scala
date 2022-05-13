@@ -64,9 +64,9 @@ case class Bulk(response: Option[ByteString]) extends RedisReply {
 }
 
 case class MultiBulk(responses: Option[Vector[RedisReply]]) extends RedisReply {
-  def toByteString: ByteString = throw new NoSuchElementException()
+  def toByteString: ByteString = throw new NoSuchElementException
 
-  def asOptByteString: Option[ByteString] = throw new NoSuchElementException()
+  def asOptByteString: Option[ByteString] = throw new NoSuchElementException
 
   def asTry[A](implicit convert: MultiBulkConverter[A]): Try[A] = convert.to(this)
 
@@ -74,9 +74,9 @@ case class MultiBulk(responses: Option[Vector[RedisReply]]) extends RedisReply {
 }
 
 case class PartialMultiBulk(i: Int, acc: mutable.Buffer[RedisReply]) extends RedisReply {
-  override def toByteString: ByteString = throw new NoSuchElementException()
+  override def toByteString: ByteString = throw new NoSuchElementException
 
-  override def asOptByteString: Option[ByteString] = throw new NoSuchElementException()
+  override def asOptByteString: Option[ByteString] = throw new NoSuchElementException
 }
 
 sealed trait DecodeResult[+A] {
@@ -189,7 +189,7 @@ object RedisProtocolReply {
       val i = integer.toInt
       if (i < 0) {
         FullyDecoded(Bulk(None), bsRest)
-      } else if (bsRest.length < (i + LS.length)) {
+      } else if (bsRest.length < i + LS.length) {
         PartiallyDecoded(bsRest, decodeBulkBody(integer, _))
       } else {
         val data = bsRest.take(i)

@@ -52,7 +52,7 @@ case class Hgetall[K, R](key: K)(implicit redisKey: ByteStringSerializer[K], des
     if (seq.nonEmpty) {
       val head = seq.head.toByteString
       val tail = seq.tail
-      builder += (head.utf8String -> deserializerR.deserialize(tail.head.toByteString))
+      builder += head.utf8String -> deserializerR.deserialize(tail.head.toByteString)
       seqToMap(tail.tail, builder)
     }
   }
