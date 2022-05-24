@@ -266,7 +266,7 @@ class SortedSetsSpec extends RedisDockerServer {
         scanResult <- redis.zscan[String]("zscan", count = Some(100))
       } yield {
         scanResult.index mustEqual 0
-        scanResult.data mustEqual (1 to 20).map(x => x.toDouble -> x.toString)
+        scanResult.data mustEqual 1 to 20.map(x => x.toDouble -> x.toString)
       }
 
       Await.result(r, timeOut)
