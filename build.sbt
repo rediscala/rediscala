@@ -37,7 +37,7 @@ val scalacheck = Def.setting(
 
 val rediscalaDependencies = Def.setting(
   akka.value ++ Seq(
-    "com.dimafeng" %% "testcontainers-scala" % "0.40.7" % Test,
+    "com.dimafeng" %% "testcontainers-scala" % "0.40.8" % Test,
     stm,
     specs2 % "test",
     scalacheck.value % "test"
