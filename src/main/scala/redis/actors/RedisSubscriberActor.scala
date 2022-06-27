@@ -54,16 +54,14 @@ abstract class RedisSubscriberActor(
     }
   }
 
-  def writing: Receive = {
-    case message: SubscribeMessage => {
-      if (message.params.nonEmpty) {
-        write(message.toByteString)
-        message match {
-          case s: SUBSCRIBE => channelsSubscribed ++= s.channel
-          case u: UNSUBSCRIBE => channelsSubscribed --= u.channel
-          case ps: PSUBSCRIBE => patternsSubscribed ++= ps.pattern
-          case pu: PUNSUBSCRIBE => patternsSubscribed --= pu.pattern
-        }
+  def writing: Receive = { case message: SubscribeMessage =>
+    if (message.params.nonEmpty) {
+      write(message.toByteString)
+      message match {
+        case s: SUBSCRIBE => channelsSubscribed ++= s.channel
+        case u: UNSUBSCRIBE => channelsSubscribed --= u.channel
+        case ps: PSUBSCRIBE => patternsSubscribed ++= ps.pattern
+        case pu: PUNSUBSCRIBE => patternsSubscribed --= pu.pattern
       }
     }
   }
@@ -94,12 +92,10 @@ abstract class RedisSubscriberActor(
 
   def onDecodedReply(reply: RedisReply): Unit = {
     reply match {
-      case MultiBulk(Some(list)) if list.length == 3 && list.head.toByteString.utf8String == "message" => {
+      case MultiBulk(Some(list)) if list.length == 3 && list.head.toByteString.utf8String == "message" =>
         onMessage(Message(list(1).toByteString.utf8String, list(2).toByteString))
-      }
-      case MultiBulk(Some(list)) if list.length == 4 && list.head.toByteString.utf8String == "pmessage" => {
+      case MultiBulk(Some(list)) if list.length == 4 && list.head.toByteString.utf8String == "pmessage" =>
         onPMessage(PMessage(list(1).toByteString.utf8String, list(2).toByteString.utf8String, list(3).toByteString))
-      }
       case error @ Error(_) =>
         onErrorReply(error)
       case _ => // subscribe or psubscribe

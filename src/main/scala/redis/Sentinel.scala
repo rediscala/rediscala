@@ -39,28 +39,25 @@ case class SentinelClient(
       log.debug(s"SentinelClient.onMessage: message received:${message.channel} ${message.data.utf8String}")
 
     message match {
-      case Message("+switch-master", data) => {
+      case Message("+switch-master", data) =>
         data.utf8String.split(" ") match {
           case Array(master, oldip, oldport, newip, newport) =>
             onMasterChange(master, newip, newport.toInt)
-          case _ => {}
+          case _ =>
         }
-      }
-      case Message("+failover-state-send-slaveof-noone", data) => {
+      case Message("+failover-state-send-slaveof-noone", data) =>
         data.utf8String.split(" ") match {
           case Array("slave", slaveName, slaveip, slaveport, "@", master, masterip, masterport) =>
             onMasterChange(master, slaveip, slaveport.toInt)
-          case _ => {}
+          case _ =>
         }
-      }
-      case Message("+sentinel", data) => {
+      case Message("+sentinel", data) =>
         data.utf8String.split(" ") match {
           case Array("sentinel", sentName, sentinelip, sentinelport, "@", master, masterip, masterport) =>
             onNewSentinel(master, sentinelip, sentinelport.toInt)
-          case _ => {}
+          case _ =>
         }
-      }
-      case Message("+sdown", data) => {
+      case Message("+sdown", data) =>
         data.utf8String.split(" ") match {
           case Array("sentinel", sentName, sentinelip, sentinelport, "@", master, masterip, masterport) =>
             onSentinelDown(master, sentinelip, sentinelport.toInt)
@@ -68,28 +65,24 @@ case class SentinelClient(
           case Array("slave", slaveName, slaveip, slaveport, "@", master, masterip, masterport) =>
             onSlaveDown(master, slaveip, slaveport.toInt)
 
-          case _ => {}
+          case _ =>
         }
-      }
-      case Message("-sdown", data) => {
+      case Message("-sdown", data) =>
         data.utf8String.split(" ") match {
           case Array("slave", slaveName, slaveip, slaveport, "@", master, masterip, masterport) =>
             onNewSlave(master, slaveip, slaveport.toInt)
 
-          case _ => {}
+          case _ =>
         }
-      }
-      case Message("+slave", data) => {
+      case Message("+slave", data) =>
         data.utf8String.split(" ") match {
           case Array("slave", slaveName, slaveip, slaveport, "@", master, masterip, masterport) =>
             onNewSlave(master, slaveip, slaveport.toInt)
 
-          case _ => {}
+          case _ =>
         }
-      }
-      case _ => {
+      case _ =>
         log.warning(s"SentinelClient.onMessage: unexpected message received: $message")
-      }
     }
   }
 

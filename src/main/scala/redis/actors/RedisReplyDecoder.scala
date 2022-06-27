@@ -24,9 +24,8 @@ class RedisReplyDecoder() extends Actor {
   }
 
   def receive = {
-    case promises: QueuePromises => {
+    case promises: QueuePromises =>
       queuePromises ++= promises.queue
-    }
     case byteStringInput: ByteString => decodeReplies(byteStringInput)
   }
 

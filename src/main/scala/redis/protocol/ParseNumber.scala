@@ -9,8 +9,6 @@ object ParseNumber {
    * Code from openjdk java.lang.Integer parseInt()
    * @see http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/7-b147/java/lang/Integer.java#Integer.parseInt%28java.lang.String%2Cint%29
    * 3 times faster than java.lang.Integer.parseInt(ByteString().utf8String))
-   * @param byteString
-   * @return
    */
   def parseInt(byteString: ByteString): Int = {
     if (byteString == null) {

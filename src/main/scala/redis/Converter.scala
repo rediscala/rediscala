@@ -53,7 +53,7 @@ object MultiBulkConverter {
   def toClusterSlots(reply: MultiBulk) = {
     reply.responses.map { slot =>
       {
-        val elementSeq = slot.toSeq
+        val elementSeq = slot
         val begin = elementSeq(0).toByteString
         val end = elementSeq(1).toByteString
         (begin, end)

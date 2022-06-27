@@ -46,14 +46,13 @@ class RedisClientActor(
     case op: Operation[_, _] =>
       queuePromises enqueue op
       write(op.redisCommand.encodedRequest)
-    case Transaction(commands) => {
+    case Transaction(commands) =>
       val buffer = new ByteStringBuilder
       commands.foreach(operation => {
         buffer.append(operation.redisCommand.encodedRequest)
         queuePromises enqueue operation
       })
       write(buffer.result())
-    }
     case Terminated(actorRef) =>
       log.warning(s"Terminated($actorRef)")
     case KillOldRepliesDecoder => killOldRepliesDecoder()
@@ -92,14 +91,12 @@ class RedisClientActor(
   }
 
   override val supervisorStrategy =
-    OneForOneStrategy() {
-      case _: Exception => {
-        // Start a new decoder
-        repliesDecoder = initRepliesDecoder()
-        restartConnection()
-        // stop the old one => clean the mailbox
-        Stop
-      }
+    OneForOneStrategy() { case _: Exception =>
+      // Start a new decoder
+      repliesDecoder = initRepliesDecoder()
+      restartConnection()
+      // stop the old one => clean the mailbox
+      Stop
     }
 
   def onConnectWrite(): ByteString = {

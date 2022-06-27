@@ -61,16 +61,13 @@ case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
   }
 
   override val decodeRedisReply: PartialFunction[ByteString, DecodeResult[MultiBulk]] = {
-    case bs if bs.head == RedisProtocolReply.MULTIBULK => {
+    case bs if bs.head == RedisProtocolReply.MULTIBULK =>
       val multibulk = RedisProtocolReply.decodeReplyMultiBulk(bs)
       multibulk
-    }
-    case bs if bs.head == RedisProtocolReply.INTEGER => {
+    case bs if bs.head == RedisProtocolReply.INTEGER =>
       RedisProtocolReply.decodeReplyMultiBulk(bs)
-    }
-    case bs => {
+    case bs =>
       RedisProtocolReply.decodeReplyMultiBulk(bs)
-    }
 
   }
 }

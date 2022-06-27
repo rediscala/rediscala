@@ -25,8 +25,6 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
 
   /**
     *
-    * @param redisCommand
-    * @tparam T
     * @return behave nicely with Future helpers like firstCompletedOf or sequence
     */
   def broadcast[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Seq[Future[T]] = {

@@ -86,21 +86,19 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
 
   private def reading: Receive = {
     case WriteAck => tryWrite()
-    case Received(dataByteString) => {
+    case Received(dataByteString) =>
       if (sender() == tcpWorker)
         onDataReceived(dataByteString)
       else
         onDataReceivedOnClosingConnection(dataByteString)
-    }
     case a: InetSocketAddress => onAddressChanged(a)
-    case c: ConnectionClosed => {
+    case c: ConnectionClosed =>
       if (sender() == tcpWorker)
         onConnectionClosed(c)
       else {
         onConnectStatus(false)
         onClosingConnectionClosed()
       }
-    }
     case c: CommandFailed => onConnectedCommandFailed(c)
   }
 
