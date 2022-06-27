@@ -9,7 +9,6 @@ import scala.collection.immutable.Queue
 import redis.actors.ReplyErrorException
 import redis.protocol._
 import redis.protocol.MultiBulk
-import scala.Some
 import scala.util.Failure
 import scala.util.Success
 import redis.api.transactions.Watch
@@ -21,7 +20,7 @@ trait Transactions extends ActorRequest {
 
   def multi(): TransactionBuilder = transaction()
 
-  def multi(operations: (TransactionBuilder) => Unit): TransactionBuilder = {
+  def multi(operations: TransactionBuilder => Unit): TransactionBuilder = {
     val builder = transaction()
     operations(builder)
     builder

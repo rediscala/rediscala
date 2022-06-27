@@ -99,10 +99,10 @@ class RedisClusterTest extends RedisClusterClients {
 
   "tools" should {
     "groupby" in {
-      redisCluster.groupByCluserServer(Seq("{foo1}1", "{foo2}1", "{foo1}2", "{foo2}2")).sortBy(_.head).toList mustEqual (Seq(
+      redisCluster.groupByCluserServer(Seq("{foo1}1", "{foo2}1", "{foo1}2", "{foo2}2")).sortBy(_.head).toList mustEqual Seq(
         Seq("{foo2}1", "{foo2}2"),
         Seq("{foo1}1", "{foo1}2")
-      ).sortBy(_.head))
+      ).sortBy(_.head)
     }
   }
 
@@ -141,7 +141,7 @@ class RedisClusterTest extends RedisClusterClients {
       for (m <- res) {
         println(m.toString)
       }
-      res.size mustEqual 6
+      res.length mustEqual 6
       res.count(_.master != "-") mustEqual 3
       res.count(_.link_state == "connected") mustEqual 6
     }

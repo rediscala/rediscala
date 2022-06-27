@@ -83,7 +83,7 @@ abstract class RedisStandaloneServer extends RedisHelper {
   val port = server.port
   lazy val redis = RedisClient(port = port)
 
-  def withRedisServer[T](block: (Int) => T): T = {
+  def withRedisServer[T](block: Int => T): T = {
     val serverProcess = redisManager.newRedisProcess()
     serverProcess.start()
     Thread.sleep(3000) // wait for server start
@@ -229,7 +229,7 @@ abstract class RedisClusterClients() extends RedisHelper {
   override def cleanup() = {
     println("Stop begin")
     // cluster shutdown
-    nodePorts.map { port =>
+    nodePorts.foreach { port =>
       val out = new Socket(redisHost, port).getOutputStream
       out.write("SHUTDOWN NOSAVE\n".getBytes)
       out.flush

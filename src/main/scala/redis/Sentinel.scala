@@ -153,7 +153,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
   }
 
   def makeSentinelClient(host: String, port: Int): SentinelClient = {
-    new SentinelClient(host, port, onSwitchMaster, onNewSentinel, onSentinelDown, internalOnNewSlave, internalOnSlaveDown, "SMSentinelClient")(system)
+    SentinelClient(host, port, onSwitchMaster, onNewSentinel, onSentinelDown, internalOnNewSlave, internalOnSlaveDown, "SMSentinelClient")(system)
   }
 
   def onNewSentinel(masterName: String, sentinelip: String, sentinelport: Int): Unit = {
