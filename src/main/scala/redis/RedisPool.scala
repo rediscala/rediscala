@@ -52,7 +52,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     server.db.foreach(redis.select)
   }
 
-  def onConnectStatus(server: RedisServer, active: Ref[Boolean]): (Boolean) => Unit = { (status: Boolean) =>
+  def onConnectStatus(server: RedisServer, active: Ref[Boolean]): Boolean => Unit = { (status: Boolean) =>
     {
       if (active.single.compareAndSet(!status, status)) {
         refreshConnections()
@@ -183,14 +183,14 @@ case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)
     with Transactions {
 
   val masterClient: RedisClient = withMasterAddr((ip, port) => {
-    new RedisClient(ip, port, name = "SMRedisClient")
+    RedisClient(ip, port, name = "SMRedisClient")
   })
 
   val slavesClients: RedisClientMutablePool = withSlavesAddr(slavesHostPort => {
     val slaves = slavesHostPort.map { case (ip, port) =>
-      new RedisServer(ip, port)
+      RedisServer(ip, port)
     }
-    new RedisClientMutablePool(slaves, name = "SMRedisClient")
+    RedisClientMutablePool(slaves, name = "SMRedisClient")
   })
 
   val onNewSlave = (ip: String, port: Int) => {

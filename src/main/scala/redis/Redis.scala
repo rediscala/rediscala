@@ -42,7 +42,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
     name + '-' + Redis.tempName()
   )
 
-  def reconnect(host: String = host, port: Int = port) = {
+  def reconnect(host: String = host, port: Int = port): Unit = {
     if (this.host != host || this.port != port) {
       this.host = host
       this.port = port
@@ -55,7 +55,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
     db.foreach(redis.select(_))
   }
 
-  def onConnectStatus: (Boolean) => Unit = (status: Boolean) => {}
+  def onConnectStatus: Boolean => Unit = (status: Boolean) => {}
 
   def getConnectOperations: () => Seq[Operation[_, _]] = () => {
     val self = this
@@ -145,7 +145,7 @@ case class RedisPubSub(
     redisConnection ! PUNSUBSCRIBE(patterns: _*)
   }
 
-  def onConnectStatus(): (Boolean) => Unit = (status: Boolean) => {}
+  def onConnectStatus(): Boolean => Unit = (status: Boolean) => {}
 }
 
 case class SentinelMonitoredRedisClient(
@@ -160,7 +160,7 @@ case class SentinelMonitoredRedisClient(
     with Transactions {
 
   val redisClient: RedisClient = withMasterAddr((ip, port) => {
-    new RedisClient(ip, port, password, db, name)
+    RedisClient(ip, port, password, db, name)
   })
   override val onNewSlave = (ip: String, port: Int) => {}
   override val onSlaveDown = (ip: String, port: Int) => {}
@@ -176,7 +176,7 @@ case class SentinelMonitoredRedisBlockingClient(
     extends SentinelMonitoredRedisClientLike(system, redisDispatcher)
     with BLists {
   val redisClient: RedisBlockingClient = withMasterAddr((ip, port) => {
-    new RedisBlockingClient(ip, port, password, db, name)
+    RedisBlockingClient(ip, port, password, db, name)
   })
   override val onNewSlave = (ip: String, port: Int) => {}
   override val onSlaveDown = (ip: String, port: Int) => {}

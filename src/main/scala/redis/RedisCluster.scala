@@ -39,7 +39,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
     clusterNode.host == server.host && clusterNode.port == server.port
   }
 
-  override def onConnectStatus(server: RedisServer, active: Ref[Boolean]): (Boolean) => Unit = { (status: Boolean) =>
+  override def onConnectStatus(server: RedisServer, active: Ref[Boolean]): Boolean => Unit = { (status: Boolean) =>
     {
       if (active.single.compareAndSet(!status, status)) {
         refreshConnections()

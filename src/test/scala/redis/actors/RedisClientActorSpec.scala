@@ -23,7 +23,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
 
   val timeout = 120.seconds.dilated
 
-  val onConnectStatus: (Boolean) => Unit = (status: Boolean) => {}
+  val onConnectStatus: Boolean => Unit = (status: Boolean) => {}
 
   "RedisClientActor" should {
 

@@ -99,11 +99,9 @@ object MultiBulkConverter {
   }
 
   def toOptionStringByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Option[(String, R)] = {
-    reply.responses
-      .map(r => {
-        Some(r.head.toString -> deserializer.deserialize(r.tail.head.toByteString))
-      })
-      .getOrElse(None)
+    reply.responses.map { r =>
+      r.head.toString -> deserializer.deserialize(r.tail.head.toByteString)
+    }
   }
 
   def toSeqBoolean(reply: MultiBulk): Seq[Boolean] = {
@@ -128,9 +126,7 @@ trait ByteStringSerializer[K] { self =>
   def serialize(data: K): ByteString
 
   def contramap[A](f: A => K): ByteStringSerializer[A] =
-    new ByteStringSerializer[A] {
-      def serialize(data: A) = self.serialize(f(data))
-    }
+    (data: A) => self.serialize(f(data))
 }
 
 object ByteStringSerializer extends ByteStringSerializerLowPriority
@@ -184,9 +180,7 @@ trait ByteStringDeserializer[T] { self =>
   def deserialize(bs: ByteString): T
 
   def map[A](f: T => A): ByteStringDeserializer[A] =
-    new ByteStringDeserializer[A] {
-      def deserialize(bs: ByteString) = f(self.deserialize(bs))
-    }
+    (bs: ByteString) => f(self.deserialize(bs))
 }
 
 object ByteStringDeserializer extends ByteStringDeserializerLowPriority

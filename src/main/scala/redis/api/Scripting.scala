@@ -35,7 +35,7 @@ case class RedisScript(script: String) {
 trait EvaledScript {
   def isMasterOnly = true
   def encodeRequest[KK, KA](
-    encoder: ((String, Seq[ByteString]) => ByteString),
+    encoder: (String, Seq[ByteString]) => ByteString,
     command: String,
     param: String,
     keys: Seq[KK],
