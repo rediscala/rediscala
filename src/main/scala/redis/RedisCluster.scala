@@ -130,7 +130,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
       send(redisConnection, redisCommand).recoverWith {
         case e: redis.actors.ReplyErrorException if e.message.startsWith("MOVED") || e.message.startsWith("ASK") =>
           e.message match {
-            // folow the redirect
+            // follow the redirect
             case redirectMessagePattern(opt, host, port) =>
               log.debug("Redirect:" + e.message)
 
