@@ -81,6 +81,15 @@ class ConverterSpec extends Specification {
       formatter.serialize(dumb) mustEqual ByteString("aa|bb")
       formatter.deserialize(ByteString("aa|bb")) mustEqual dumb
     }
+
+    "generate from the serializer and the deserializer automatically" in {
+      val formatter = implicitly[ByteStringFormatter[Double]]
+
+      val bs = ByteString("123.123456")
+      val d = 123.123456
+      formatter.serialize(d) mustEqual bs
+      formatter.deserialize(bs) mustEqual d
+    }
   }
 
 }
