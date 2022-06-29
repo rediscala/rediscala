@@ -219,6 +219,16 @@ trait ByteStringDeserializerDefault {
 
 trait ByteStringFormatter[T] extends ByteStringSerializer[T] with ByteStringDeserializer[T]
 
+object ByteStringFormatter extends ByteStringFormatterDefault
+
+trait ByteStringFormatterDefault {
+  implicit def GenericFormatter[T](implicit s: ByteStringSerializer[T], d: ByteStringDeserializer[T]): ByteStringFormatter[T] =
+    new ByteStringFormatter[T] {
+      override def serialize(data: T): ByteString = s.serialize(data)
+      override def deserialize(bs: ByteString): T = d.deserialize(bs)
+    }
+}
+
 @implicitNotFound(
   msg = "No RedisReplyDeserializer deserializer found for type ${T}. Try to implement an implicit RedisReplyDeserializer for this type."
 )
