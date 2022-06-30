@@ -27,7 +27,7 @@ val akka = Def.setting(
   )
 )
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.16.0" cross CrossVersion.for3Use2_13
+val specs2 = "org.specs2" %% "specs2-core" % "4.16.1" cross CrossVersion.for3Use2_13
 
 val stm = "org.scala-stm" %% "scala-stm" % "0.11.1"
 
