@@ -29,8 +29,6 @@ val akka = Def.setting(
 
 val specs2 = "org.specs2" %% "specs2-core" % "4.16.1" cross CrossVersion.for3Use2_13
 
-val stm = "org.scala-stm" %% "scala-stm" % "0.11.1"
-
 val scalacheck = Def.setting(
   "org.scalacheck" %% "scalacheck" % "1.16.0"
 )
@@ -38,7 +36,6 @@ val scalacheck = Def.setting(
 val rediscalaDependencies = Def.setting(
   akka.value ++ Seq(
     "com.dimafeng" %% "testcontainers-scala" % "0.40.8" % Test,
-    stm,
     specs2 % "test",
     scalacheck.value % "test"
   )
