@@ -31,6 +31,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
   var host: String
   var port: Int
   val name: String
+  val username: Option[String] = None
   val password: Option[String] = None
   val db: Option[Int] = None
   implicit val executionContext = system.dispatchers.lookup(redisDispatcher.name)
@@ -51,7 +52,11 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
   }
 
   def onConnect(redis: RedisCommands): Unit = {
-    password.foreach(redis.auth(_)) // TODO log on auth failure
+    (username, password) match {
+      case (Some(username), Some(password)) => redis.auth(username, password)
+      case (None, Some(password)) => redis.auth(password)
+      case (_, _) =>
+    }
     db.foreach(redis.select(_))
   }
 
@@ -77,6 +82,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
 case class RedisClient(
   var host: String = "localhost",
   var port: Int = 6379,
+  override val username: Option[String] = None,
   override val password: Option[String] = None,
   override val db: Option[Int] = None,
   name: String = "RedisClient",
@@ -89,6 +95,7 @@ case class RedisClient(
 case class RedisBlockingClient(
   var host: String = "localhost",
   var port: Int = 6379,
+  override val username: Option[String] = None,
   override val password: Option[String] = None,
   override val db: Option[Int] = None,
   name: String = "RedisBlockingClient",
@@ -104,6 +111,7 @@ case class RedisPubSub(
   patterns: Seq[String],
   onMessage: Message => Unit = _ => {},
   onPMessage: PMessage => Unit = _ => {},
+  authUsername: Option[String] = None,
   authPassword: Option[String] = None,
   name: String = "RedisPubSub"
 )(implicit system: ActorRefFactory, redisDispatcher: RedisDispatcher = Redis.dispatcher) {
@@ -116,6 +124,7 @@ case class RedisPubSub(
       patterns,
       onMessage,
       onPMessage,
+      authUsername,
       authPassword,
       onConnectStatus()
     ).withDispatcher(redisDispatcher.name),
@@ -151,6 +160,7 @@ case class RedisPubSub(
 case class SentinelMonitoredRedisClient(
   sentinels: Seq[(String, Int)] = Seq(("localhost", 26379)),
   master: String,
+  username: Option[String] = None,
   password: Option[String] = None,
   db: Option[Int] = None,
   name: String = "SMRedisClient"
@@ -160,7 +170,7 @@ case class SentinelMonitoredRedisClient(
     with Transactions {
 
   val redisClient: RedisClient = withMasterAddr((ip, port) => {
-    RedisClient(ip, port, password, db, name)
+    RedisClient(ip, port, username, password, db, name)
   })
   override val onNewSlave = (ip: String, port: Int) => {}
   override val onSlaveDown = (ip: String, port: Int) => {}
@@ -169,6 +179,7 @@ case class SentinelMonitoredRedisClient(
 case class SentinelMonitoredRedisBlockingClient(
   sentinels: Seq[(String, Int)] = Seq(("localhost", 26379)),
   master: String,
+  username: Option[String] = None,
   password: Option[String] = None,
   db: Option[Int] = None,
   name: String = "SMRedisBlockingClient"
@@ -176,7 +187,7 @@ case class SentinelMonitoredRedisBlockingClient(
     extends SentinelMonitoredRedisClientLike(system, redisDispatcher)
     with BLists {
   val redisClient: RedisBlockingClient = withMasterAddr((ip, port) => {
-    RedisBlockingClient(ip, port, password, db, name)
+    RedisBlockingClient(ip, port, username, password, db, name)
   })
   override val onNewSlave = (ip: String, port: Int) => {}
   override val onSlaveDown = (ip: String, port: Int) => {}

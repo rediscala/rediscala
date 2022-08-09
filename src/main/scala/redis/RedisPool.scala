@@ -11,7 +11,13 @@ import scala.concurrent.ExecutionContext
 import redis.protocol.RedisReply
 import redis.commands.Transactions
 
-case class RedisServer(host: String = "localhost", port: Int = 6379, password: Option[String] = None, db: Option[Int] = None)
+case class RedisServer(
+  host: String = "localhost",
+  port: Int = 6379,
+  username: Option[String] = None,
+  password: Option[String] = None,
+  db: Option[Int] = None
+)
 
 case class RedisConnection(actor: ActorRef, active: AtomicBoolean = new AtomicBoolean(false))
 
@@ -47,7 +53,11 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
   }
 
   def onConnect(redis: RedisCommands, server: RedisServer): Unit = {
-    server.password.foreach(redis.auth(_)) // TODO log on auth failure
+    (server.username, server.password) match {
+      case (Some(username), Some(password)) => redis.auth(username, password)
+      case (None, Some(password)) => redis.auth(password)
+      case (_, _) =>
+    } // TODO log on auth failure
     server.db.foreach(redis.select)
   }
 
@@ -158,7 +168,7 @@ case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer]
     with Transactions {
   implicit val executionContext = _system.dispatchers.lookup(redisDispatcher.name)
 
-  val masterClient = RedisClient(master.host, master.port, master.password, master.db)
+  val masterClient = RedisClient(master.host, master.port, master.username, master.password, master.db)
 
   val slavesClients = RedisClientPool(slaves)
 

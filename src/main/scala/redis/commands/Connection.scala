@@ -8,8 +8,11 @@ import redis.protocol.Status
 import redis.api.connection._
 
 trait Connection extends Request {
-  def auth[V: ByteStringSerializer](value: V): Future[Status] =
-    send(Auth(value))
+  def auth[V: ByteStringSerializer](password: V): Future[Status] =
+    send(Auth(password))
+
+  def auth[V: ByteStringSerializer](username: V, password: V): Future[Status] =
+    send(Auth(username, Some(password)))
 
   def echo[V: ByteStringSerializer, R: ByteStringDeserializer](value: V): Future[Option[R]] =
     send(Echo(value))

@@ -4,9 +4,13 @@ import redis._
 import akka.util.ByteString
 import redis.protocol.Status
 
-case class Auth[V](value: V)(implicit convert: ByteStringSerializer[V]) extends RedisCommandStatus[Status] {
+case class Auth[V](value1: V, value2: Option[V] = None)(implicit convert: ByteStringSerializer[V]) extends RedisCommandStatus[Status] {
   def isMasterOnly = true
-  val encodedRequest: ByteString = encode("AUTH", Seq(convert.serialize(value)))
+  val encodedRequest: ByteString = (value1, value2) match {
+    case (username, Some(password)) => encode("AUTH", Seq(convert.serialize(username), convert.serialize(password)))
+    case (password, None) => encode("AUTH", Seq(convert.serialize(password)))
+    case (_, _) => ByteString.empty
+  }
 
   def decodeReply(s: Status) = s
 }
