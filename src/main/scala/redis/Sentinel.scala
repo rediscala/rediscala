@@ -95,6 +95,7 @@ case class SentinelClient(
       onMessage,
       (pmessage: PMessage) => {},
       None,
+      None,
       (status: Boolean) => {}
     ).withDispatcher(redisDispatcher.name),
     name + '-' + Redis.tempName()

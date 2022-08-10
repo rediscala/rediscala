@@ -68,7 +68,7 @@ class RedisSubscriberActorSpec extends TestKit(ActorSystem()) with Specification
 }
 
 class SubscriberActor(address: InetSocketAddress, channels: Seq[String], patterns: Seq[String], probeMock: ActorRef)
-    extends RedisSubscriberActor(address, channels, patterns, None, (status: Boolean) => { () }) {
+    extends RedisSubscriberActor(address, channels, patterns, None, None, (status: Boolean) => { () }) {
 
   override val tcp = probeMock
 

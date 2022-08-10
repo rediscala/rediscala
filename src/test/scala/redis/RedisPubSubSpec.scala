@@ -112,7 +112,7 @@ class RedisPubSubSpec extends RedisDockerServer {
 }
 
 class SubscriberActor(address: InetSocketAddress, channels: Seq[String], patterns: Seq[String], probeMock: ActorRef)
-    extends RedisSubscriberActor(address, channels, patterns, None, (b: Boolean) => ()) {
+    extends RedisSubscriberActor(address, channels, patterns, None, None, (b: Boolean) => ()) {
 
   override def onMessage(m: Message) = {
     probeMock ! m
