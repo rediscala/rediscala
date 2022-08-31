@@ -8,7 +8,7 @@ import java.io.OutputStream
 import scala.io.Source
 import scala.sys.process._
 
-class AuthUsernameAndPasswordSpec extends RedisStandaloneServer {
+class AuthUsernameAndPasswordSpec extends RedisDockerServer {
   sequential
 
   "AUTH with username and password" should {
