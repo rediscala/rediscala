@@ -15,5 +15,5 @@ Session.vim
 .DS_Store
 *.rdb
 *.aof
-redis-5.0.14/
-redis-5.0.14.tar.gz
+redis-6.2.7/
+redis-6.2.7.tar.gz

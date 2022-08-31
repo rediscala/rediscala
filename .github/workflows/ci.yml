@@ -21,7 +21,7 @@ jobs:
           - java: 17
             scala: 3
     env:
-      REDIS_HOME: "redis-5.0.14/src"
+      REDIS_HOME: "redis-6.2.7/src"
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
