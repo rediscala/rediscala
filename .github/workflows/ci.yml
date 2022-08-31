@@ -29,8 +29,13 @@ jobs:
         java-version: ${{matrix.java}}
         distribution: adopt
     - uses: coursier/cache-action@v6
-    - run: ./install-redis.sh
     - run: sbt scalafmtSbtCheck "SetScala${{ matrix.scala }}" scalafmtCheckAll Test/compile
+    - uses: nick-invision/retry@v2
+      with:
+        timeout_minutes: 20
+        max_attempts: 3
+        command: sbt "SetScala${{ matrix.scala }}" runDockerTests
+    - run: ./install-redis.sh
     - uses: nick-invision/retry@v2
       with:
         timeout_minutes: 20
