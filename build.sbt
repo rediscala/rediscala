@@ -22,8 +22,8 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val akka = Def.setting(
   Seq(
-    "com.typesafe.akka" %% "akka-actor" % "2.6.19",
-    "com.typesafe.akka" %% "akka-testkit" % "2.6.19" % "test"
+    "com.typesafe.akka" %% "akka-actor" % "2.6.20",
+    "com.typesafe.akka" %% "akka-testkit" % "2.6.20" % "test"
   )
 )
 
