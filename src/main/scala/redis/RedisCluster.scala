@@ -174,7 +174,11 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
     }
   }
 
-  def groupByCluserServer(keys: Seq[String]): Seq[Seq[String]] = {
+  @deprecated(message = "use groupByClusterServer", since = "1.14.0")
+  def groupByCluserServer(keys: Seq[String]): Seq[Seq[String]] =
+    groupByClusterServer(keys)
+
+  def groupByClusterServer(keys: Seq[String]): Seq[Seq[String]] = {
     keys.groupBy { key =>
       getRedisConnection(RedisComputeSlot.hashSlot(key))
     }.values.toSeq
