@@ -192,7 +192,7 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       probeMock.expectMsg(WriteSent) mustEqual WriteSent
       probeTcpWorker.reply(WriteAck)
 
-      // change adresse
+      // change address
       val address2 = new InetSocketAddress("localhost", 6380)
       redisWorkerIO ! address2
 

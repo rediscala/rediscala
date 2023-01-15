@@ -13,9 +13,9 @@ object RedisProtocolRequest {
     val argsSizeString = (args.size + 1).toString
     var length: Int = 1 + argsSizeString.length + LS.length
 
-    val cmdLenghtString = command.length.toString
+    val cmdLengthString = command.length.toString
 
-    length += 1 + cmdLenghtString.length + LS.length + command.length + LS.length
+    length += 1 + cmdLengthString.length + LS.length + command.length + LS.length
 
     args.foreach(arg => {
       val argLengthString = arg.length.toString
@@ -33,8 +33,8 @@ object RedisProtocolRequest {
 
     bytes.update(i, '$')
     i += 1
-    arraycopy(cmdLenghtString.getBytes(UTF8_CHARSET), 0, bytes, i, cmdLenghtString.length)
-    i += cmdLenghtString.length
+    arraycopy(cmdLengthString.getBytes(UTF8_CHARSET), 0, bytes, i, cmdLengthString.length)
+    i += cmdLengthString.length
     arraycopy(LS, 0, bytes, i, LS.length)
     i += LS.length
     arraycopy(command.getBytes(UTF8_CHARSET), 0, bytes, i, command.length)
