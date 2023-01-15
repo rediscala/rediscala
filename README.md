@@ -282,19 +282,19 @@ Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscal
 
 [Rediscala scaladoc API (version 1.7)](https://oss.sonatype.org/service/local/repositories/releases/archive/com/github/etaty/rediscala_2.11/1.7.0/rediscala_2.11-1.7.0-javadoc.jar/!/index.html#package)
 
-[Rediscala scaladoc API (version 1.6)](http://etaty.github.io/rediscala/1.6.0/api/index.html#package)
+[Rediscala scaladoc API (version 1.6)](https://etaty.github.io/rediscala/1.6.0/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.5)](http://etaty.github.io/rediscala/1.5.0/api/index.html#package)
+[Rediscala scaladoc API (version 1.5)](https://etaty.github.io/rediscala/1.5.0/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.4)](http://etaty.github.io/rediscala/1.4.0/api/index.html#package)
+[Rediscala scaladoc API (version 1.4)](https://etaty.github.io/rediscala/1.4.0/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.3)](http://etaty.github.io/rediscala/1.3/api/index.html#package)
+[Rediscala scaladoc API (version 1.3)](https://etaty.github.io/rediscala/1.3/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.2)](http://etaty.github.io/rediscala/1.2/api/index.html#package)
+[Rediscala scaladoc API (version 1.2)](https://etaty.github.io/rediscala/1.2/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.1)](http://etaty.github.io/rediscala/1.1/api/index.html#package)
+[Rediscala scaladoc API (version 1.1)](https://etaty.github.io/rediscala/1.1/api/index.html#package)
 
-[Rediscala scaladoc API (version 1.0)](http://etaty.github.io/rediscala/1.0/api/index.html#package)
+[Rediscala scaladoc API (version 1.0)](https://etaty.github.io/rediscala/1.0/api/index.html#package)
 
 </details>
 
@@ -302,7 +302,7 @@ Full example: [ExampleByteStringFormatter](https://github.com/rediscala/rediscal
 
 More than 250 000 requests/second
 
-* [benchmark result from scalameter](http://bit.ly/rediscalabench-1-1)
+* [benchmark result from scalameter](https://bit.ly/rediscalabench-1-1)
 
 The hardware used is a macbook retina (Intel Core i7, 2.6 GHz, 4 cores, 8 threads, 8GB) running the sun/oracle jvm 1.6
 
