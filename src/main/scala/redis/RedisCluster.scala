@@ -113,8 +113,8 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
   }
 
   def getClusterAndConnection(slot: Int): Option[(ClusterSlot, RedisConnection)] = {
-    clusterSlotsRef.get.flatMap { clusterSlots =>
-      clusterSlots.find { case (clusterSlot, _) =>
+    clusterSlotsRef.get.flatMap {
+      _.find { case (clusterSlot, _) =>
         val result = clusterSlot.begin <= slot && slot <= clusterSlot.end
         if (result) {
           log.debug(s"slot $slot => " + clusterSlot.master.toString)

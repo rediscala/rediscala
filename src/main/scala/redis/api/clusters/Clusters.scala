@@ -24,8 +24,8 @@ case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
   }
 
   def decodeReply(mb: MultiBulk): Seq[ClusterSlot] = {
-    val clusterSlots: Option[Seq[ClusterSlot]] = mb.responses.map { vector =>
-      vector.collect { case MultiBulk(Some(groupSlot)) =>
+    val clusterSlots: Option[Seq[ClusterSlot]] = mb.responses.map {
+      _.collect { case MultiBulk(Some(groupSlot)) =>
         //
         // redis response:
         // MultiBulk(begin,end,MultiBulk(masterId,masterPort,masterId),MultiBulk(slave1Id,slave1Port,slave1Id),MultiBulk(slave2Id,slave2Port,slave2Id))...,
