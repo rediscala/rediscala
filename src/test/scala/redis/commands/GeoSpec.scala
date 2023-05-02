@@ -23,7 +23,7 @@ class GeoSpec extends RedisDockerServer {
       res shouldEqual 1
     }
 
-    "GEORADIUS By Member" in {
+    "GEORADIUS" in {
       addPlaces()
       val res = Await.result(redis.geoRadius(testKey, 15, 37, 200, Kilometer), 2.second)
       res shouldEqual Vector("Agrigento", "Catania")
