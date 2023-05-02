@@ -119,7 +119,7 @@ class HashesSpec extends RedisDockerServer {
       Await.result(r, timeOut)
     }
 
-    "HMSET" in {
+    "HSET" in {
       val r = for {
         _ <- redis.hdel("hsetKey", "field")
         set <- redis.hset("hsetKey", "field", "value")
