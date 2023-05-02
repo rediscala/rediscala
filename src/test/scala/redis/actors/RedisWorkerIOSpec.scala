@@ -4,7 +4,7 @@ import akka.testkit._
 import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.ActorSystem
-import org.specs2.mutable.SpecificationLike
+import org.scalatest.wordspec.AnyWordSpecLike
 import java.net.InetSocketAddress
 import akka.io.Tcp._
 import akka.util.ByteString
@@ -15,7 +15,7 @@ import akka.io.Tcp.Connect
 import akka.io.Tcp.CommandFailed
 import redis.Redis
 
-class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike with ImplicitSender {
+class RedisWorkerIOSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 
   import scala.concurrent.duration._
 
@@ -33,20 +33,20 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       )
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       probeTcp.reply(CommandFailed(connectMsg))
-      probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
+      assert(probeMock.expectMsg(OnConnectionClosed) == OnConnectionClosed)
 
       // should reconnect in 2s
       within(1.second, 4.seconds) {
         val connectMsg = probeTcp.expectMsgType[Connect]
-        connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
-        connectMsg.remoteAddress must not beTheSameAs address
+        assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
+        assert(connectMsg.remoteAddress ne address)
 
         val probeTcpWorker = TestProbe()
         probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-        probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+        assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
       }
     }
 
@@ -61,26 +61,26 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       redisWorkerIO ! "PING1"
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
 
       redisWorkerIO ! "PING2"
       redisWorkerIO ! "PING3"
       probeTcpWorker.reply(WriteAck)
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING2PING3"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING2PING3"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
 
       redisWorkerIO ! "PING"
       probeTcpWorker.expectNoMessage(1.seconds)
       probeTcpWorker.send(redisWorkerIO, WriteAck)
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
     }
 
     "reconnect : connected <-> disconnected" in within(timeout) {
@@ -94,32 +94,32 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       redisWorkerIO ! "PING1"
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
 
       redisWorkerIO ! "PING 2"
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result() mustEqual ByteString("PING 2"))
+      awaitAssert(assert(redisWorkerIO.underlyingActor.bufferWrite.result() == ByteString("PING 2")))
       // ConnectionClosed
       probeTcpWorker.send(redisWorkerIO, ErrorClosed("test"))
-      probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.length mustEqual 0)
+      assert(probeMock.expectMsg(OnConnectionClosed) == OnConnectionClosed)
+      awaitAssert(assert(redisWorkerIO.underlyingActor.bufferWrite.length == 0))
 
       // Reconnect
       val connectMsg2 = probeTcp.expectMsgType[Connect]
-      connectMsg2 mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg2 == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker2 = TestProbe()
       probeTcpWorker2.send(redisWorkerIO, Connected(connectMsg2.remoteAddress, address))
-      probeTcpWorker2.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker2.expectMsgType[Register] == Register(redisWorkerIO))
 
       redisWorkerIO ! "PING1"
-      probeTcpWorker2.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker2.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
     }
 
     "onConnectedCommandFailed" in within(timeout) {
@@ -133,18 +133,18 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       redisWorkerIO ! "PING1"
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
       val msg = probeTcpWorker.expectMsgType[Write]
-      msg mustEqual Write(ByteString("PING1"), WriteAck)
+      assert(msg == Write(ByteString("PING1"), WriteAck))
 
       probeTcpWorker.reply(CommandFailed(msg))
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
     }
 
     "received" in within(timeout) {
@@ -158,17 +158,17 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       redisWorkerIO ! "PING1"
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
 
       probeTcpWorker.send(redisWorkerIO, Received(ByteString("PONG")))
-      probeMock.expectMsgType[ByteString] mustEqual ByteString("PONG")
+      assert(probeMock.expectMsgType[ByteString] == ByteString("PONG"))
     }
 
     "Address Changed" in within(timeout) {
@@ -182,47 +182,47 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       redisWorkerIO ! "PING1"
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(ByteString("PING1"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(ByteString("PING1"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
       probeTcpWorker.reply(WriteAck)
 
       // change address
       val address2 = new InetSocketAddress("localhost", 6380)
       redisWorkerIO ! address2
 
-      probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
+      assert(probeMock.expectMsg(OnConnectionClosed) == OnConnectionClosed)
 
       redisWorkerIO ! "PING2"
 
       val connectMsg2 = probeTcp.expectMsgType[Connect]
-      connectMsg2 mustEqual Connect(address2, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg2 == Connect(address2, options = SO.KeepAlive(on = true) :: Nil))
 
       val probeTcpWorker2 = TestProbe()
       probeTcpWorker2.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker2.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker2.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker2.expectMsgType[Write] mustEqual Write(ByteString("PING2"), WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker2.expectMsgType[Write] == Write(ByteString("PING2"), WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
       probeTcpWorker2.reply(WriteAck)
 
       // receiving data on connection with the sending direction closed
       probeTcpWorker.send(redisWorkerIO, Received(ByteString("PONG1")))
-      probeMock.expectMsg(DataReceivedOnClosingConnection) mustEqual DataReceivedOnClosingConnection
+      assert(probeMock.expectMsg(DataReceivedOnClosingConnection) == DataReceivedOnClosingConnection)
 
       // receiving data on open connection
       probeTcpWorker2.send(redisWorkerIO, Received(ByteString("PONG2")))
-      probeMock.expectMsgType[ByteString] mustEqual ByteString("PONG2")
+      assert(probeMock.expectMsgType[ByteString] == ByteString("PONG2"))
 
       // close connection
       probeTcpWorker.send(redisWorkerIO, ConfirmedClosed)
-      probeMock.expectMsg(ClosingConnectionClosed) mustEqual ClosingConnectionClosed
+      assert(probeMock.expectMsg(ClosingConnectionClosed) == ClosingConnectionClosed)
     }
 
     "on connect write" in within(timeout) {
@@ -235,33 +235,33 @@ class RedisWorkerIOSpec extends TestKit(ActorSystem()) with SpecificationLike wi
       )
 
       val connectMsg = probeTcp.expectMsgType[Connect]
-      connectMsg mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker = TestProbe()
       probeTcpWorker.send(redisWorkerIO, Connected(connectMsg.remoteAddress, address))
 
-      probeTcpWorker.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker.expectMsgType[Write] mustEqual Write(onConnectByteString, WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker.expectMsgType[Write] == Write(onConnectByteString, WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
 
       redisWorkerIO ! "PING1"
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.result() mustEqual ByteString("PING1"))
+      awaitAssert(assert(redisWorkerIO.underlyingActor.bufferWrite.result() == ByteString("PING1")))
 
       // ConnectionClosed
       probeTcpWorker.send(redisWorkerIO, ErrorClosed("test"))
-      probeMock.expectMsg(OnConnectionClosed) mustEqual OnConnectionClosed
+      assert(probeMock.expectMsg(OnConnectionClosed) == OnConnectionClosed)
 
-      awaitAssert(redisWorkerIO.underlyingActor.bufferWrite.length mustEqual 0)
+      awaitAssert(assert(redisWorkerIO.underlyingActor.bufferWrite.length == 0))
 
       // Reconnect
       val connectMsg2 = probeTcp.expectMsgType[Connect]
-      connectMsg2 mustEqual Connect(address, options = SO.KeepAlive(on = true) :: Nil)
+      assert(connectMsg2 == Connect(address, options = SO.KeepAlive(on = true) :: Nil))
       val probeTcpWorker2 = TestProbe()
       probeTcpWorker2.send(redisWorkerIO, Connected(connectMsg2.remoteAddress, address))
-      probeTcpWorker2.expectMsgType[Register] mustEqual Register(redisWorkerIO)
+      assert(probeTcpWorker2.expectMsgType[Register] == Register(redisWorkerIO))
 
-      probeTcpWorker2.expectMsgType[Write] mustEqual Write(onConnectByteString, WriteAck)
-      probeMock.expectMsg(WriteSent) mustEqual WriteSent
+      assert(probeTcpWorker2.expectMsgType[Write] == Write(onConnectByteString, WriteAck))
+      assert(probeMock.expectMsg(WriteSent) == WriteSent)
     }
   }
 }

@@ -4,7 +4,7 @@ import java.net.InetSocketAddress
 import akka.actor._
 import akka.testkit._
 import akka.util.ByteString
-import org.specs2.mutable.SpecificationLike
+import org.scalatest.wordspec.AnyWordSpecLike
 import redis.api.connection.Ping
 import redis.api.strings.Get
 import redis.Operation
@@ -13,7 +13,7 @@ import scala.collection.mutable
 import scala.concurrent.Await
 import scala.concurrent.Promise
 
-class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike with ImplicitSender {
+class RedisClientActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 
   import scala.concurrent.duration._
 
@@ -53,31 +53,31 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       val op2 = Operation(Ping, promise2)
       redisClientActor ! op2
 
-      probeMock.expectMsg(WriteMock) mustEqual WriteMock
-      awaitAssert(redisClientActor.underlyingActor.queuePromises.length mustEqual 2)
+      assert(probeMock.expectMsg(WriteMock) == WriteMock)
+      awaitAssert(assert(redisClientActor.underlyingActor.queuePromises.length == 2))
 
       // onConnectWrite
       redisClientActor.underlyingActor.onConnectWrite()
-      awaitAssert(redisClientActor.underlyingActor.queuePromises.toSeq mustEqual Seq(opConnectPing, opConnectGet, op1, op2))
-      awaitAssert(redisClientActor.underlyingActor.queuePromises.length mustEqual 4)
+      awaitAssert(assert(redisClientActor.underlyingActor.queuePromises.toSeq == Seq(opConnectPing, opConnectGet, op1, op2)))
+      awaitAssert(assert(redisClientActor.underlyingActor.queuePromises.length == 4))
 
       // onWriteSent
       redisClientActor.underlyingActor.onWriteSent()
-      probeReplyDecoder.expectMsgType[QueuePromises] mustEqual QueuePromises(mutable.Queue(opConnectPing, opConnectGet, op1, op2))
-      awaitAssert(redisClientActor.underlyingActor.queuePromises must beEmpty)
+      assert(probeReplyDecoder.expectMsgType[QueuePromises] == QueuePromises(mutable.Queue(opConnectPing, opConnectGet, op1, op2)))
+      awaitAssert(assert(redisClientActor.underlyingActor.queuePromises.isEmpty))
 
       // onDataReceived
       awaitAssert(redisClientActor.underlyingActor.onDataReceived(ByteString.empty))
-      probeReplyDecoder.expectMsgType[ByteString] mustEqual ByteString.empty
+      assert(probeReplyDecoder.expectMsgType[ByteString] == ByteString.empty)
 
       awaitAssert(redisClientActor.underlyingActor.onDataReceived(ByteString("bytestring")))
-      probeReplyDecoder.expectMsgType[ByteString] mustEqual ByteString("bytestring")
+      assert(probeReplyDecoder.expectMsgType[ByteString] == ByteString("bytestring"))
 
       // onConnectionClosed
       val deathWatcher = TestProbe()
       deathWatcher.watch(probeReplyDecoder.ref)
       redisClientActor.underlyingActor.onConnectionClosed()
-      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds) must beAnInstanceOf[Terminated]
+      assert(deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds).isInstanceOf[Terminated])
     }
 
     "onConnectionClosed with promises queued" in {
@@ -92,14 +92,14 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
 
       val promise3 = Promise[String]()
       redisClientActor.receive(Operation(Ping, promise3))
-      redisClientActor.queuePromises.length mustEqual 1
+      assert(redisClientActor.queuePromises.length == 1)
 
       val deathWatcher = TestProbe()
       deathWatcher.watch(probeReplyDecoder.ref)
 
       redisClientActor.onConnectionClosed()
-      deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds) must beAnInstanceOf[Terminated]
-      Await.result(promise3.future, 10.seconds) must throwA(NoConnectionException)
+      assert(deathWatcher.expectTerminated(probeReplyDecoder.ref, 30.seconds).isInstanceOf[Terminated])
+      assertThrows[NoConnectionException.type](Await.result(promise3.future, 10.seconds))
     }
 
     "replyDecoder died -> reset connection" in {
@@ -116,22 +116,22 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with SpecificationLike
       val promiseNotSent = Promise[String]()
       val operation = Operation(Ping, promiseSent)
       redisClientActor.receive(operation)
-      redisClientActor.queuePromises.length mustEqual 1
+      assert(redisClientActor.queuePromises.length == 1)
 
       redisClientActor.onWriteSent()
-      redisClientActor.queuePromises must beEmpty
-      probeReplyDecoder.expectMsgType[QueuePromises] mustEqual QueuePromises(mutable.Queue(operation))
+      assert(redisClientActor.queuePromises.isEmpty)
+      assert(probeReplyDecoder.expectMsgType[QueuePromises] == QueuePromises(mutable.Queue(operation)))
 
       redisClientActor.receive(Operation(Ping, promiseNotSent))
-      redisClientActor.queuePromises.length mustEqual 1
+      assert(redisClientActor.queuePromises.length == 1)
 
       val deathWatcher = TestProbe()
       deathWatcher.watch(probeReplyDecoder.ref)
       deathWatcher.watch(redisClientActorRef)
 
       probeReplyDecoder.ref ! Kill
-      deathWatcher.expectTerminated(probeReplyDecoder.ref) must beAnInstanceOf[Terminated]
-      redisClientActor.queuePromises.length mustEqual 1
+      assert(deathWatcher.expectTerminated(probeReplyDecoder.ref).isInstanceOf[Terminated])
+      assert(redisClientActor.queuePromises.length == 1)
     }
   }
 }

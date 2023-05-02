@@ -24,11 +24,11 @@ class SortedSetsSpec extends RedisDockerServer {
         _ <- redis.zadd("zaddKey", 1.0 -> "one", (4, "three"))
         zr <- redis.zrangeWithscores("zaddKey", 0, -1)
       } yield {
-        z1 mustEqual 3
-        z2 mustEqual 0
-        z3 mustEqual 1
-        z4 mustEqual 1
-        zr mustEqual Seq((ByteString("one"), 1.0), (ByteString("uno"), 1), (ByteString("two"), 3), (ByteString("three"), 4))
+        assert(z1 == 3)
+        assert(z2 == 0)
+        assert(z3 == 1)
+        assert(z4 == 1)
+        assert(zr == Seq((ByteString("one"), 1.0), (ByteString("uno"), 1), (ByteString("two"), 3), (ByteString("three"), 4)))
       }
       Await.result(r, timeOut)
     }
@@ -40,8 +40,8 @@ class SortedSetsSpec extends RedisDockerServer {
         _ <- redis.zadd("zcardKey", 1.0 -> "one", (2, "two"))
         c2 <- redis.zcard("zcardKey")
       } yield {
-        c1 mustEqual 0
-        c2 mustEqual 2
+        assert(c1 == 0)
+        assert(c2 == 2)
       }
       Await.result(r, timeOut)
     }
@@ -54,9 +54,9 @@ class SortedSetsSpec extends RedisDockerServer {
         c2 <- redis.zcount("zcountKey")
         c3 <- redis.zcount("zcountKey", Limit(1, inclusive = false), Limit(3))
       } yield {
-        c1 mustEqual 0
-        c2 mustEqual 3
-        c3 mustEqual 2
+        assert(c1 == 0)
+        assert(c2 == 3)
+        assert(c3 == 2)
       }
       Await.result(r, timeOut)
     }
@@ -69,9 +69,9 @@ class SortedSetsSpec extends RedisDockerServer {
         d2 <- redis.zincrby("zincrbyKey", 2.1, "notexisting")
         zr <- redis.zrangeWithscores("zincrbyKey", 0, -1)
       } yield {
-        d mustEqual 3.1
-        d2 mustEqual 2.1
-        zr mustEqual Seq((ByteString("two"), 2.0), (ByteString("notexisting"), 2.1), (ByteString("one"), 3.1))
+        assert(d == 3.1)
+        assert(d2 == 2.1)
+        assert(zr == Seq((ByteString("two"), 2.0), (ByteString("notexisting"), 2.1), (ByteString("one"), 3.1)))
       }
       Await.result(r, timeOut)
     }
@@ -87,12 +87,12 @@ class SortedSetsSpec extends RedisDockerServer {
         zr <- redis.zrangeWithscores("zinterstoreKeyOut", 0, -1)
         zrWeighted <- redis.zrangeWithscores("zinterstoreKeyOutWeighted", 0, -1)
       } yield {
-        z1 mustEqual 2
-        z2 mustEqual 3
-        zinterstore mustEqual 2
-        zinterstoreWeighted mustEqual 2
-        zr mustEqual Seq((ByteString("one"), 2), (ByteString("two"), 4))
-        zrWeighted mustEqual Seq((ByteString("one"), 5), (ByteString("two"), 10))
+        assert(z1 == 2)
+        assert(z2 == 3)
+        assert(zinterstore == 2)
+        assert(zinterstoreWeighted == 2)
+        assert(zr == Seq((ByteString("one"), 2), (ByteString("two"), 4)))
+        assert(zrWeighted == Seq((ByteString("one"), 5), (ByteString("two"), 10)))
       }
       Await.result(r, timeOut)
     }
@@ -105,10 +105,10 @@ class SortedSetsSpec extends RedisDockerServer {
         zr2 <- redis.zrange("zrangeKey", 2, 3)
         zr3 <- redis.zrange("zrangeKey", -2, -1)
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("one"), ByteString("two"), ByteString("three"))
-        zr2 mustEqual Seq(ByteString("three"))
-        zr3 mustEqual Seq(ByteString("two"), ByteString("three"))
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("one"), ByteString("two"), ByteString("three")))
+        assert(zr2 == Seq(ByteString("three")))
+        assert(zr3 == Seq(ByteString("two"), ByteString("three")))
       }
       Await.result(r, timeOut)
     }
@@ -124,13 +124,13 @@ class SortedSetsSpec extends RedisDockerServer {
         zr3 <- redis.zrangebyscore("zrangebyscoreKey", Limit(1, inclusive = false), Limit(2))
         zr4 <- redis.zrangebyscore("zrangebyscoreKey", Limit(1, inclusive = false), Limit(2, inclusive = false))
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("one"), ByteString("two"), ByteString("three"))
-        zr1Limit mustEqual Seq(ByteString("two"), ByteString("three"))
-        zr2 mustEqual Seq(ByteString("one"), ByteString("two"))
-        zr2WithScores mustEqual Seq((ByteString("one"), 1), (ByteString("two"), 2))
-        zr3 mustEqual Seq(ByteString("two"))
-        zr4 mustEqual Seq()
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("one"), ByteString("two"), ByteString("three")))
+        assert(zr1Limit == Seq(ByteString("two"), ByteString("three")))
+        assert(zr2 == Seq(ByteString("one"), ByteString("two")))
+        assert(zr2WithScores == Seq((ByteString("one"), 1), (ByteString("two"), 2)))
+        assert(zr3 == Seq(ByteString("two")))
+        assert(zr4 == Seq())
       }
       Await.result(r, timeOut)
     }
@@ -142,9 +142,9 @@ class SortedSetsSpec extends RedisDockerServer {
         zr1 <- redis.zrank("zrankKey", "three")
         zr2 <- redis.zrank("zrankKey", "four")
       } yield {
-        z1 mustEqual 3
-        zr1 must beSome(2)
-        zr2 must beNone
+        assert(z1 == 3)
+        assert(zr1 == Some(2))
+        assert(zr2.isEmpty)
       }
       Await.result(r, timeOut)
     }
@@ -156,9 +156,9 @@ class SortedSetsSpec extends RedisDockerServer {
         z2 <- redis.zrem("zremKey", "two", "nonexisting")
         zr <- redis.zrangeWithscores("zremKey", 0, -1)
       } yield {
-        z1 mustEqual 3
-        z2 mustEqual 1
-        zr mustEqual Seq((ByteString("one"), 1), (ByteString("three"), 3))
+        assert(z1 == 3)
+        assert(z2 == 1)
+        assert(zr == Seq((ByteString("one"), 1), (ByteString("three"), 3)))
       }
       Await.result(r, timeOut)
     }
@@ -171,10 +171,10 @@ class SortedSetsSpec extends RedisDockerServer {
         z3 <- redis.zremrangebylex("zremrangebylexKey", "[b", "[d")
         zrange1 <- redis.zrange("zremrangebylexKey", 0, -1)
       } yield {
-        z1 mustEqual 7
-        z2 mustEqual 0
-        z3 mustEqual 3
-        zrange1 mustEqual Seq(ByteString("a"), ByteString("e"), ByteString("f"), ByteString("g"))
+        assert(z1 == 7)
+        assert(z2 == 0)
+        assert(z3 == 3)
+        assert(zrange1 == Seq(ByteString("a"), ByteString("e"), ByteString("f"), ByteString("g")))
       }
       Await.result(r, timeOut)
     }
@@ -186,9 +186,9 @@ class SortedSetsSpec extends RedisDockerServer {
         z2 <- redis.zremrangebyrank("zremrangebyrankKey", 0, 1)
         zr <- redis.zrangeWithscores("zremrangebyrankKey", 0, -1)
       } yield {
-        z1 mustEqual 3
-        z2 mustEqual 2
-        zr mustEqual Seq((ByteString("three"), 3))
+        assert(z1 == 3)
+        assert(z2 == 2)
+        assert(zr == Seq((ByteString("three"), 3)))
       }
       Await.result(r, timeOut)
     }
@@ -200,9 +200,9 @@ class SortedSetsSpec extends RedisDockerServer {
         z2 <- redis.zremrangebyscore("zremrangebyscoreKey", Limit(Double.NegativeInfinity), Limit(2, inclusive = false))
         zr <- redis.zrangeWithscores("zremrangebyscoreKey", 0, -1)
       } yield {
-        z1 mustEqual 3
-        z2 mustEqual 1
-        zr mustEqual Seq((ByteString("two"), 2), (ByteString("three"), 3))
+        assert(z1 == 3)
+        assert(z2 == 1)
+        assert(zr == Seq((ByteString("two"), 2), (ByteString("three"), 3)))
       }
       Await.result(r, timeOut)
     }
@@ -216,11 +216,11 @@ class SortedSetsSpec extends RedisDockerServer {
         zr3 <- redis.zrevrange("zrevrangeKey", -2, -1)
         zr3WithScores <- redis.zrevrangeWithscores("zrevrangeKey", -2, -1)
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("three"), ByteString("two"), ByteString("one"))
-        zr2 mustEqual Seq(ByteString("one"))
-        zr3 mustEqual Seq(ByteString("two"), ByteString("one"))
-        zr3WithScores mustEqual Seq((ByteString("two"), 2), (ByteString("one"), 1))
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("three"), ByteString("two"), ByteString("one")))
+        assert(zr2 == Seq(ByteString("one")))
+        assert(zr3 == Seq(ByteString("two"), ByteString("one")))
+        assert(zr3WithScores == Seq((ByteString("two"), 2), (ByteString("one"), 1)))
       }
       Await.result(r, timeOut)
     }
@@ -235,12 +235,12 @@ class SortedSetsSpec extends RedisDockerServer {
         zr3 <- redis.zrevrangebyscore("zrevrangebyscoreKey", Limit(2), Limit(1, inclusive = false))
         zr4 <- redis.zrevrangebyscore("zrevrangebyscoreKey", Limit(2, inclusive = false), Limit(1, inclusive = false))
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("three"), ByteString("two"), ByteString("one"))
-        zr2 mustEqual Seq(ByteString("two"), ByteString("one"))
-        zr2WithScores mustEqual Seq((ByteString("two"), 2), (ByteString("one"), 1))
-        zr3 mustEqual Seq(ByteString("two"))
-        zr4 mustEqual Seq()
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("three"), ByteString("two"), ByteString("one")))
+        assert(zr2 == Seq(ByteString("two"), ByteString("one")))
+        assert(zr2WithScores == Seq((ByteString("two"), 2), (ByteString("one"), 1)))
+        assert(zr3 == Seq(ByteString("two")))
+        assert(zr4 == Seq())
       }
       Await.result(r, timeOut)
     }
@@ -252,9 +252,9 @@ class SortedSetsSpec extends RedisDockerServer {
         zr1 <- redis.zrevrank("zrevrankKey", "one")
         zr2 <- redis.zrevrank("zrevrankKey", "four")
       } yield {
-        z1 mustEqual 3
-        zr1 must beSome(2)
-        zr2 must beNone
+        assert(z1 == 3)
+        assert(zr1 == Some(2))
+        assert(zr2.isEmpty)
       }
       Await.result(r, timeOut)
     }
@@ -265,8 +265,8 @@ class SortedSetsSpec extends RedisDockerServer {
         _ <- redis.zadd("zscan", (1 to 20).map(x => x.toDouble -> x.toString): _*)
         scanResult <- redis.zscan[String]("zscan", count = Some(100))
       } yield {
-        scanResult.index mustEqual 0
-        scanResult.data mustEqual (1 to 20).map(x => x.toDouble -> x.toString)
+        assert(scanResult.index == 0)
+        assert(scanResult.data == (1 to 20).map(x => x.toDouble -> x.toString))
       }
 
       Await.result(r, timeOut)
@@ -288,11 +288,11 @@ class SortedSetsSpec extends RedisDockerServer {
         zr3 <- redis.zscore("zscoreKey", "positiveinf")
         zr4 <- redis.zscore("zscoreKey", "negativeinf")
       } yield {
-        z1 mustEqual 5
-        zr1 mustEqual Some(1.1)
-        zr2 mustEqual None
-        zr3 mustEqual Some(Double.PositiveInfinity)
-        zr4 mustEqual Some(Double.NegativeInfinity)
+        assert(z1 == 5)
+        assert(zr1 == Some(1.1))
+        assert(zr2 == None)
+        assert(zr3 == Some(Double.PositiveInfinity))
+        assert(zr4 == Some(Double.NegativeInfinity))
       }
       Await.result(r, timeOut)
     }
@@ -308,12 +308,12 @@ class SortedSetsSpec extends RedisDockerServer {
         zunionstoreWeighted <- redis.zunionstoreWeighted("zunionstoreKeyOutWeighted", Map("zunionstoreKey1" -> 2, "zunionstoreKey2" -> 3))
         zrWeighted <- redis.zrangeWithscores("zunionstoreKeyOutWeighted", 0, -1)
       } yield {
-        z1 mustEqual 2
-        z2 mustEqual 3
-        zunionstore mustEqual 3
-        zr mustEqual Seq((ByteString("one"), 2), (ByteString("three"), 3), (ByteString("two"), 4))
-        zunionstoreWeighted mustEqual 3
-        zrWeighted mustEqual Seq((ByteString("one"), 5), (ByteString("three"), 9), (ByteString("two"), 10))
+        assert(z1 == 2)
+        assert(z2 == 3)
+        assert(zunionstore == 3)
+        assert(zr == Seq((ByteString("one"), 2), (ByteString("three"), 3), (ByteString("two"), 4)))
+        assert(zunionstoreWeighted == 3)
+        assert(zrWeighted == Seq((ByteString("one"), 5), (ByteString("three"), 9), (ByteString("two"), 10)))
       }
       Await.result(r, timeOut)
     }
@@ -325,9 +325,9 @@ class SortedSetsSpec extends RedisDockerServer {
         zr1 <- redis.zrangebylex("zrangebylexKey", Some("[lex"), None, None)
         zr2 <- redis.zrangebylex("zrangebylexKey", Some("[lex"), None, Some((0L, 1L)))
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("lexA"), ByteString("lexB"), ByteString("lexC"))
-        zr2 mustEqual Seq(ByteString("lexA"))
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("lexA"), ByteString("lexB"), ByteString("lexC")))
+        assert(zr2 == Seq(ByteString("lexA")))
       }
       Await.result(r, timeOut)
     }
@@ -339,9 +339,9 @@ class SortedSetsSpec extends RedisDockerServer {
         zr1 <- redis.zrevrangebylex("zrevrangebylexKey", None, Some("[lex"), None)
         zr2 <- redis.zrevrangebylex("zrevrangebylexKey", None, Some("[lex"), Some((0L, 1L)))
       } yield {
-        z1 mustEqual 3
-        zr1 mustEqual Seq(ByteString("lexC"), ByteString("lexB"), ByteString("lexA"))
-        zr2 mustEqual Seq(ByteString("lexC"))
+        assert(z1 == 3)
+        assert(zr1 == Seq(ByteString("lexC"), ByteString("lexB"), ByteString("lexA")))
+        assert(zr2 == Seq(ByteString("lexC")))
       }
       Await.result(r, timeOut)
     }
@@ -354,10 +354,10 @@ class SortedSetsSpec extends RedisDockerServer {
         z2 <- redis.zadd("zpopminKey", (3, "three"), (2, "two"), (1, "one"))
         z2r <- redis.zpopmin("zpopminKey", 2)
       } yield {
-        z1 mustEqual 1
-        z1r mustEqual Seq(ByteString("one"), ByteString("1"))
-        z2 mustEqual 3
-        z2r mustEqual Seq(ByteString("one"), ByteString("1"), ByteString("two"), ByteString("2"))
+        assert(z1 == 1)
+        assert(z1r == Seq(ByteString("one"), ByteString("1")))
+        assert(z2 == 3)
+        assert(z2r == Seq(ByteString("one"), ByteString("1"), ByteString("two"), ByteString("2")))
       }
       Await.result(r, timeOut)
     }
@@ -371,10 +371,10 @@ class SortedSetsSpec extends RedisDockerServer {
         z2 <- redis.zadd("zpopmaxKey", (3, "three"), (2, "two"), (1, "one"))
         z2r <- redis.zpopmax("zpopmaxKey", 2)
       } yield {
-        z1 mustEqual 1
-        z1r mustEqual Seq(ByteString("one"), ByteString("1"))
-        z2 mustEqual 3
-        z2r mustEqual Seq(ByteString("three"), ByteString("3"), ByteString("two"), ByteString("2"))
+        assert(z1 == 1)
+        assert(z1r == Seq(ByteString("one"), ByteString("1")))
+        assert(z2 == 3)
+        assert(z2r == Seq(ByteString("three"), ByteString("3"), ByteString("two"), ByteString("2")))
       }
       Await.result(r, timeOut)
     }

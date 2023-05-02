@@ -4,15 +4,15 @@ import java.io.File
 import redis._
 import scala.concurrent.Await
 import akka.util.ByteString
-import org.specs2.concurrent.ExecutionEnv
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
+import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.time.SpanSugar._
 import redis.protocol.Bulk
 import redis.protocol.MultiBulk
 import redis.actors.ReplyErrorException
 import redis.api.scripting.RedisScript
 
-class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
-
-  sequential
+class ScriptingSpec extends RedisDockerServer with ScalaFutures {
 
   "Scripting commands" should {
     val redisScript = RedisScript("return 'rediscala'")
@@ -20,13 +20,13 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
     val redisScriptConversionObject = RedisScript("return redis.call('get', 'dumbKey')")
 
     "evalshaOrEval (RedisScript)" in {
-      Await.result(redis.scriptFlush(), timeOut) must beTrue
+      assert(Await.result(redis.scriptFlush(), timeOut))
       val r = Await.result(redis.evalshaOrEval(redisScriptKeysArgs, Seq("key"), Seq("arg")), timeOut)
-      r mustEqual MultiBulk(Some(Vector(Bulk(Some(ByteString("key"))), Bulk(Some(ByteString("arg"))))))
+      assert(r == MultiBulk(Some(Vector(Bulk(Some(ByteString("key"))), Bulk(Some(ByteString("arg")))))))
     }
 
     "EVAL" in {
-      Await.result(redis.eval(redisScript.script), timeOut) mustEqual Bulk(Some(ByteString("rediscala")))
+      assert(Await.result(redis.eval(redisScript.script), timeOut) == Bulk(Some(ByteString("rediscala"))))
     }
 
     "EVAL with type conversion" in {
@@ -37,11 +37,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
           redis.eval[DumbClass](redisScriptConversionObject.script)
         })
 
-      Await.result(r, timeOut) mustEqual dumbObject
+      assert(Await.result(r, timeOut) == dumbObject)
     }
 
     "EVALSHA" in {
-      Await.result(redis.evalsha(redisScript.sha1), timeOut) mustEqual Bulk(Some(ByteString("rediscala")))
+      assert(Await.result(redis.evalsha(redisScript.sha1), timeOut) == Bulk(Some(ByteString("rediscala"))))
     }
 
     "EVALSHA with type conversion" in {
@@ -52,11 +52,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
           redis.evalsha[DumbClass](redisScriptConversionObject.sha1)
         })
 
-      Await.result(r, timeOut) mustEqual dumbObject
+      assert(Await.result(r, timeOut) == dumbObject)
     }
 
     "evalshaOrEvalForTypeOf (RedisScript)" in {
-      Await.result(redis.scriptFlush(), timeOut) must beTrue
+      assert(Await.result(redis.scriptFlush(), timeOut))
       val dumbObject = new DumbClass("foo3", "bar3")
 
       val r = redis
@@ -65,11 +65,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
           redis.evalshaOrEval[DumbClass](redisScriptConversionObject)
         })
 
-      Await.result(r, timeOut) mustEqual dumbObject
+      assert(Await.result(r, timeOut) == dumbObject)
     }
 
     "SCRIPT FLUSH" in {
-      Await.result(redis.scriptFlush(), timeOut) must beTrue
+      assert(Await.result(redis.scriptFlush(), timeOut))
     }
 
     "SCRIPT KILL" in {
@@ -77,7 +77,11 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
       withRedisServer(serverPort => {
         val redisKiller = RedisClient(port = serverPort)
         val redisScriptLauncher = RedisClient(port = serverPort)
-        Await.result(redisKiller.scriptKill(), timeOut) must throwA(ReplyErrorException("NOTBUSY No scripts in execution right now."))
+        assert(
+          intercept[ReplyErrorException](Await.result(redisKiller.scriptKill(), timeOut)) == ReplyErrorException(
+            "NOTBUSY No scripts in execution right now."
+          )
+        )
 
         // infinite script (5 seconds)
         val infiniteScript = redisScriptLauncher.eval("""
@@ -87,9 +91,9 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
             |return 0
           """.stripMargin)
         Thread.sleep(1000)
-        redisKiller.scriptKill() must beTrue.await(retries = 3, timeOut)
-        Await.result(infiniteScript, timeOut) must throwA(
-          ReplyErrorException(
+        assert(redisKiller.scriptKill().futureValue(Timeout(30.seconds)))
+        assert(
+          intercept[ReplyErrorException](Await.result(infiniteScript, timeOut)) == ReplyErrorException(
             "ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL..."
           )
         )
@@ -97,25 +101,25 @@ class ScriptingSpec(implicit ee: ExecutionEnv) extends RedisDockerServer {
     }
 
     "SCRIPT LOAD" in {
-      Await.result(redis.scriptLoad("return 'rediscala'"), timeOut) mustEqual "d4cf7650161a37eb55a7e9325f3534cec6fc3241"
+      assert(Await.result(redis.scriptLoad("return 'rediscala'"), timeOut) == "d4cf7650161a37eb55a7e9325f3534cec6fc3241")
     }
 
     "SCRIPT EXISTS" in {
       val redisScriptNotFound = RedisScript("return 'SCRIPT EXISTS not found'")
       val redisScriptFound = RedisScript("return 'SCRIPT EXISTS found'")
       val scriptsLoaded = redis.scriptLoad(redisScriptFound.script).flatMap(_ => redis.scriptExists(redisScriptFound.sha1, redisScriptNotFound.sha1))
-      Await.result(scriptsLoaded, timeOut) mustEqual Seq(true, false)
+      assert(Await.result(scriptsLoaded, timeOut) == Seq(true, false))
 
     }
 
     "fromFile" in {
       val testScriptFile = new File(getClass.getResource("/lua/test.lua").getPath)
-      RedisScript.fromFile(testScriptFile) mustEqual RedisScript("""return "test"""")
+      assert(RedisScript.fromFile(testScriptFile) == RedisScript("""return "test""""))
     }
 
     "fromResource" in {
       val testScriptPath = "/lua/test.lua"
-      RedisScript.fromResource(testScriptPath) mustEqual RedisScript("""return "test"""")
+      assert(RedisScript.fromResource(testScriptPath) == RedisScript("""return "test""""))
     }
 
   }

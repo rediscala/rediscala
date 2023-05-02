@@ -14,9 +14,9 @@ class SetsSpec extends RedisDockerServer {
         s2 <- redis.sadd("saddKey", "World")
         m <- redis.smembers("saddKey")
       } yield {
-        s1 mustEqual 2
-        s2 mustEqual 0
-        m must containTheSameElementsAs(Seq(ByteString("Hello"), ByteString("World")))
+        assert(s1 == 2)
+        assert(s2 == 0)
+        assert(m.toSet == Seq(ByteString("Hello"), ByteString("World")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -28,8 +28,8 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("scardKey", "Hello", "World")
         c2 <- redis.scard("scardKey")
       } yield {
-        c1 mustEqual 0
-        c2 mustEqual 2
+        assert(c1 == 0)
+        assert(c2 == 2)
       }
       Await.result(r, timeOut)
     }
@@ -42,7 +42,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sdiffKey2", "c", "d", "e")
         diff <- redis.sdiff("sdiffKey1", "sdiffKey2")
       } yield {
-        diff must containTheSameElementsAs(Seq(ByteString("a"), ByteString("b")))
+        assert(diff.toSet == Seq(ByteString("a"), ByteString("b")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -56,8 +56,8 @@ class SetsSpec extends RedisDockerServer {
         diff <- redis.sdiffstore("sdiffstoreKeyDest", "sdiffstoreKey1", "sdiffstoreKey2")
         m <- redis.smembers("sdiffstoreKeyDest")
       } yield {
-        diff mustEqual 2
-        m must containTheSameElementsAs(Seq(ByteString("a"), ByteString("b")))
+        assert(diff == 2)
+        assert(m.toSet == Seq(ByteString("a"), ByteString("b")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -70,7 +70,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sinterKey2", "c", "d", "e")
         inter <- redis.sinter("sinterKey1", "sinterKey2")
       } yield {
-        inter must containTheSameElementsAs(Seq(ByteString("c")))
+        assert(inter.toSet == Seq(ByteString("c")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -84,8 +84,8 @@ class SetsSpec extends RedisDockerServer {
         inter <- redis.sinterstore("sinterstoreKeyDest", "sinterstoreKey1", "sinterstoreKey2")
         m <- redis.smembers("sinterstoreKeyDest")
       } yield {
-        inter mustEqual 1
-        m must containTheSameElementsAs(Seq(ByteString("c")))
+        assert(inter == 1)
+        assert(m.toSet == Seq(ByteString("c")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -97,8 +97,8 @@ class SetsSpec extends RedisDockerServer {
         is <- redis.sismember("sismemberKey", "World")
         isNot <- redis.sismember("sismemberKey", "not member")
       } yield {
-        is mustEqual true
-        isNot mustEqual false
+        assert(is)
+        assert(isNot == false)
       }
       Await.result(r, timeOut)
     }
@@ -109,7 +109,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("smembersKey", "Hello", "World")
         m <- redis.smembers("smembersKey")
       } yield {
-        m must containTheSameElementsAs(Seq(ByteString("Hello"), ByteString("World")))
+        assert(m.toSet == Seq(ByteString("Hello"), ByteString("World")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -124,9 +124,9 @@ class SetsSpec extends RedisDockerServer {
         isNotMoved <- redis.smove("smoveKey1", "smoveKey2", "non existing")
         m <- redis.smembers("smoveKey2")
       } yield {
-        isMoved mustEqual true
-        isNotMoved mustEqual false
-        m must containTheSameElementsAs(Seq(ByteString("three"), ByteString("two")))
+        assert(isMoved)
+        assert(isNotMoved == false)
+        assert(m.toSet == Seq(ByteString("three"), ByteString("two")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -139,9 +139,9 @@ class SetsSpec extends RedisDockerServer {
         popNone <- redis.spop("spopKeyNonExisting")
         m <- redis.smembers("spopKey")
       } yield {
-        Seq(ByteString("three"), ByteString("two"), ByteString("one")) must contain(equalTo(pop.get))
-        popNone must beNone
-        m must containAnyOf(Seq(ByteString("three"), ByteString("two"), ByteString("one")))
+        assert(Seq(ByteString("three"), ByteString("two"), ByteString("one")).contains(pop.get))
+        assert(popNone.isEmpty)
+        assert(m.forall(Set(ByteString("three"), ByteString("two"), ByteString("one"))))
       }
       Await.result(r, timeOut)
     }
@@ -155,9 +155,9 @@ class SetsSpec extends RedisDockerServer {
         randmemberNonExisting <- redis.srandmember("srandmemberKeyNonExisting", 2)
         m <- redis.smembers("spopKey")
       } yield {
-        Seq(ByteString("three"), ByteString("two"), ByteString("one")) must contain(equalTo(randmember.get))
-        randmember2 must have size 2
-        randmemberNonExisting must beEmpty
+        assert(Seq(ByteString("three"), ByteString("two"), ByteString("one")).contains(randmember.get))
+        assert(randmember2.size == 2)
+        assert(randmemberNonExisting.isEmpty)
       }
       Await.result(r, timeOut)
     }
@@ -170,9 +170,9 @@ class SetsSpec extends RedisDockerServer {
         remNothing <- redis.srem("sremKey", "five")
         m <- redis.smembers("sremKey")
       } yield {
-        rem mustEqual 2
-        remNothing mustEqual 0
-        m must containTheSameElementsAs(Seq(ByteString("three"), ByteString("two")))
+        assert(rem == 2)
+        assert(remNothing == 0)
+        assert(m.toSet == Seq(ByteString("three"), ByteString("two")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -182,8 +182,8 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sscan", (1 to 20).map(_.toString): _*)
         scanResult <- redis.sscan[String]("sscan", count = Some(100))
       } yield {
-        scanResult.index mustEqual 0
-        scanResult.data.map(_.toInt).sorted mustEqual (1 to 20)
+        assert(scanResult.index == 0)
+        assert(scanResult.data.map(_.toInt).sorted == (1 to 20))
       }
 
       Await.result(r, timeOut)
@@ -197,7 +197,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sunionKey2", "c", "d", "e")
         union <- redis.sunion("sunionKey1", "sunionKey2")
       } yield {
-        union must containTheSameElementsAs(Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")))
+        assert(union.toSet == Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")).toSet)
       }
       Await.result(r, timeOut)
     }
@@ -211,8 +211,8 @@ class SetsSpec extends RedisDockerServer {
         union <- redis.sunionstore("sunionstoreKeyDest", "sunionstoreKey1", "sunionstoreKey2")
         m <- redis.smembers("sunionstoreKeyDest")
       } yield {
-        union mustEqual 5
-        m must containTheSameElementsAs(Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")))
+        assert(union == 5)
+        assert(m.toSet == Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")).toSet)
       }
       Await.result(r, timeOut)
     }

@@ -1,55 +1,55 @@
 package redis.protocol
 
 import akka.util.ByteString
-import org.specs2.mutable._
+import org.scalatest.wordspec.AnyWordSpec
 
-class RedisProtocolReplySpec extends Specification {
+class RedisProtocolReplySpec extends AnyWordSpec {
 
   "Decode reply" should {
     "fail" in {
       val bs = ByteString("!!")
-      RedisProtocolReply.decodeReply(bs) must throwA[Exception]
+      assertThrows[Exception] { RedisProtocolReply.decodeReply(bs) }
     }
   }
 
   "Decode String" should {
     "decode simple string" in {
       val ok = ByteString("OK\r\n")
-      RedisProtocolReply.decodeString(ok) mustEqual FullyDecoded(ok.dropRight(2), ByteString())
+      assert(RedisProtocolReply.decodeString(ok) == FullyDecoded(ok.dropRight(2), ByteString()))
     }
     "wait for more content" in {
       val waitForMore = ByteString("waiting for more")
       val r = RedisProtocolReply.decodeString(waitForMore)
-      r.isFullyDecoded must beFalse
-      r.rest mustEqual waitForMore
+      assert(r.isFullyDecoded == false)
+      assert(r.rest == waitForMore)
     }
     "decode and keep the tail" in {
       val decode = ByteString("decode\r\n")
       val keepTail = ByteString("keep the tail")
-      RedisProtocolReply.decodeString(decode ++ keepTail) mustEqual FullyDecoded(decode.dropRight(2), keepTail)
+      assert(RedisProtocolReply.decodeString(decode ++ keepTail) == FullyDecoded(decode.dropRight(2), keepTail))
     }
   }
 
   "Decode integer" should {
     "decode positive integer" in {
       val int = ByteString("6\r\n")
-      RedisProtocolReply.decodeInteger(int) mustEqual FullyDecoded(Integer(ByteString("6")), ByteString())
+      assert(RedisProtocolReply.decodeInteger(int) == FullyDecoded(Integer(ByteString("6")), ByteString()))
     }
     "decode negative integer" in {
       val int = ByteString("-6\r\n")
       val decoded = RedisProtocolReply.decodeInteger(int)
-      decoded mustEqual FullyDecoded(Integer(ByteString("-6")), ByteString())
+      assert(decoded == FullyDecoded(Integer(ByteString("-6")), ByteString()))
     }
   }
 
   "Decode bulk" should {
     "decode simple bulk" in {
       val bulk = ByteString("6\r\nfoobar\r\n")
-      RedisProtocolReply.decodeBulk(bulk) mustEqual FullyDecoded(Bulk(Some(ByteString("foobar"))), ByteString())
+      assert(RedisProtocolReply.decodeBulk(bulk) == FullyDecoded(Bulk(Some(ByteString("foobar"))), ByteString()))
     }
     "decode Null Bulk Reply" in {
       val bulk = ByteString("-1\r\n")
-      RedisProtocolReply.decodeBulk(bulk) mustEqual FullyDecoded(Bulk(None), ByteString())
+      assert(RedisProtocolReply.decodeBulk(bulk) == FullyDecoded(Bulk(None), ByteString()))
     }
   }
 
@@ -58,26 +58,26 @@ class RedisProtocolReplySpec extends Specification {
       val multibulkString = ByteString("4\r\n$3\r\nfoo\r\n$3\r\nbar\r\n$5\r\nHello\r\n$5\r\nWorld\r\n")
       val multibulk =
         Some(Vector(Bulk(Some(ByteString("foo"))), Bulk(Some(ByteString("bar"))), Bulk(Some(ByteString("Hello"))), Bulk(Some(ByteString("World")))))
-      RedisProtocolReply.decodeMultiBulk(multibulkString) mustEqual FullyDecoded(MultiBulk(multibulk), ByteString())
+      assert(RedisProtocolReply.decodeMultiBulk(multibulkString) == FullyDecoded(MultiBulk(multibulk), ByteString()))
     }
     "decode waiting" in {
       val multibulkString = ByteString("4\r\n$3\r\nfoo\r\n$3\r\nbar\r\n$5\r\nHello\r\n$50\r\nWaiting ...")
       val r = RedisProtocolReply.decodeMultiBulk(multibulkString)
-      r.isFullyDecoded must beFalse
-      r.rest mustEqual ByteString()
+      assert(r.isFullyDecoded == false)
+      assert(r.rest == ByteString())
     }
     "decode Empty Multi Bulk" in {
       val emptyMultiBulk = ByteString("0\r\n")
-      RedisProtocolReply.decodeMultiBulk(emptyMultiBulk) mustEqual FullyDecoded(MultiBulk(Some(Vector())), ByteString())
+      assert(RedisProtocolReply.decodeMultiBulk(emptyMultiBulk) == FullyDecoded(MultiBulk(Some(Vector())), ByteString()))
     }
     "decode Null Multi Bulk" in {
       val nullMultiBulk = ByteString("-1\r\n")
-      RedisProtocolReply.decodeMultiBulk(nullMultiBulk) mustEqual FullyDecoded(MultiBulk(None), ByteString())
+      assert(RedisProtocolReply.decodeMultiBulk(nullMultiBulk) == FullyDecoded(MultiBulk(None), ByteString()))
     }
     "decode Null element in Multi Bulk" in {
       val nullElementInMultiBulk = ByteString("3\r\n$3\r\nfoo\r\n$-1\r\n$3\r\nbar\r\n")
       val multibulk = Some(Vector(Bulk(Some(ByteString("foo"))), Bulk(None), Bulk(Some(ByteString("bar")))))
-      RedisProtocolReply.decodeMultiBulk(nullElementInMultiBulk) mustEqual FullyDecoded(MultiBulk(multibulk), ByteString())
+      assert(RedisProtocolReply.decodeMultiBulk(nullElementInMultiBulk) == FullyDecoded(MultiBulk(multibulk), ByteString()))
     }
     "decode different reply type" in {
       val diff = ByteString("5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n")
@@ -90,7 +90,7 @@ class RedisProtocolReplySpec extends Specification {
           Bulk(Some(ByteString("foobar")))
         )
       )
-      RedisProtocolReply.decodeMultiBulk(diff) mustEqual FullyDecoded(MultiBulk(multibulk), ByteString())
+      assert(RedisProtocolReply.decodeMultiBulk(diff) == FullyDecoded(MultiBulk(multibulk), ByteString()))
     }
   }
 }

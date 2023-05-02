@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 class BListsSpec extends RedisDockerServer {
 
   "Blocking Lists commands" should {
-    "BLPOP" in {
+    "BLPOP" should {
       "already containing elements" in {
         val redisB = RedisBlockingClient(port = port)
         val r = for {
@@ -16,7 +16,7 @@ class BListsSpec extends RedisDockerServer {
           p <- redis.rpush("blpop1", "a", "b", "c")
           b <- redisB.blpop(Seq("blpop1", "blpop2"))
         } yield {
-          b mustEqual Some("blpop1" -> ByteString("a"))
+          assert(b == Some("blpop1" -> ByteString("a")))
         }
         val rr = Await.result(r, timeOut)
         redisB.stop()
@@ -34,7 +34,7 @@ class BListsSpec extends RedisDockerServer {
               redis.rpush("blpopBlock", "a", "b", "c")
               blpop
             })
-          Await.result(r, timeOut) mustEqual Some("blpopBlock" -> ByteString("a"))
+          assert(Await.result(r, timeOut) == Some("blpopBlock" -> ByteString("a")))
         }
         redisB.stop()
         rr
@@ -48,14 +48,14 @@ class BListsSpec extends RedisDockerServer {
             .flatMap(_ => {
               redisB.brpop(Seq("blpopBlockTimeout"), 1.seconds)
             })
-          Await.result(r, timeOut) must beNone
+          assert(Await.result(r, timeOut).isEmpty)
         }
         redisB.stop()
         rr
       }
     }
 
-    "BRPOP" in {
+    "BRPOP" should {
       "already containing elements" in {
         val redisB = RedisBlockingClient(port = port)
         val r = for {
@@ -64,7 +64,7 @@ class BListsSpec extends RedisDockerServer {
           b <- redisB.brpop(Seq("brpop1", "brpop2"))
         } yield {
           redisB.stop()
-          b mustEqual Some("brpop1" -> ByteString("c"))
+          assert(b == Some("brpop1" -> ByteString("c")))
         }
         Await.result(r, timeOut)
       }
@@ -80,7 +80,7 @@ class BListsSpec extends RedisDockerServer {
               redis.rpush("brpopBlock", "a", "b", "c")
               brpop
             })
-          Await.result(r, timeOut) mustEqual Some("brpopBlock" -> ByteString("c"))
+          assert(Await.result(r, timeOut) == Some("brpopBlock" -> ByteString("c")))
         }
         redisB.stop()
         rr
@@ -94,14 +94,14 @@ class BListsSpec extends RedisDockerServer {
             .flatMap(_ => {
               redisB.brpop(Seq("brpopBlockTimeout"), 1.seconds)
             })
-          Await.result(r, timeOut) must beNone
+          assert(Await.result(r, timeOut).isEmpty)
         }
         redisB.stop()
         rr
       }
     }
 
-    "BRPOPLPUSH" in {
+    "BRPOPLPUSH" should {
       "already containing elements" in {
         val redisB = RedisBlockingClient(port = port)
         val r = for {
@@ -109,7 +109,7 @@ class BListsSpec extends RedisDockerServer {
           p <- redis.rpush("brpopplush1", "a", "b", "c")
           b <- redisB.brpoplpush("brpopplush1", "brpopplush2")
         } yield {
-          b mustEqual Some(ByteString("c"))
+          assert(b == Some(ByteString("c")))
         }
         val rr = Await.result(r, timeOut)
         redisB.stop()
@@ -127,7 +127,7 @@ class BListsSpec extends RedisDockerServer {
               redis.rpush("brpopplushBlock1", "a", "b", "c")
               brpopplush
             })
-          Await.result(r, timeOut) mustEqual Some(ByteString("c"))
+          assert(Await.result(r, timeOut) == Some(ByteString("c")))
         }
         redisB.stop()
         rr
@@ -141,7 +141,7 @@ class BListsSpec extends RedisDockerServer {
             .flatMap(_ => {
               redisB.brpoplpush("brpopplushBlockTimeout1", "brpopplushBlockTimeout2", 1.seconds)
             })
-          Await.result(r, timeOut) must beNone
+          assert(Await.result(r, timeOut).isEmpty)
         }
         redisB.stop()
         rr

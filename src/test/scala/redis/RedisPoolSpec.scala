@@ -6,8 +6,6 @@ import scala.concurrent.duration._
 
 class RedisPoolSpec extends RedisDockerServer {
 
-  sequential
-
   "basic pool test" should {
     "ok" in {
       val redisPool =
@@ -23,13 +21,13 @@ class RedisPoolSpec extends RedisDockerServer {
         getKey2 <- redisPool.get[String](key)
         getKey0 <- redisPool.get[String](key)
       } yield {
-        getDb1 must beNone
-        getDb2 must beNone
-        getDb0 must beSome("0")
-        select mustEqual Seq(true, true, true)
-        getKey1 must beSome("0")
-        getKey2 must beSome("0")
-        getKey0 must beSome("0")
+        assert(getDb1.isEmpty)
+        assert(getDb2.isEmpty)
+        assert(getDb0 == Some("0"))
+        assert(select == Seq(true, true, true))
+        assert(getKey1 == Some("0"))
+        assert(getKey2 == Some("0"))
+        assert(getKey0 == Some("0"))
       }
       Await.result(r, timeOut)
     }
@@ -39,7 +37,7 @@ class RedisPoolSpec extends RedisDockerServer {
         RedisClientPool(Seq(RedisServer(port = port, db = Some(0)), RedisServer(port = port, db = Some(1)), RedisServer(port = 3333, db = Some(3))))
       val key = "keyPoolDb0"
 
-      awaitAssert(redisPool.redisConnectionPool.size mustEqual 2, 20.second)
+      awaitAssert(assert(redisPool.redisConnectionPool.size == 2), 20.second)
       redisPool.set(key, 0)
       val r = for {
         getDb1 <- redisPool.get(key)
@@ -48,11 +46,11 @@ class RedisPoolSpec extends RedisDockerServer {
         getKey1 <- redisPool.get[String](key)
         getKey0 <- redisPool.get[String](key)
       } yield {
-        getDb1 must beNone
-        getDb0 must beSome("0")
-        select mustEqual Seq(true, true)
-        getKey1 must beSome("0")
-        getKey0 must beSome("0")
+        assert(getDb1.isEmpty)
+        assert(getDb0 == Some("0"))
+        assert(select == Seq(true, true))
+        assert(getKey1 == Some("0"))
+        assert(getKey0 == Some("0"))
       }
       Await.result(r, timeOut)
 

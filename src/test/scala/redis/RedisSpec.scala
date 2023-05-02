@@ -8,9 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
 import akka.util.Timeout
-import org.specs2.concurrent.FutureAwait
-import org.specs2.mutable.SpecificationLike
-import org.specs2.specification.core.Fragments
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.wordspec.AnyWordSpecLike
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
 import scala.io.Source
@@ -42,7 +41,7 @@ object RedisServerHelper {
   val portNumber = new AtomicInteger(10500)
 }
 
-abstract class RedisHelper extends TestKit(ActorSystem()) with SpecificationLike with FutureAwait {
+abstract class RedisHelper extends TestKit(ActorSystem()) with AnyWordSpecLike with BeforeAndAfterAll {
 
   import scala.concurrent.duration._
 
@@ -52,13 +51,15 @@ abstract class RedisHelper extends TestKit(ActorSystem()) with SpecificationLike
   val timeOut = 10.seconds
   val longTimeOut = 100.seconds
 
-  override def map(fs: => Fragments) = {
+  override final def beforeAll() = {
+    super.beforeAll()
     setup()
-    fs ^
-      step {
-        TestKit.shutdownActorSystem(system)
-        cleanup()
-      }
+  }
+
+  override def afterAll(): Unit = {
+    TestKit.shutdownActorSystem(system)
+    cleanup()
+    super.afterAll()
   }
 
   def setup(): Unit

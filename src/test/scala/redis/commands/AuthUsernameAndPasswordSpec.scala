@@ -9,7 +9,6 @@ import scala.io.Source
 import scala.sys.process._
 
 class AuthUsernameAndPasswordSpec extends RedisStandaloneServer {
-  sequential
 
   "AUTH with username and password" should {
     "ok" in {
@@ -41,7 +40,7 @@ class AuthUsernameAndPasswordSpec extends RedisStandaloneServer {
         )
         .exitValue()
       Thread.sleep(5000)
-      Await.result(redis.auth(username = username, password = password), timeOut).toByteString mustEqual Status.okByteString
+      assert(Await.result(redis.auth(username = username, password = password), timeOut).toByteString == Status.okByteString)
     }
   }
 }

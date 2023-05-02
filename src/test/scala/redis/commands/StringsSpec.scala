@@ -8,7 +8,6 @@ import redis.actors.ReplyErrorException
 
 class StringsSpec extends RedisDockerServer {
 
-  sequential
   "Strings commands" should {
     "APPEND" in {
       val r = redis
@@ -17,11 +16,11 @@ class StringsSpec extends RedisDockerServer {
           redis
             .append("appendKey", " World")
             .flatMap(length => {
-              length mustEqual "Hello World".length
+              assert(length == "Hello World".length)
               redis.get("appendKey")
             })
         })
-      Await.result(r, timeOut) mustEqual Some(ByteString("Hello World"))
+      assert(Await.result(r, timeOut) == Some(ByteString("Hello World")))
     }
 
     "BITCOUNT" in {
@@ -33,10 +32,10 @@ class StringsSpec extends RedisDockerServer {
           val c = redis.bitcount("bitcountKey", 1, 1)
           Future.sequence(Seq(a, b, c))
         })
-      Await.result(r, timeOut) mustEqual Seq(26, 4, 6)
+      assert(Await.result(r, timeOut) == Seq(26, 4, 6))
     }
 
-    "BITOP" in {
+    "BITOP" should {
       val s1 = redis.set("bitopKey1", "afoobar a")
       val s2 = redis.set("bitopKey2", "aabcdef a")
       val r = for {
@@ -48,16 +47,16 @@ class StringsSpec extends RedisDockerServer {
         not <- redis.bitopNOT("NOTbitopKey", "bitopKey1")
       } yield {
         "AND" in {
-          Await.result(redis.get("ANDbitopKey"), timeOut) mustEqual Some(ByteString("a`bc`ab a"))
+          assert(Await.result(redis.get("ANDbitopKey"), timeOut) == Some(ByteString("a`bc`ab a")))
         }
         "OR" in {
-          Await.result(redis.get("ORbitopKey"), timeOut) mustEqual Some(ByteString("agoofev a"))
+          assert(Await.result(redis.get("ORbitopKey"), timeOut) == Some(ByteString("agoofev a")))
         }
         "XOR" in {
-          Await.result(redis.get("XORbitopKey"), timeOut) mustEqual Some(ByteString(0, 7, 13, 12, 6, 4, 20, 0, 0))
+          assert(Await.result(redis.get("XORbitopKey"), timeOut) == Some(ByteString(0, 7, 13, 12, 6, 4, 20, 0, 0)))
         }
         "NOT" in {
-          Await.result(redis.get("NOTbitopKey"), timeOut) mustEqual Some(ByteString(-98, -103, -112, -112, -99, -98, -115, -33, -98))
+          assert(Await.result(redis.get("NOTbitopKey"), timeOut) == Some(ByteString(-98, -103, -112, -112, -99, -98, -115, -33, -98)))
         }
       }
       Await.result(r, timeOut)
@@ -72,12 +71,12 @@ class StringsSpec extends RedisDockerServer {
         v4 <- redis.bitpos("bitposKey", 0, 3)
         v5 <- redis.bitpos("bitposKey", 0, 1, 2)
       } yield {
-        s1 mustEqual true
-        v1 mustEqual 0
-        v2 mustEqual 1
-        v3 mustEqual 10
-        v4 mustEqual -1
-        v5 mustEqual 8
+        assert(s1)
+        assert(v1 == 0)
+        assert(v2 == 1)
+        assert(v3 == 10)
+        assert(v4 == -1)
+        assert(v5 == 8)
       }
       Await.result(r, timeOut)
     }
@@ -93,8 +92,8 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.decr("decrKeyError")
         })
-      Await.result(r, timeOut) mustEqual 9
-      Await.result(r2, timeOut) must throwA[ReplyErrorException]("ERR value is not an integer or out of range")
+      assert(Await.result(r, timeOut) == 9)
+      assert(intercept[ReplyErrorException] { Await.result(r2, timeOut) }.getMessage == "ERR value is not an integer or out of range")
     }
 
     "DECRBY" in {
@@ -103,7 +102,7 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.decrby("decrbyKey", 5)
         })
-      Await.result(r, timeOut) mustEqual 5
+      assert(Await.result(r, timeOut) == 5)
     }
 
     "GET" in {
@@ -113,13 +112,13 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.get("getKey")
         })
-      Await.result(r, timeOut) mustEqual None
-      Await.result(r2, timeOut) mustEqual Some(ByteString("Hello"))
+      assert(Await.result(r, timeOut) == None)
+      assert(Await.result(r2, timeOut) == Some(ByteString("Hello")))
 
       val rrr = for {
         r3 <- redis.get[String]("getKey")
       } yield {
-        r3 must beSome("Hello")
+        assert(r3 == Some("Hello"))
       }
       Await.result(rrr, timeOut)
     }
@@ -131,7 +130,7 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.get[DumbClass]("getDumbKey")
         })
-      Await.result(r, timeOut) mustEqual Some(dumbObject)
+      assert(Await.result(r, timeOut) == Some(dumbObject))
     }
 
     "GETBIT" in {
@@ -141,8 +140,8 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.getbit("getbitKey", 1)
         })
-      Await.result(r, timeOut) mustEqual false
-      Await.result(r2, timeOut) mustEqual true
+      assert(Await.result(r, timeOut) == false)
+      assert(Await.result(r2, timeOut))
     }
 
     "GETRANGE" in {
@@ -158,7 +157,7 @@ class StringsSpec extends RedisDockerServer {
             ).map(_.map(_.map(_.utf8String).get))
           )
         })
-      Await.result(r, timeOut) mustEqual Seq("This", "ing", "This is a string", "string")
+      assert(Await.result(r, timeOut) == Seq("This", "ing", "This is a string", "string"))
     }
 
     "GETSET" in {
@@ -168,11 +167,11 @@ class StringsSpec extends RedisDockerServer {
           redis
             .getset("getsetKey", "World")
             .flatMap(hello => {
-              hello mustEqual Some(ByteString("Hello"))
+              assert(hello == Some(ByteString("Hello")))
               redis.get("getsetKey")
             })
         })
-      Await.result(r, timeOut) mustEqual Some(ByteString("World"))
+      assert(Await.result(r, timeOut) == Some(ByteString("World")))
     }
 
     "INCR" in {
@@ -181,7 +180,7 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.incr("incrKey")
         })
-      Await.result(r, timeOut) mustEqual 11
+      assert(Await.result(r, timeOut) == 11)
     }
 
     "INCRBY" in {
@@ -190,7 +189,7 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.incrby("incrbyKey", 5)
         })
-      Await.result(r, timeOut) mustEqual 15
+      assert(Await.result(r, timeOut) == 15)
     }
 
     "INCRBYFLOAT" in {
@@ -199,7 +198,7 @@ class StringsSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.incrbyfloat("incrbyfloatKey", 0.15)
         })
-      Await.result(r, timeOut) mustEqual Some(10.65)
+      assert(Await.result(r, timeOut) == Some(10.65))
     }
 
     "MGET" in {
@@ -210,7 +209,7 @@ class StringsSpec extends RedisDockerServer {
         _ <- s2
         mget <- redis.mget("mgetKey", "mgetKey2", "mgetKeyNonexisting")
       } yield {
-        mget mustEqual Seq(Some(ByteString("Hello")), Some(ByteString("World")), None)
+        assert(mget == Seq(Some(ByteString("Hello")), Some(ByteString("World")), None))
       }
       Await.result(r, timeOut)
     }
@@ -219,7 +218,7 @@ class StringsSpec extends RedisDockerServer {
       val r = redis
         .mset(Map("msetKey" -> "Hello", "msetKey2" -> "World"))
         .flatMap(ok => {
-          ok mustEqual true
+          assert(ok)
           Future.sequence(
             Seq(
               redis.get("msetKey"),
@@ -227,7 +226,7 @@ class StringsSpec extends RedisDockerServer {
             )
           )
         })
-      Await.result(r, timeOut) mustEqual Seq(Some(ByteString("Hello")), Some(ByteString("World")))
+      assert(Await.result(r, timeOut) == Seq(Some(ByteString("Hello")), Some(ByteString("World"))))
     }
 
     "MSETNX" in {
@@ -236,8 +235,8 @@ class StringsSpec extends RedisDockerServer {
         msetnx <- redis.msetnx(Map("msetnxKey" -> "Hello", "msetnxKey2" -> "World"))
         msetnxFalse <- redis.msetnx(Map("msetnxKey3" -> "Hello", "msetnxKey2" -> "already set !!"))
       } yield {
-        msetnx mustEqual true
-        msetnxFalse mustEqual false
+        assert(msetnx)
+        assert(msetnxFalse == false)
       }
       Await.result(r, timeOut)
     }
@@ -246,16 +245,16 @@ class StringsSpec extends RedisDockerServer {
       val r = redis
         .psetex("psetexKey", 2000, "temp value")
         .flatMap(x => {
-          x mustEqual true
+          assert(x)
           redis
             .get("psetexKey")
             .flatMap(v => {
-              v mustEqual Some(ByteString("temp value"))
+              assert(v == Some(ByteString("temp value")))
               Thread.sleep(2000)
               redis.get("psetexKey")
             })
         })
-      Await.result(r, timeOut) mustEqual None
+      assert(Await.result(r, timeOut) == None)
     }
 
     "SET" in {
@@ -275,16 +274,16 @@ class StringsSpec extends RedisDockerServer {
         xx <- redis.set("setKey", "value", XX = true)
         nxFalse <- redis.set("setKey", "value", NX = true)
       } yield {
-        r mustEqual true
-        ex mustEqual true
-        nxex must beTrue
-        ttlnxex must beBetween[Long](0, 60)
-        xxex must beTrue
-        ttlxxex must beBetween[Long](60, 180)
-        px mustEqual true
-        nxTrue mustEqual true // because pxMilliseconds = 1 millisecond
-        xx mustEqual true
-        nxFalse mustEqual false
+        assert(r)
+        assert(ex)
+        assert(nxex)
+        assert((0 <= ttlnxex) && (ttlnxex <= 60))
+        assert(xxex)
+        assert((60 <= ttlxxex) && (ttlxxex <= 180))
+        assert(px)
+        assert(nxTrue) // because pxMilliseconds = 1 millisecond
+        assert(xx)
+        assert(nxFalse == false)
       }
       Await.result(rr, timeOut)
     }
@@ -297,10 +296,10 @@ class StringsSpec extends RedisDockerServer {
         setFalse <- redis.setbit("setbitKey", 1, value = false)
         getFalse <- redis.getbit("setbitKey", 1)
       } yield {
-        setTrue mustEqual false
-        getTrue mustEqual true
-        setFalse mustEqual true
-        getFalse mustEqual false
+        assert(setTrue == false)
+        assert(getTrue)
+        assert(setFalse)
+        assert(getFalse == false)
       }
       Await.result(r, timeOut)
     }
@@ -309,16 +308,16 @@ class StringsSpec extends RedisDockerServer {
       val r = redis
         .setex("setexKey", 1, "temp value")
         .flatMap(x => {
-          x mustEqual true
+          assert(x)
           redis
             .get("setexKey")
             .flatMap(v => {
-              v mustEqual Some(ByteString("temp value"))
+              assert(v == Some(ByteString("temp value")))
               Thread.sleep(2000)
               redis.get("setexKey")
             })
         })
-      Await.result(r, timeOut) mustEqual None
+      assert(Await.result(r, timeOut) == None)
     }
 
     "SETNX" in {
@@ -327,8 +326,8 @@ class StringsSpec extends RedisDockerServer {
         s1 <- redis.setnx("setnxKey", "Hello")
         s2 <- redis.setnx("setnxKey", "World")
       } yield {
-        s1 mustEqual true
-        s2 mustEqual false
+        assert(s1)
+        assert(s2 == false)
       }
       Await.result(r, timeOut)
     }
@@ -340,11 +339,11 @@ class StringsSpec extends RedisDockerServer {
           redis
             .setrange("setrangeKey", 6, "Redis")
             .flatMap(length => {
-              length mustEqual "Hello Redis".length
+              assert(length == "Hello Redis".length)
               redis.get("setrangeKey")
             })
         })
-      Await.result(r, timeOut) mustEqual Some(ByteString("Hello Redis"))
+      assert(Await.result(r, timeOut) == Some(ByteString("Hello Redis")))
     }
 
     "STRLEN" in {
@@ -354,11 +353,11 @@ class StringsSpec extends RedisDockerServer {
           redis
             .strlen("strlenKey")
             .flatMap(length => {
-              length mustEqual "Hello World".length
+              assert(length == "Hello World".length)
               redis.strlen("strlenKeyNonexisting")
             })
         })
-      Await.result(r, timeOut) mustEqual 0
+      assert(Await.result(r, timeOut) == 0)
     }
   }
 }

@@ -5,8 +5,6 @@ import scala.concurrent.Await
 
 class HyperLogLogSpec extends RedisDockerServer {
 
-  sequential
-
   "HyperLogLog commands" should {
     "PFADD" in {
       val r = redis
@@ -15,7 +13,7 @@ class HyperLogLogSpec extends RedisDockerServer {
           redis
             .pfcount("hll")
             .flatMap(count => {
-              count mustEqual 7
+              assert(count == 7)
               redis
                 .pfadd("hll", "h", "i")
                 .flatMap(_ => {
@@ -23,7 +21,7 @@ class HyperLogLogSpec extends RedisDockerServer {
                 })
             })
         })
-      Await.result(r, timeOut) mustEqual 9
+      assert(Await.result(r, timeOut) == 9)
     }
 
     "PFCOUNT" in {
@@ -32,7 +30,7 @@ class HyperLogLogSpec extends RedisDockerServer {
         .flatMap(_ => {
           redis.pfcount("hll2")
         })
-      Await.result(r, timeOut) mustEqual 7
+      assert(Await.result(r, timeOut) == 7)
     }
 
     "PFMERGE" in {
@@ -45,13 +43,13 @@ class HyperLogLogSpec extends RedisDockerServer {
               redis
                 .pfmerge("hll5", "hll4", "hll3")
                 .flatMap(merged => {
-                  merged mustEqual true
+                  assert(merged)
                   redis.pfcount("hll5")
                 })
             })
         })
 
-      Await.result(r, timeOut) mustEqual 4
+      assert(Await.result(r, timeOut) == 4)
     }
   }
 }

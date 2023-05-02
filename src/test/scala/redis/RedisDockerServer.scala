@@ -1,10 +1,10 @@
 package redis
 
 import com.dimafeng.testcontainers.GenericContainer
-import org.specs2.specification.AfterAll
 import scala.concurrent.Future
+import org.scalatest.BeforeAndAfterAll
 
-abstract class RedisDockerServer extends RedisHelper with AfterAll {
+abstract class RedisDockerServer extends RedisHelper with BeforeAndAfterAll {
 
   private[this] def exportPort = 6379
   private[this] val container = GenericContainer(
@@ -38,6 +38,7 @@ abstract class RedisDockerServer extends RedisHelper with AfterAll {
   }
 
   override def afterAll(): Unit = {
+    super.afterAll()
     container.stop()
   }
 

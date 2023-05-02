@@ -16,9 +16,9 @@ class ListsSpec extends RedisDockerServer {
         world <- redis.lindex("lindexKey", 1)
         none <- redis.lindex("lindexKey", 2)
       } yield {
-        hello mustEqual Some(ByteString("Hello"))
-        world mustEqual Some(ByteString("World"))
-        none mustEqual None
+        assert(hello == Some(ByteString("Hello")))
+        assert(world == Some(ByteString("World")))
+        assert(none == None)
       }
       Await.result(r, timeOut)
     }
@@ -32,10 +32,10 @@ class ListsSpec extends RedisDockerServer {
         length4 <- redis.linsertAfter("linsertKey", "World", "!!!")
         list4 <- redis.lrange("linsertKey", 0, -1)
       } yield {
-        length mustEqual 3
-        list mustEqual Seq(ByteString("Hello"), ByteString("There"), ByteString("World"))
-        length4 mustEqual 4
-        list4 mustEqual Seq(ByteString("Hello"), ByteString("There"), ByteString("World"), ByteString("!!!"))
+        assert(length == 3)
+        assert(list == Seq(ByteString("Hello"), ByteString("There"), ByteString("World")))
+        assert(length4 == 4)
+        assert(list4 == Seq(ByteString("Hello"), ByteString("There"), ByteString("World"), ByteString("!!!")))
       }
       Await.result(r, timeOut)
     }
@@ -46,7 +46,7 @@ class ListsSpec extends RedisDockerServer {
         _ <- redis.lpush("llenKey", "World", "Hello")
         length <- redis.llen("llenKey")
       } yield {
-        length mustEqual 2
+        assert(length == 2)
       }
       Await.result(r, timeOut)
     }
@@ -57,7 +57,7 @@ class ListsSpec extends RedisDockerServer {
         _ <- redis.rpush("lpopKey", "one", "two", "three")
         e <- redis.lpop("lpopKey")
       } yield {
-        e mustEqual Some(ByteString("one"))
+        assert(e == Some(ByteString("one")))
       }
       Await.result(r, timeOut)
     }
@@ -68,7 +68,7 @@ class ListsSpec extends RedisDockerServer {
         _ <- redis.lpush("lpushKey", "World", "Hello")
         list <- redis.lrange("lpushKey", 0, -1)
       } yield {
-        list mustEqual Seq(ByteString("Hello"), ByteString("World"))
+        assert(list == Seq(ByteString("Hello"), ByteString("World")))
       }
       Await.result(r, timeOut)
     }
@@ -83,11 +83,11 @@ class ListsSpec extends RedisDockerServer {
         list <- redis.lrange("lpushxKey", 0, -1)
         listOther <- redis.lrange("lpushxKeyOther", 0, -1)
       } yield {
-        i mustEqual 1
-        ii mustEqual 3
-        zero mustEqual 0
-        list mustEqual Seq(ByteString("a"), ByteString("b"), ByteString("c"))
-        listOther must beEmpty
+        assert(i == 1)
+        assert(ii == 3)
+        assert(zero == 0)
+        assert(list == Seq(ByteString("a"), ByteString("b"), ByteString("c")))
+        assert(listOther.isEmpty)
       }
       Await.result(r, timeOut)
     }
@@ -101,10 +101,10 @@ class ListsSpec extends RedisDockerServer {
         list3 <- redis.lrange("lrangeKey", 5, 10)
         nonExisting <- redis.lrange("lrangeKeyNonexisting", 5, 10)
       } yield {
-        list mustEqual Seq(ByteString("one"))
-        list2 mustEqual Seq(ByteString("one"), ByteString("two"), ByteString("three"))
-        list3 must beEmpty
-        nonExisting must beEmpty
+        assert(list == Seq(ByteString("one")))
+        assert(list2 == Seq(ByteString("one"), ByteString("two"), ByteString("three")))
+        assert(list3.isEmpty)
+        assert(nonExisting.isEmpty)
       }
       Await.result(r, timeOut)
     }
@@ -116,8 +116,8 @@ class ListsSpec extends RedisDockerServer {
         lrem <- redis.lrem("lremKey", -2, "hello")
         list2 <- redis.lrange("lremKey", 0, -1)
       } yield {
-        lrem mustEqual 2
-        list2 mustEqual Seq(ByteString("hello"), ByteString("foo"))
+        assert(lrem == 2)
+        assert(list2 == Seq(ByteString("hello"), ByteString("foo")))
       }
       Await.result(r, timeOut)
     }
@@ -130,9 +130,9 @@ class ListsSpec extends RedisDockerServer {
         lset2 <- redis.lset("lsetKey", -2, "five")
         list <- redis.lrange("lsetKey", 0, -1)
       } yield {
-        lset1 mustEqual true
-        lset2 mustEqual true
-        list mustEqual Seq(ByteString("four"), ByteString("five"), ByteString("three"))
+        assert(lset1)
+        assert(lset2)
+        assert(list == Seq(ByteString("four"), ByteString("five"), ByteString("three")))
       }
       Await.result(r, timeOut)
     }
@@ -144,8 +144,8 @@ class ListsSpec extends RedisDockerServer {
         ltrim <- redis.ltrim("ltrimKey", 1, -1)
         list <- redis.lrange("ltrimKey", 0, -1)
       } yield {
-        ltrim mustEqual true
-        list mustEqual Seq(ByteString("two"), ByteString("three"))
+        assert(ltrim)
+        assert(list == Seq(ByteString("two"), ByteString("three")))
       }
       Await.result(r, timeOut)
     }
@@ -157,8 +157,8 @@ class ListsSpec extends RedisDockerServer {
         rpop <- redis.rpop("rpopKey")
         list <- redis.lrange("rpopKey", 0, -1)
       } yield {
-        rpop mustEqual Some(ByteString("three"))
-        list mustEqual Seq(ByteString("one"), ByteString("two"))
+        assert(rpop == Some(ByteString("three")))
+        assert(list == Seq(ByteString("one"), ByteString("two")))
       }
       Await.result(r, timeOut)
     }
@@ -172,9 +172,9 @@ class ListsSpec extends RedisDockerServer {
         list <- redis.lrange("rpoplpushKey", 0, -1)
         listOther <- redis.lrange("rpoplpushKeyOther", 0, -1)
       } yield {
-        rpoplpush mustEqual Some(ByteString("three"))
-        list mustEqual Seq(ByteString("one"), ByteString("two"))
-        listOther mustEqual Seq(ByteString("three"))
+        assert(rpoplpush == Some(ByteString("three")))
+        assert(list == Seq(ByteString("one"), ByteString("two")))
+        assert(listOther == Seq(ByteString("three")))
       }
       Await.result(r, timeOut)
     }
@@ -186,9 +186,9 @@ class ListsSpec extends RedisDockerServer {
         ii <- redis.rpush("rpushKey", "world")
         list <- redis.lrange("rpushKey", 0, -1)
       } yield {
-        i mustEqual 1
-        ii mustEqual 2
-        list mustEqual Seq(ByteString("hello"), ByteString("world"))
+        assert(i == 1)
+        assert(ii == 2)
+        assert(list == Seq(ByteString("hello"), ByteString("world")))
       }
       Await.result(r, timeOut)
     }
@@ -203,11 +203,11 @@ class ListsSpec extends RedisDockerServer {
         list <- redis.lrange("rpushxKey", 0, -1)
         listOther <- redis.lrange("rpushxKeyOther", 0, -1)
       } yield {
-        i mustEqual 1
-        ii mustEqual 3
-        zero mustEqual 0
-        list mustEqual Seq(ByteString("a"), ByteString("b"), ByteString("c"))
-        listOther must beEmpty
+        assert(i == 1)
+        assert(ii == 3)
+        assert(zero == 0)
+        assert(list == Seq(ByteString("a"), ByteString("b"), ByteString("c")))
+        assert(listOther.isEmpty)
       }
       Await.result(r, timeOut)
     }

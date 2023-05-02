@@ -27,8 +27,6 @@ val akka = Def.setting(
   )
 )
 
-val specs2 = "org.specs2" %% "specs2-core" % "4.20.0" cross CrossVersion.for3Use2_13
-
 val scalacheck = Def.setting(
   "org.scalacheck" %% "scalacheck" % "1.17.0"
 )
@@ -36,7 +34,7 @@ val scalacheck = Def.setting(
 val rediscalaDependencies = Def.setting(
   akka.value ++ Seq(
     "com.dimafeng" %% "testcontainers-scala" % "0.40.15" % Test,
-    specs2 % "test",
+    "org.scalatest" %% "scalatest-wordspec" % "3.2.15" % "test",
     scalacheck.value % "test"
   )
 )
@@ -90,6 +88,7 @@ lazy val standardSettings = Def.settings(
     )
   },
   autoAPIMappings := true,
+  Test / fork := true,
   TaskKey[Unit]("runDockerTests") := Def.taskDyn {
     val dockerTests = (Test / compile).value
       .asInstanceOf[sbt.internal.inc.Analysis]

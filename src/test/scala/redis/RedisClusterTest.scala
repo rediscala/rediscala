@@ -2,7 +2,6 @@ package redis
 
 import akka.util.ByteString
 import java.util.Base64
-import org.specs2.execute.Result
 import redis.api.clusters.ClusterSlots
 import redis.protocol._
 import scala.concurrent.Await
@@ -18,17 +17,15 @@ class RedisClusterTest extends RedisClusterClients {
     redisCluster = RedisCluster(nodePorts.map(p => RedisServer("127.0.0.1", p)))
   }
 
-  sequential
-
   "RedisComputeSlot" should {
     "simple" in {
-      RedisComputeSlot.hashSlot("foo") mustEqual 12182
-      RedisComputeSlot.hashSlot("somekey") mustEqual 11058
-      RedisComputeSlot.hashSlot("somekey3452345325453532452345") mustEqual 15278
-      RedisComputeSlot.hashSlot("rzarzaZERAZERfqsfsdQSFD") mustEqual 14258
-      RedisComputeSlot.hashSlot("{foo}46546546546") mustEqual 12182
-      RedisComputeSlot.hashSlot("foo_312312") mustEqual 5839
-      RedisComputeSlot.hashSlot("aazaza{aa") mustEqual 11473
+      assert(RedisComputeSlot.hashSlot("foo") == 12182)
+      assert(RedisComputeSlot.hashSlot("somekey") == 11058)
+      assert(RedisComputeSlot.hashSlot("somekey3452345325453532452345") == 15278)
+      assert(RedisComputeSlot.hashSlot("rzarzaZERAZERfqsfsdQSFD") == 14258)
+      assert(RedisComputeSlot.hashSlot("{foo}46546546546") == 12182)
+      assert(RedisComputeSlot.hashSlot("foo_312312") == 5839)
+      assert(RedisComputeSlot.hashSlot("aazaza{aa") == 11473)
     }
   }
 
@@ -46,16 +43,16 @@ class RedisClusterTest extends RedisClusterClients {
         case _ => "fail"
       }
 
-      val r: Result = dr match {
+      dr match {
         case FullyDecoded(decodeValue, _) =>
-          decodeValue mustEqual "Vector(ClusterSlot(0,5460,ClusterNode(127.0.0.1,7000,e43599dff6e3a7b9ed53b1ca0db4bd009a850ba5),List(ClusterNode(127.0.0.1,7003,c0f6f39b648815a19e49dc4536d2a13b147a9f50))), " +
-            "ClusterSlot(10923,16383,ClusterNode(127.0.0.1,7002,48d37120f213578cb1eac38e5f2bf589dcda4a0b),List(ClusterNode(127.0.0.1,7005,14f769ee6e5af62fb17966ed4eedf1219ccb1592))), " +
-            "ClusterSlot(5461,10922,ClusterNode(127.0.0.1,7001,c8ec392c22694d589a64a20999b4dd5cb40e4201),List(ClusterNode(127.0.0.1,7004,efa8fd74041a3a8d7af25f70903b9e1f4c064a21))))"
+          assert(
+            decodeValue == "Vector(ClusterSlot(0,5460,ClusterNode(127.0.0.1,7000,e43599dff6e3a7b9ed53b1ca0db4bd009a850ba5),List(ClusterNode(127.0.0.1,7003,c0f6f39b648815a19e49dc4536d2a13b147a9f50))), " +
+              "ClusterSlot(10923,16383,ClusterNode(127.0.0.1,7002,48d37120f213578cb1eac38e5f2bf589dcda4a0b),List(ClusterNode(127.0.0.1,7005,14f769ee6e5af62fb17966ed4eedf1219ccb1592))), " +
+              "ClusterSlot(5461,10922,ClusterNode(127.0.0.1,7001,c8ec392c22694d589a64a20999b4dd5cb40e4201),List(ClusterNode(127.0.0.1,7004,efa8fd74041a3a8d7af25f70903b9e1f4c064a21))))"
+          )
 
-        case _ => failure
+        case x => fail(s"unexpected ${x}")
       }
-
-      r
     }
 
   }
@@ -65,16 +62,16 @@ class RedisClusterTest extends RedisClusterClients {
       println("set")
       Await.result(redisCluster.set[String]("foo", "FOO"), timeOut)
       println("exists")
-      Await.result(redisCluster.exists("foo"), timeOut) mustEqual true
+      assert(Await.result(redisCluster.exists("foo"), timeOut))
 
       println("get")
-      Await.result(redisCluster.get[String]("foo"), timeOut) mustEqual Some("FOO")
+      assert(Await.result(redisCluster.get[String]("foo"), timeOut) == Some("FOO"))
 
       println("del")
       Await.result(redisCluster.del("foo", "foo"), timeOut)
 
       println("exists")
-      Await.result(redisCluster.exists("foo"), timeOut) mustEqual false
+      assert(Await.result(redisCluster.exists("foo"), timeOut) == false)
 
     }
 
@@ -82,27 +79,29 @@ class RedisClusterTest extends RedisClusterClients {
       println("mset")
       Await.result(redisCluster.mset[String](Map("{foo}1" -> "FOO1", "{foo}2" -> "FOO2")), timeOut)
       println("exists")
-      Await.result(redisCluster.exists("{foo}1"), timeOut) mustEqual true
-      Await.result(redisCluster.exists("{foo}2"), timeOut) mustEqual true
+      assert(Await.result(redisCluster.exists("{foo}1"), timeOut))
+      assert(Await.result(redisCluster.exists("{foo}2"), timeOut))
 
       println("mget")
-      Await.result(redisCluster.mget[String]("{foo}1", "{foo}2"), timeOut) mustEqual Seq(Some("FOO1"), Some("FOO2"))
+      assert(Await.result(redisCluster.mget[String]("{foo}1", "{foo}2"), timeOut) == Seq(Some("FOO1"), Some("FOO2")))
 
       println("del")
       Await.result(redisCluster.del("{foo}1", "{foo}2"), timeOut)
 
       println("exists")
-      Await.result(redisCluster.exists("{foo}1"), timeOut) mustEqual false
+      assert(Await.result(redisCluster.exists("{foo}1"), timeOut) == false)
 
     }
   }
 
   "tools" should {
     "groupby" in {
-      redisCluster.groupByClusterServer(Seq("{foo1}1", "{foo2}1", "{foo1}2", "{foo2}2")).sortBy(_.head).toList mustEqual Seq(
-        Seq("{foo2}1", "{foo2}2"),
-        Seq("{foo1}1", "{foo1}2")
-      ).sortBy(_.head)
+      assert(
+        redisCluster.groupByClusterServer(Seq("{foo1}1", "{foo2}1", "{foo1}2", "{foo2}2")).sortBy(_.head).toList == Seq(
+          Seq("{foo2}1", "{foo2}2"),
+          Seq("{foo1}1", "{foo1}2")
+        ).sortBy(_.head)
+      )
     }
   }
 
@@ -114,7 +113,7 @@ class RedisClusterTest extends RedisClusterClients {
       println("wait...")
       // Thread.sleep(15000)
       println("get")
-      Await.result(redisCluster.get[String]("foo1"), timeOut) mustEqual Some("FOO")
+      assert(Await.result(redisCluster.get[String]("foo1"), timeOut) == Some("FOO"))
 
     }
 
@@ -123,27 +122,27 @@ class RedisClusterTest extends RedisClusterClients {
   "clusterInfo" should {
     "just work" in {
       val res = Await.result(redisCluster.clusterInfo(), timeOut)
-      res must not be empty
+      assert(res.nonEmpty)
       for (v <- res) {
         println(s"Key  ${v._1} value ${v._2}")
       }
-      res("cluster_state") mustEqual "ok"
-      res("cluster_slots_ok") mustEqual "16384"
-      res("cluster_known_nodes") mustEqual "6"
-      res("cluster_size") mustEqual "3"
+      assert(res("cluster_state") == "ok")
+      assert(res("cluster_slots_ok") == "16384")
+      assert(res("cluster_known_nodes") == "6")
+      assert(res("cluster_size") == "3")
     }
   }
 
   "clusterNodes" should {
     "just work" in {
       val res = Await.result(redisCluster.clusterNodes(), timeOut)
-      res must not be empty
+      assert(res.nonEmpty)
       for (m <- res) {
         println(m.toString)
       }
-      res.length mustEqual 6
-      res.count(_.master != "-") mustEqual 3
-      res.count(_.link_state == "connected") mustEqual 6
+      assert(res.length == 6)
+      assert(res.count(_.master != "-") == 3)
+      assert(res.count(_.link_state == "connected") == 6)
     }
   }
 }

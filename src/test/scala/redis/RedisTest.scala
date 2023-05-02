@@ -6,23 +6,21 @@ import akka.util.ByteString
 
 class RedisTest extends RedisDockerServer {
 
-  sequential
-
   "basic test" should {
     "ping" in {
-      Await.result(redis.ping(), timeOut) mustEqual "PONG"
+      assert(Await.result(redis.ping(), timeOut) == "PONG")
     }
     "set" in {
-      Await.result(redis.set("key", "value"), timeOut) mustEqual true
+      assert(Await.result(redis.set("key", "value"), timeOut))
     }
     "get" in {
-      Await.result(redis.get("key"), timeOut) mustEqual Some(ByteString("value"))
+      assert(Await.result(redis.get("key"), timeOut) == Some(ByteString("value")))
     }
     "del" in {
-      Await.result(redis.del("key"), timeOut) mustEqual 1
+      assert(Await.result(redis.del("key"), timeOut) == 1)
     }
     "get not found" in {
-      Await.result(redis.get("key"), timeOut) mustEqual None
+      assert(Await.result(redis.get("key"), timeOut) == None)
     }
   }
 
@@ -36,7 +34,7 @@ class RedisTest extends RedisDockerServer {
           _ <- redis.set("keyDbSelect", "2")
         } yield {
           val redis = RedisClient(port = port, password = Some("password"), db = Some(2))
-          Await.result(redis.get[String]("keyDbSelect"), timeOut) must beSome("2")
+          assert(Await.result(redis.get[String]("keyDbSelect"), timeOut) == Some("2"))
         }
         Await.result(r, timeOut)
       })
@@ -46,7 +44,7 @@ class RedisTest extends RedisDockerServer {
         implicit val redisDispatcher = RedisDispatcher("no-this-dispatcher")
         RedisClient(port = port)
       })
-      test() must throwA[ConfigurationException]
+      assertThrows[ConfigurationException] { test() }
     }
   }
 

@@ -3,11 +3,9 @@ package redis
 import scala.concurrent._
 import scala.concurrent.duration._
 import akka.testkit._
-import org.specs2.concurrent.ExecutionEnv
+import org.scalatest.concurrent.ScalaFutures
 
-class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("SentinelSpec") {
-
-  sequential
+class SentinelSpec extends RedisSentinelClients("SentinelSpec") with ScalaFutures {
 
   "sentinel monitored test" should {
 
@@ -16,81 +14,85 @@ class SentinelSpec(implicit ee: ExecutionEnv) extends RedisSentinelClients("Sent
 
       awaitAssert(
         {
-          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-          sentinelClient.failover(masterName) must beTrue.await
+          assert(Await.result(sentinelMonitoredRedisClient.ping(), timeOut) == "PONG")
+          assert(sentinelClient.failover(masterName).futureValue)
         },
         30.seconds.dilated
       )
 
       awaitAssert(
         {
-          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-          sentinelMonitoredRedisClient.redisClient.port must beOneOf(slavePort1, slavePort2, port)
+          assert(Await.result(sentinelMonitoredRedisClient.ping(), timeOut) == "PONG")
+          assert(
+            Seq(slavePort1, slavePort2, port).contains(
+              sentinelMonitoredRedisClient.redisClient.port
+            )
+          )
         },
         30.seconds.dilated
       )
 
       awaitAssert(
         {
-          Await.result(sentinelClient.failover(masterName), timeOut) must beTrue
+          assert(Await.result(sentinelClient.failover(masterName), timeOut))
         },
         30.seconds.dilated
       )
 
       awaitAssert(
         {
-          Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
+          assert(Await.result(sentinelMonitoredRedisClient.ping(), timeOut) == "PONG")
         },
         30.seconds.dilated
       )
-      sentinelMonitoredRedisClient.redisClient.port must beOneOf(slavePort1, slavePort2, masterPort, port)
+      assert(Seq(slavePort1, slavePort2, masterPort, port).contains(sentinelMonitoredRedisClient.redisClient.port))
     }
 
     "ping" in {
-      Await.result(sentinelMonitoredRedisClient.ping(), timeOut) mustEqual "PONG"
-      Await.result(redisClient.ping(), timeOut) mustEqual "PONG"
+      assert(Await.result(sentinelMonitoredRedisClient.ping(), timeOut) == "PONG")
+      assert(Await.result(redisClient.ping(), timeOut) == "PONG")
     }
 
     "sentinel nodes auto discovery" in {
       val sentinelCount = sentinelMonitoredRedisClient.sentinelClients.size
       val sentinel = newSentinelProcess()
 
-      awaitAssert(sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount + 1, 10.second)
+      awaitAssert(assert(sentinelMonitoredRedisClient.sentinelClients.size == sentinelCount + 1), 10.second)
 
       sentinel.stop()
       awaitAssert(
         {
-          sentinelMonitoredRedisClient.sentinelClients.size mustEqual sentinelCount
+          assert(sentinelMonitoredRedisClient.sentinelClients.size == sentinelCount)
         },
         10.seconds
       )
-      success
     }
   }
 
   "sentinel test" should {
     "masters" in {
       val r = Await.result(sentinelClient.masters(), timeOut)
-      r(0)("name") mustEqual masterName
-      r(0)("flags").startsWith("master") mustEqual true
+      assert(r(0)("name") == masterName)
+      assert(r(0)("flags").startsWith("master"))
     }
     "no such master" in {
       val opt = Await.result(sentinelClient.getMasterAddr("no-such-master"), timeOut)
-      opt must beNone.setMessage(s"unexpected: master with name '$masterName' was not supposed to be found")
+      assert(opt.isEmpty, s"unexpected: master with name '$masterName' was not supposed to be found")
     }
     "unknown master state" in {
       val opt = Await.result(sentinelClient.isMasterDown("no-such-master"), timeOut)
-      opt must beNone.setMessage("unexpected: master state should be unknown")
+      assert(opt.isEmpty, "unexpected: master state should be unknown")
     }
     "master ok" in {
-      Await.result(sentinelClient.isMasterDown(masterName), timeOut) must beSome(false).setMessage(
+      assert(
+        Await.result(sentinelClient.isMasterDown(masterName), timeOut) == Some(false),
         s"unexpected: master with name '$masterName' was not found"
       )
     }
     "slaves" in {
       val r = Await.result(sentinelClient.slaves(masterName), timeOut)
-      r must not be empty
-      r(0)("flags").startsWith("slave") mustEqual true
+      assert(r.nonEmpty)
+      assert(r(0)("flags").startsWith("slave"))
     }
     "reset bogus master" in {
       !Await.result(sentinelClient.resetMaster("no-such-master"), timeOut)

@@ -7,48 +7,48 @@ import redis.actors.ReplyErrorException
 
 class ConnectionSpec extends RedisDockerServer {
 
-  sequential
-
   "Connection commands" should {
     "AUTH" in {
       val expectMessage =
         "ERR AUTH <password> called without any password configured for the default user. Are you sure your configuration is correct?"
-      Await.result(redis.auth("no password"), timeOut) must throwA[ReplyErrorException](expectMessage)
+      assert(intercept[ReplyErrorException] { Await.result(redis.auth("no password"), timeOut) }.getMessage == expectMessage)
     }
     "AUTH with bad username and password" in {
-      val errorMessage = "WRONGPASS invalid username-password pair or user is disabled"
-      Await.result(redis.auth(username = "baduser", password = "bad password"), timeOut) must throwA[ReplyErrorException](errorMessage)
+      val errorMessage = "WRONGPASS invalid username-password pair or user is disabled."
+      assert(intercept[ReplyErrorException] {
+        Await.result(redis.auth(username = "baduser", password = "bad password"), timeOut)
+      }.getMessage == errorMessage)
     }
     "ECHO" in {
       val hello = "Hello World!"
-      Await.result(redis.echo(hello), timeOut) mustEqual Some(ByteString(hello))
+      assert(Await.result(redis.echo(hello), timeOut) == Some(ByteString(hello)))
     }
     "PING" in {
-      Await.result(redis.ping(), timeOut) mustEqual "PONG"
+      assert(Await.result(redis.ping(), timeOut) == "PONG")
     }
     "QUIT" in {
       // todo test that the TCP connection is reset.
       val f = redis.quit()
       Thread.sleep(1000)
       val ping = redis.ping()
-      Await.result(f, timeOut) mustEqual true
-      Await.result(ping, timeOut) mustEqual "PONG"
+      assert(Await.result(f, timeOut))
+      assert(Await.result(ping, timeOut) == "PONG")
     }
     "SELECT" in {
-      Await.result(redis.select(1), timeOut) mustEqual true
-      Await.result(redis.select(0), timeOut) mustEqual true
-      Await.result(redis.select(-1), timeOut) must throwA[ReplyErrorException]("ERR DB index is out of range")
-      Await.result(redis.select(1000), timeOut) must throwA[ReplyErrorException]("ERR DB index is out of range")
+      assert(Await.result(redis.select(1), timeOut))
+      assert(Await.result(redis.select(0), timeOut))
+      assert(intercept[ReplyErrorException] { Await.result(redis.select(-1), timeOut) }.getMessage == "ERR DB index is out of range")
+      assert(intercept[ReplyErrorException] { Await.result(redis.select(1000), timeOut) }.getMessage == "ERR DB index is out of range")
     }
     "SWAPDB" in {
-      Await.result(redis.select(0), timeOut) mustEqual true
-      Await.result(redis.set("key1", "value1"), timeOut) mustEqual true
-      Await.result(redis.select(1), timeOut) mustEqual true
-      Await.result(redis.set("key2", "value2"), timeOut) mustEqual true
-      Await.result(redis.swapdb(0, 1), timeOut) mustEqual true
-      Await.result(redis.get("key1"), timeOut) mustEqual Some(ByteString("value1"))
-      Await.result(redis.select(0), timeOut) mustEqual true
-      Await.result(redis.get("key2"), timeOut) mustEqual Some(ByteString("value2"))
+      assert(Await.result(redis.select(0), timeOut))
+      assert(Await.result(redis.set("key1", "value1"), timeOut))
+      assert(Await.result(redis.select(1), timeOut))
+      assert(Await.result(redis.set("key2", "value2"), timeOut))
+      assert(Await.result(redis.swapdb(0, 1), timeOut))
+      assert(Await.result(redis.get("key1"), timeOut) == Some(ByteString("value1")))
+      assert(Await.result(redis.select(0), timeOut))
+      assert(Await.result(redis.get("key2"), timeOut) == Some(ByteString("value2")))
     }
   }
 }

@@ -20,61 +20,61 @@ class GeoSpec extends RedisDockerServer {
 
     "GEOADD add key member" in {
       val res = Await.result(redis.geoAdd(testKey, 23.361389, 48.115556, "SomePlace"), 2.second)
-      res shouldEqual 1
+      assert(res == 1)
     }
 
     "GEORADIUS" in {
       addPlaces()
       val res = Await.result(redis.geoRadius(testKey, 15, 37, 200, Kilometer), 2.second)
-      res shouldEqual Vector("Agrigento", "Catania")
+      assert(res == Vector("Agrigento", "Catania"))
     }
 
     "GEORADIUS By Member" in {
       addPlaces()
       val res = Await.result(redis.geoRadiusByMember(testKey, "Catania", 500, Kilometer), 2.second)
-      res shouldEqual Vector("Agrigento", "Palermo", "Catania")
+      assert(res == Vector("Agrigento", "Palermo", "Catania"))
     }
 
     "GEORADIUS By Member with opt" in {
       addPlaces()
       val res = Await.result(redis.geoRadiusByMemberWithOpt(testKey, "Agrigento", 100, Kilometer), 2.second)
-      res shouldEqual Vector("Agrigento", "0.0000", "Palermo", "89.8694")
+      assert(res == Vector("Agrigento", "0.0000", "Palermo", "89.8694"))
     }
 
     "GEODIST with default unit" in {
       addPlaces()
       val res = Await.result(redis.geoDist(testKey, "Palermo", "Catania"), 2.seconds)
-      res shouldEqual 203017.1901
+      assert(res == 203017.1901)
     }
 
     "GEODIST in km" in {
       addPlaces()
       val res = Await.result(redis.geoDist(testKey, "Palermo", "Catania", Kilometer), 2.seconds)
-      res shouldEqual 203.0172
+      assert(res == 203.0172)
     }
 
     "GEODIST in mile" in {
       addPlaces()
       val res = Await.result(redis.geoDist(testKey, "Palermo", "Catania", Mile), 2.seconds)
-      res shouldEqual 126.1493
+      assert(res == 126.1493)
     }
 
     "GEODIST in feet" in {
       addPlaces()
       val res = Await.result(redis.geoDist(testKey, "Palermo", "Catania", Feet), 2.seconds)
-      res shouldEqual 666066.8965
+      assert(res == 666066.8965)
     }
 
     "GEOHASH " in {
       addPlaces()
       val res = Await.result(redis.geoHash(testKey, "Palermo", "Catania"), 2.seconds)
-      res shouldEqual Vector("sfdtv6s9ew0", "sf7h526gsz0")
+      assert(res == Vector("sfdtv6s9ew0", "sf7h526gsz0"))
     }
 
     "GEOPOS " in {
       addPlaces()
       val res = Await.result(redis.geoPos(testKey, "Palermo", "Catania"), 2.seconds)
-      res shouldNotEqual Nil
+      assert(res != Nil)
     }
   }
 }
