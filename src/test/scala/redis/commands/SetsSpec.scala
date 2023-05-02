@@ -16,7 +16,7 @@ class SetsSpec extends RedisDockerServer {
       } yield {
         assert(s1 == 2)
         assert(s2 == 0)
-        assert(m.toSet == Seq(ByteString("Hello"), ByteString("World")).toSet)
+        assert(m.toSet == Set(ByteString("Hello"), ByteString("World")))
       }
       Await.result(r, timeOut)
     }
@@ -42,7 +42,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sdiffKey2", "c", "d", "e")
         diff <- redis.sdiff("sdiffKey1", "sdiffKey2")
       } yield {
-        assert(diff.toSet == Seq(ByteString("a"), ByteString("b")).toSet)
+        assert(diff.toSet == Set(ByteString("a"), ByteString("b")))
       }
       Await.result(r, timeOut)
     }
@@ -57,7 +57,7 @@ class SetsSpec extends RedisDockerServer {
         m <- redis.smembers("sdiffstoreKeyDest")
       } yield {
         assert(diff == 2)
-        assert(m.toSet == Seq(ByteString("a"), ByteString("b")).toSet)
+        assert(m.toSet == Set(ByteString("a"), ByteString("b")))
       }
       Await.result(r, timeOut)
     }
@@ -70,7 +70,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sinterKey2", "c", "d", "e")
         inter <- redis.sinter("sinterKey1", "sinterKey2")
       } yield {
-        assert(inter.toSet == Seq(ByteString("c")).toSet)
+        assert(inter.toSet == Set(ByteString("c")))
       }
       Await.result(r, timeOut)
     }
@@ -85,7 +85,7 @@ class SetsSpec extends RedisDockerServer {
         m <- redis.smembers("sinterstoreKeyDest")
       } yield {
         assert(inter == 1)
-        assert(m.toSet == Seq(ByteString("c")).toSet)
+        assert(m.toSet == Set(ByteString("c")))
       }
       Await.result(r, timeOut)
     }
@@ -109,7 +109,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("smembersKey", "Hello", "World")
         m <- redis.smembers("smembersKey")
       } yield {
-        assert(m.toSet == Seq(ByteString("Hello"), ByteString("World")).toSet)
+        assert(m.toSet == Set(ByteString("Hello"), ByteString("World")))
       }
       Await.result(r, timeOut)
     }
@@ -126,7 +126,7 @@ class SetsSpec extends RedisDockerServer {
       } yield {
         assert(isMoved)
         assert(isNotMoved == false)
-        assert(m.toSet == Seq(ByteString("three"), ByteString("two")).toSet)
+        assert(m.toSet == Set(ByteString("three"), ByteString("two")))
       }
       Await.result(r, timeOut)
     }
@@ -172,7 +172,7 @@ class SetsSpec extends RedisDockerServer {
       } yield {
         assert(rem == 2)
         assert(remNothing == 0)
-        assert(m.toSet == Seq(ByteString("three"), ByteString("two")).toSet)
+        assert(m.toSet == Set(ByteString("three"), ByteString("two")))
       }
       Await.result(r, timeOut)
     }
@@ -197,7 +197,7 @@ class SetsSpec extends RedisDockerServer {
         _ <- redis.sadd("sunionKey2", "c", "d", "e")
         union <- redis.sunion("sunionKey1", "sunionKey2")
       } yield {
-        assert(union.toSet == Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")).toSet)
+        assert(union.toSet == Set(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")))
       }
       Await.result(r, timeOut)
     }
@@ -212,7 +212,7 @@ class SetsSpec extends RedisDockerServer {
         m <- redis.smembers("sunionstoreKeyDest")
       } yield {
         assert(union == 5)
-        assert(m.toSet == Seq(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")).toSet)
+        assert(m.toSet == Set(ByteString("a"), ByteString("b"), ByteString("c"), ByteString("d"), ByteString("e")))
       }
       Await.result(r, timeOut)
     }

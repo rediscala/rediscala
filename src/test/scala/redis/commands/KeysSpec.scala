@@ -95,8 +95,8 @@ class KeysSpec extends RedisStandaloneServer {
         k2 <- redis.keys("keysKey?")
         k3 <- redis.keys("keysKeyNomatch")
       } yield {
-        assert(k.toSet == Seq("keysKey2", "keysKey").toSet)
-        assert(k2.toSet == Seq("keysKey2").toSet)
+        assert(k.toSet == Set("keysKey2", "keysKey"))
+        assert(k2.toSet == Set("keysKey2"))
         assert(k3.isEmpty)
       }
       Await.result(r, timeOut)
