@@ -190,7 +190,7 @@ abstract class RedisClusterClients() extends RedisHelper {
   def newNode(port: Int) =
     s"$redisServerCmd --port $port --cluster-enabled yes --cluster-config-file nodes-${port}.conf --cluster-node-timeout 30000 --appendonly yes --appendfilename appendonly-${port}.aof --dbfilename dump-${port}.rdb --logfile ${port}.log --daemonize yes"
 
-  val nodePorts = (0 to 5).map(_ => portNumber.getAndIncrement())
+  val nodePorts = Seq.fill(6) { portNumber.getAndIncrement() }
 
   override def setup() = {
     println("Setup")
