@@ -24,7 +24,7 @@ case class LimitOffsetCount(offset: Long, count: Long) {
   def toByteString: Seq[ByteString] = Seq(ByteString("LIMIT"), ByteString(offset.toString), ByteString(count.toString))
 }
 
-sealed trait BitOperator
+sealed trait BitOperator extends Product with Serializable
 
 case object AND extends BitOperator
 
@@ -34,19 +34,19 @@ case object XOR extends BitOperator
 
 case object NOT extends BitOperator
 
-sealed trait ListPivot
+sealed trait ListPivot extends Product with Serializable
 
 case object AFTER extends ListPivot
 
 case object BEFORE extends ListPivot
 
-sealed trait ShutdownModifier
+sealed trait ShutdownModifier extends Product with Serializable
 
 case object SAVE extends ShutdownModifier
 
 case object NOSAVE extends ShutdownModifier
 
-sealed trait ZaddOption {
+sealed trait ZaddOption extends Product with Serializable {
   def serialize: ByteString
 }
 

@@ -1,7 +1,7 @@
 package redis.api.geo
 
 object DistUnits {
-  sealed trait Measurement {
+  sealed trait Measurement extends Product with Serializable {
     def value: String = {
       this match {
         case Meter => "m"

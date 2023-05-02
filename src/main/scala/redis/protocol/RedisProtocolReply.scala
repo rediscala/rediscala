@@ -6,7 +6,7 @@ import scala.collection.mutable
 import scala.util.Try
 import redis.MultiBulkConverter
 
-sealed trait RedisReply {
+sealed trait RedisReply extends Product with Serializable {
   def toByteString: ByteString
 
   def asOptByteString: Option[ByteString]

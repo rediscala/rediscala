@@ -7,7 +7,7 @@ case class Message(channel: String, data: ByteString)
 
 case class PMessage(patternMatched: String, channel: String, data: ByteString)
 
-sealed trait SubscribeMessage {
+sealed trait SubscribeMessage extends Product with Serializable {
   def cmd: String
 
   def params: Seq[String]
