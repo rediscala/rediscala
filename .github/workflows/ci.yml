@@ -35,4 +35,4 @@ jobs:
       with:
         timeout_minutes: 20
         max_attempts: 3
-        command: sbt "SetScala${{ matrix.scala }}" test
+        command: sbt "SetScala${{ matrix.scala }}" "onFailure testQuick" test
