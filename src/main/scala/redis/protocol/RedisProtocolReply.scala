@@ -173,7 +173,7 @@ object RedisProtocolReply {
   }
 
   def decodeString(bs: ByteString): DecodeResult[ByteString] = {
-    val index = bs.indexOf('\n')
+    val index = bs.indexOf[Byte]('\n': Byte)
     if (index >= 0 && bs.length >= index + 1) {
       val reply = bs.take(index + 1 - LS.length)
       val tail = bs.drop(index + 1)
