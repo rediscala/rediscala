@@ -286,7 +286,7 @@ class KeysSpec extends RedisStandaloneServer {
       Await.result(r, timeOut)
     }
 
-    "PEXPIREAT" in {
+    "PTTL" in {
       val r = for {
         s <- redis.set("pttlKey", "value")
         e <- redis.expire("pttlKey", 1)
