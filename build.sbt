@@ -42,7 +42,7 @@ val rediscalaDependencies = Def.setting(
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 val Scala212 = "2.12.18"
-val Scala213 = "2.13.10"
+val Scala213 = "2.13.11"
 val Scala3 = "3.3.0"
 
 lazy val standardSettings = Def.settings(
