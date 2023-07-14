@@ -10,7 +10,7 @@ import redis.RediscalaTestCompat.testkit.TestKit
 import redis.RediscalaCompat.util.Timeout
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext
 import scala.io.Source
 import scala.sys.process.ProcessIO

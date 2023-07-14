@@ -123,6 +123,15 @@ lazy val rediscala = projectMatrix
   .in(file("."))
   .settings(
     standardSettings,
+    libraryDependencies ++= {
+      if (scalaBinaryVersion.value == "2.12") {
+        Seq(
+          "org.scala-lang.modules" %% "scala-collection-compat" % "2.11.0" % Test,
+        )
+      } else {
+        Nil
+      }
+    },
     libraryDependencies ++= Seq(
       "com.dimafeng" %% "testcontainers-scala" % "0.40.17" % Test,
       "org.scalatest" %% "scalatest-wordspec" % "3.2.16" % Test,
