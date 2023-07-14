@@ -1,6 +1,6 @@
 package redis.protocol
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 object ParseNumber {
 

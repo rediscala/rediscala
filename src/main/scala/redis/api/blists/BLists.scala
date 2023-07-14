@@ -3,7 +3,7 @@ package redis.api.blists
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration.FiniteDuration
 import redis._
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisReply
 import redis.protocol.MultiBulk
 import redis.protocol.Bulk

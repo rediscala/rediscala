@@ -1,7 +1,7 @@
 package redis
 
-import akka.actor._
-import akka.util.Helpers
+import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.util.Helpers
 import redis.commands._
 import scala.concurrent._
 import java.net.InetSocketAddress

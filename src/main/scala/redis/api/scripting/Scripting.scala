@@ -5,7 +5,7 @@ import java.security.MessageDigest
 import redis.protocol.MultiBulk
 import redis.protocol.Bulk
 import redis._
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 object RedisScript {
   def fromFile(file: File): RedisScript = {

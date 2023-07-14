@@ -4,11 +4,11 @@ import scala.concurrent.Await
 import redis.api.pubsub._
 import redis.actors.RedisSubscriberActor
 import java.net.InetSocketAddress
-import akka.actor.Props
-import akka.actor.ActorRef
-import akka.testkit.TestActorRef
-import akka.testkit.TestProbe
-import akka.util.ByteString
+import redis.RediscalaCompat.actor.Props
+import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaTestCompat.testkit.TestActorRef
+import redis.RediscalaTestCompat.testkit.TestProbe
+import redis.RediscalaCompat.util.ByteString
 
 class RedisPubSubSpec extends RedisDockerServer {
 

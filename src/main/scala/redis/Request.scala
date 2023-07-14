@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Promise
 import scala.concurrent.Future
 import scala.collection.immutable.Queue
-import akka.actor.ActorRef
+import redis.RediscalaCompat.actor.ActorRef
 import java.util.concurrent.atomic.AtomicInteger
 
 trait Request {

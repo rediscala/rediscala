@@ -1,6 +1,6 @@
 package redis
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import java.util.Base64
 import redis.api.clusters.ClusterSlots
 import redis.protocol._

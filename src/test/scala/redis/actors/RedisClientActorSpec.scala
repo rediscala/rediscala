@@ -1,9 +1,9 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-import akka.actor._
-import akka.testkit._
-import akka.util.ByteString
+import redis.RediscalaCompat.actor._
+import redis.RediscalaTestCompat.testkit._
+import redis.RediscalaCompat.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.api.connection.Ping
 import redis.api.strings.Get

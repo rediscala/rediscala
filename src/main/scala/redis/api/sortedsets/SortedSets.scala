@@ -1,6 +1,6 @@
 package redis.api.sortedsets
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis._
 import redis.api.Aggregate
 import redis.api.Limit

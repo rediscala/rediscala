@@ -2,7 +2,8 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
 
-releaseCrossBuild := true
+val pekko = ActorLibCross("-pekko", "-pekko")
+val akka = ActorLibCross("-akka", "-akka")
 
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
@@ -11,7 +12,7 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  releaseStepCommandAndRemaining("+ publishSigned"),
+  releaseStepCommandAndRemaining("publishSigned"),
   releaseStepCommandAndRemaining("sonatypeBundleRelease"),
   setNextVersion,
   commitNextVersion,
@@ -20,39 +21,13 @@ releaseProcess := Seq[ReleaseStep](
 
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
-val akka = Def.setting(
-  Seq(
-    "com.typesafe.akka" %% "akka-actor" % "2.6.21",
-    "com.typesafe.akka" %% "akka-testkit" % "2.6.21" % "test"
-  )
-)
-
-val scalacheck = Def.setting(
-  "org.scalacheck" %% "scalacheck" % "1.17.0"
-)
-
-val rediscalaDependencies = Def.setting(
-  akka.value ++ Seq(
-    "com.dimafeng" %% "testcontainers-scala" % "0.40.17" % Test,
-    "org.scalatest" %% "scalatest-wordspec" % "3.2.16" % "test",
-    scalacheck.value % "test"
-  )
-)
-
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-val Scala212 = "2.12.18"
-val Scala213 = "2.13.11"
-val Scala3 = "3.3.0"
+def scalaVersions = Seq("2.12.18", "2.13.11", "3.3.0")
 
 lazy val standardSettings = Def.settings(
   name := "rediscala",
   organization := "io.github.rediscala",
-  scalaVersion := Scala212,
-  crossScalaVersions := Seq(Scala212, Scala213, Scala3),
-  addCommandAlias("SetScala2_12", s"++ ${Scala212}! -v"),
-  addCommandAlias("SetScala2_13", s"++ ${Scala213}! -v"),
-  addCommandAlias("SetScala3", s"++ ${Scala3}! -v"),
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
@@ -67,6 +42,7 @@ lazy val standardSettings = Def.settings(
   ),
   publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
+  Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
     "-encoding",
@@ -118,9 +94,68 @@ lazy val standardSettings = Def.settings(
       baseSourceUrl + branch + "€{FILE_PATH}.scala"
     )
   },
+  version := {
+    if (baseDirectory.value == (LocalRootProject / baseDirectory).value) {
+      version.value
+    } else {
+      val v = version.value
+      val snapshotSuffix = "-SNAPSHOT"
+      val axes = virtualAxes.?.value.getOrElse(Nil)
+      val suffix = (axes.contains(pekko), axes.contains(akka)) match {
+        case (true, false) =>
+          "-pekko"
+        case (false, true) =>
+          "-akka"
+        case _ =>
+          sys.error(axes.toString)
+      }
+      if (v.endsWith(snapshotSuffix)) {
+        v.dropRight(snapshotSuffix.length) + suffix + snapshotSuffix
+      } else {
+        v + suffix
+      }
+    }
+  },
 )
 
-lazy val root = Project(id = "rediscala", base = file(".")).settings(
-  standardSettings,
-  libraryDependencies ++= rediscalaDependencies.value,
-)
+lazy val rediscala = projectMatrix
+  .defaultAxes(VirtualAxis.jvm)
+  .in(file("."))
+  .settings(
+    standardSettings,
+    libraryDependencies ++= Seq(
+      "com.dimafeng" %% "testcontainers-scala" % "0.40.17" % Test,
+      "org.scalatest" %% "scalatest-wordspec" % "3.2.16" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.17.0" % Test,
+    )
+  )
+  .jvmPlatform(
+    scalaVersions = scalaVersions,
+    axisValues = Seq(pekko),
+    settings = Def.settings(
+      Compile / unmanagedResourceDirectories += {
+        (Compile / scalaSource).value.getParentFile / "resources-pekko"
+      },
+      libraryDependencies ++= Seq(
+        "org.apache.pekko" %% "pekko-actor" % "1.0.0",
+        "org.apache.pekko" %% "pekko-testkit" % "1.0.0" % Test,
+      )
+    ),
+  )
+  .jvmPlatform(
+    scalaVersions = scalaVersions,
+    axisValues = Seq(akka),
+    settings = Def.settings(
+      Compile / unmanagedResourceDirectories += {
+        (Compile / scalaSource).value.getParentFile / "resources-akka"
+      },
+      libraryDependencies ++= Seq(
+        "com.typesafe.akka" %% "akka-actor" % "2.6.21",
+        "com.typesafe.akka" %% "akka-testkit" % "2.6.21" % Test,
+      )
+    ),
+  )
+
+Compile / sources := Nil
+Test / sources := Nil
+publish / skip := true

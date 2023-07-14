@@ -1,6 +1,6 @@
 package redis.actors
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Error
 import redis.protocol.MultiBulk
 import redis.protocol.RedisReply
