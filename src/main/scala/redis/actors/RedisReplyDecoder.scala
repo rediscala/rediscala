@@ -1,13 +1,13 @@
 package redis.actors
 
-import akka.actor.Actor
+import redis.RediscalaCompat.actor.Actor
 import scala.collection.mutable
 import redis.protocol.FullyDecoded
 import redis.protocol.DecodeResult
 import redis.protocol.RedisProtocolReply
 import redis.protocol.RedisReply
-import akka.util.ByteString
-import akka.event.Logging
+import redis.RediscalaCompat.util.ByteString
+import redis.RediscalaCompat.event.Logging
 import scala.annotation.tailrec
 import redis.Operation
 

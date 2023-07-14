@@ -7,7 +7,7 @@ import redis.api.ZaddOption.NX
 import redis.api.ZaddOption.XX
 import scala.concurrent.Await
 import scala.concurrent.Future
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 class SortedSetsSpec extends RedisDockerServer {
 

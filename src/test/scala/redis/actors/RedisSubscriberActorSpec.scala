@@ -1,13 +1,13 @@
 package redis.actors
 
-import akka.testkit._
-import akka.actor._
+import redis.RediscalaTestCompat.testkit._
+import redis.RediscalaCompat.actor._
 import org.scalatest.wordspec.AnyWordSpecLike
 import java.net.InetSocketAddress
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisProtocolRequest
 import redis.Redis
-import akka.io.Tcp._
+import redis.RediscalaCompat.io.Tcp._
 import redis.api.pubsub.Message
 import redis.api.pubsub.PMessage
 

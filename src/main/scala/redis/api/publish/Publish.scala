@@ -2,7 +2,7 @@ package redis.api.publish
 
 import redis.RedisCommandIntegerLong
 import redis.ByteStringSerializer
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 case class Publish[A](channel: String, value: A)(implicit convert: ByteStringSerializer[A]) extends RedisCommandIntegerLong {
   def isMasterOnly = true

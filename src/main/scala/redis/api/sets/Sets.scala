@@ -1,7 +1,7 @@
 package redis.api.sets
 
 import redis._
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisReply
 
 case class Sadd[K, V](key: K, members: Seq[V])(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])

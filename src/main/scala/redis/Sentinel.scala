@@ -1,10 +1,10 @@
 package redis
 
 import redis.commands.Sentinel
-import akka.actor.ActorSystem
-import akka.actor.Props
-import akka.actor.ActorRef
-import akka.event.Logging
+import redis.RediscalaCompat.actor.ActorSystem
+import redis.RediscalaCompat.actor.Props
+import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaCompat.event.Logging
 import redis.api.pubsub.PMessage
 import redis.api.pubsub.Message
 import redis.actors.RedisSubscriberActorWithCallback

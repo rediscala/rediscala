@@ -1,8 +1,8 @@
 package redis
 
-import akka.ConfigurationException
+import redis.RediscalaCompat.ConfigurationException
 import scala.concurrent._
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 class RedisTest extends RedisDockerServer {
 

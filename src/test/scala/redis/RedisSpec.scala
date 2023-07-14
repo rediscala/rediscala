@@ -5,9 +5,9 @@ import java.io.OutputStream
 import java.net.Socket
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
-import akka.actor.ActorSystem
-import akka.testkit.TestKit
-import akka.util.Timeout
+import redis.RediscalaCompat.actor.ActorSystem
+import redis.RediscalaTestCompat.testkit.TestKit
+import redis.RediscalaCompat.util.Timeout
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 import scala.collection.JavaConverters._

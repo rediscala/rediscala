@@ -3,7 +3,7 @@ package redis.commands
 import redis._
 import scala.concurrent.Await
 import scala.concurrent.Future
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
 
 class StringsSpec extends RedisDockerServer {

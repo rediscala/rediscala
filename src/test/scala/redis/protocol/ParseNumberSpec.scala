@@ -1,7 +1,7 @@
 package redis.protocol
 
 import org.scalatest.wordspec.AnyWordSpec
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 class ParseNumberSpec extends AnyWordSpec {
 

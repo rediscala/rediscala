@@ -4,7 +4,7 @@ import redis._
 import scala.concurrent.Promise
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
-import akka.actor._
+import redis.RediscalaCompat.actor._
 import scala.collection.immutable.Queue
 import redis.actors.ReplyErrorException
 import redis.protocol._
@@ -14,7 +14,7 @@ import scala.util.Success
 import redis.api.transactions.Watch
 import redis.api.transactions.Exec
 import redis.api.transactions.Multi
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 trait Transactions extends ActorRequest {
 

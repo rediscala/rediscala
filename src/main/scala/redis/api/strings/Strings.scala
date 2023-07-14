@@ -1,7 +1,7 @@
 package redis.api.strings
 
 import redis._
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisReply
 import redis.protocol.MultiBulk
 import redis.protocol.Status

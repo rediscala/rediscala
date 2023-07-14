@@ -2,7 +2,7 @@ package redis
 
 import scala.concurrent._
 import scala.concurrent.duration._
-import akka.testkit._
+import redis.RediscalaTestCompat.testkit._
 import org.scalatest.concurrent.ScalaFutures
 
 class SentinelSpec extends RedisSentinelClients("SentinelSpec") with ScalaFutures {

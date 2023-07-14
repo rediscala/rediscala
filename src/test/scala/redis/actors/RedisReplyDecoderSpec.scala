@@ -1,8 +1,8 @@
 package redis.actors
 
-import akka.actor._
+import redis.RediscalaCompat.actor._
 import org.scalatest.wordspec.AnyWordSpecLike
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.api.hashes.Hgetall
 import redis.protocol.MultiBulk
 import scala.concurrent.Await
@@ -13,10 +13,13 @@ import com.typesafe.config.ConfigFactory
 import redis.Redis
 import redis.Operation
 import redis.api.connection.Ping
-import akka.testkit._
+import redis.RediscalaTestCompat
+import redis.RediscalaTestCompat.testkit._
 
 class RedisReplyDecoderSpec
-    extends TestKit(ActorSystem("testsystem", ConfigFactory.parseString("""akka.loggers = ["akka.testkit.TestEventListener"]""")))
+    extends TestKit(
+      ActorSystem("testsystem", ConfigFactory.parseString(s"""${RediscalaTestCompat.loggersKey} = ["${classOf[TestEventListener].getName}"]"""))
+    )
     with AnyWordSpecLike
     with ImplicitSender {
 

@@ -1,6 +1,6 @@
 package redis.api.hyperloglog
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.RedisCommandIntegerLong
 import redis.RedisCommandStatusBoolean
 import redis.ByteStringSerializer

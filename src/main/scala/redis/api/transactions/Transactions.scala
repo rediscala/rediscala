@@ -2,7 +2,7 @@ package redis.api.transactions
 
 import redis.RedisCommandMultiBulk
 import redis.RedisCommandStatusBoolean
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
 
 case object Multi extends RedisCommandStatusBoolean {

@@ -1,10 +1,10 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-import akka.actor.SupervisorStrategy.Stop
-import akka.actor._
-import akka.util.ByteString
-import akka.util.ByteStringBuilder
+import redis.RediscalaCompat.actor.SupervisorStrategy.Stop
+import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.util.ByteString
+import redis.RediscalaCompat.util.ByteStringBuilder
 import redis.Operation
 import redis.Transaction
 import scala.collection.mutable

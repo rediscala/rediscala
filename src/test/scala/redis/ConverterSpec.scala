@@ -1,7 +1,7 @@
 package redis
 
 import org.scalatest.wordspec.AnyWordSpec
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
 import redis.protocol.RedisReply
 

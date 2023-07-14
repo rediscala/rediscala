@@ -1,6 +1,6 @@
 package redis.api
 
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 
 trait Aggregate
 

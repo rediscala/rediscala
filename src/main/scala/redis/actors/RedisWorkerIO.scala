@@ -1,18 +1,19 @@
 package redis.actors
 
-import akka.actor.ActorLogging
-import akka.actor.ActorRef
-import akka.actor.Actor
-import akka.io.Tcp
-import akka.util.ByteStringBuilder
-import akka.util.ByteString
+import redis.RediscalaCompat.actor.ActorLogging
+import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaCompat.actor.Actor
+import redis.RediscalaCompat.io.Tcp
+import redis.RediscalaCompat.util.ByteStringBuilder
+import redis.RediscalaCompat.util.ByteString
 import java.net.InetSocketAddress
-import akka.io.Tcp._
-import akka.io.Tcp.Connected
-import akka.io.Tcp.Register
-import akka.io.Tcp.Connect
-import akka.io.Tcp.CommandFailed
-import akka.io.Tcp.Received
+import redis.RediscalaCompat.io.Tcp._
+import redis.RediscalaCompat.io.Tcp.Connected
+import redis.RediscalaCompat.io.Tcp.Register
+import redis.RediscalaCompat.io.Tcp.Connect
+import redis.RediscalaCompat.io.Tcp.CommandFailed
+import redis.RediscalaCompat.io.Tcp.Received
+import redis.RediscalaCompat.io.IO
 import scala.concurrent.duration.FiniteDuration
 
 abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Boolean => Unit, connectTimeout: Option[FiniteDuration] = None)
@@ -25,7 +26,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   import scala.concurrent.duration.DurationInt
   import scala.concurrent.duration.FiniteDuration
 
-  val tcp = akka.io.IO(Tcp)(context.system)
+  val tcp = IO(Tcp)(context.system)
 
   // todo watch tcpWorker
   var tcpWorker: ActorRef = null

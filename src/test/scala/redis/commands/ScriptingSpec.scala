@@ -3,7 +3,7 @@ package redis.commands
 import java.io.File
 import redis._
 import scala.concurrent.Await
-import akka.util.ByteString
+import redis.RediscalaCompat.util.ByteString
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.SpanSugar._

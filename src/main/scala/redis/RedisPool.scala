@@ -1,8 +1,8 @@
 package redis
 
 import java.net.InetSocketAddress
-import akka.actor.ActorRef
-import akka.actor.ActorSystem
+import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaCompat.actor.ActorSystem
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import redis.actors.RedisClientActor
