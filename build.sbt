@@ -53,7 +53,7 @@ lazy val standardSettings = Def.settings(
   ),
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) { case Some((2, _)) =>
-      Seq("-Xlint")
+      Seq("-Xlint", "-Xsource:3")
     }
     .toList
     .flatten,
