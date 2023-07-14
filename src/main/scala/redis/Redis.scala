@@ -34,7 +34,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
   val username: Option[String] = None
   val password: Option[String] = None
   val db: Option[Int] = None
-  implicit val executionContext = system.dispatchers.lookup(redisDispatcher.name)
+  implicit val executionContext: ExecutionContext = system.dispatchers.lookup(redisDispatcher.name)
 
   val redisConnection: ActorRef = system.actorOf(
     RedisClientActor

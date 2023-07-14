@@ -166,7 +166,7 @@ case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer]
   redisDispatcher: RedisDispatcher = Redis.dispatcher
 ) extends RedisCommands
     with Transactions {
-  implicit val executionContext = _system.dispatchers.lookup(redisDispatcher.name)
+  implicit val executionContext: ExecutionContext = _system.dispatchers.lookup(redisDispatcher.name)
 
   val masterClient = RedisClient(master.host, master.port, master.username, master.password, master.db)
 
