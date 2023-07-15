@@ -93,7 +93,7 @@ lazy val standardSettings = Def.settings(
   Compile / doc / scalacOptions ++= {
     val branch = {
       if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-      else version.value
+      else (LocalRootProject / version).value
     }
     Seq[String](
       "-doc-source-url",
