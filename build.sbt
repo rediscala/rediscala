@@ -25,8 +25,7 @@ val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 def scalaVersions = Seq("2.12.18", "2.13.11", "3.3.0")
 
-lazy val standardSettings = Def.settings(
-  name := "rediscala",
+lazy val commonSettings = Def.settings(
   organization := "io.github.rediscala",
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
@@ -42,6 +41,13 @@ lazy val standardSettings = Def.settings(
   ),
   publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
+)
+
+commonSettings
+
+lazy val standardSettings = Def.settings(
+  commonSettings,
+  name := "rediscala",
   Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
