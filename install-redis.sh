@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -ex
-REDIS_VERSION="6.2.7"
+REDIS_VERSION="6.2.13"
 wget https://download.redis.io/releases/redis-${REDIS_VERSION}.tar.gz
 tar -xzvf redis-${REDIS_VERSION}.tar.gz
 cd redis-${REDIS_VERSION} && make
