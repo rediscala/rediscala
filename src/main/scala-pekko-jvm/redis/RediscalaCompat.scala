@@ -24,6 +24,8 @@ private[redis] object RediscalaCompat {
 
     def PoisonPill = org.apache.pekko.actor.PoisonPill
 
+    type SupervisorStrategy = org.apache.pekko.actor.SupervisorStrategy
+
     val Terminated = org.apache.pekko.actor.Terminated
     type Terminated = org.apache.pekko.actor.Terminated
 

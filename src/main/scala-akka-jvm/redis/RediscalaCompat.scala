@@ -24,6 +24,8 @@ private[redis] object RediscalaCompat {
 
     def PoisonPill = akka.actor.PoisonPill
 
+    type SupervisorStrategy = akka.actor.SupervisorStrategy
+
     val Terminated = akka.actor.Terminated
     type Terminated = akka.actor.Terminated
 

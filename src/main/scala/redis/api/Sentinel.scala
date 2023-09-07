@@ -29,7 +29,7 @@ case class SenGetMasterAddr(master: String) extends RedisCommandMultiBulk[Option
   def isMasterOnly = true
   val encodedRequest: ByteString = encode(s"SENTINEL get-master-addr-by-name $master")
 
-  def decodeReply(mb: MultiBulk) = mb.responses.map(_.map(_.toString))
+  def decodeReply(mb: MultiBulk): Option[Seq[String]] = mb.responses.map(_.map(_.toString))
 }
 
 case class SenResetMaster(pattern: String) extends RedisCommandIntegerBoolean {

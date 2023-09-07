@@ -107,7 +107,7 @@ case class Mget[K, R](keys: Seq[K])(implicit redisKey: ByteStringSerializer[K], 
   def isMasterOnly = false
   val encodedRequest: ByteString = encode("MGET", keys.map(redisKey.serialize))
 
-  def decodeReply(mb: MultiBulk) = mb.responses
+  def decodeReply(mb: MultiBulk): Seq[Option[R]] = mb.responses
     .map(res => {
       res.map(_.asOptByteString.map(deserializerR.deserialize))
     })

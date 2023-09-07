@@ -151,7 +151,7 @@ case class RedisClientPool(redisServers: Seq[RedisServer], name: String = "Redis
     with RoundRobinPoolRequest
     with RedisCommands {
 
-  override val redisServerConnections = {
+  override val redisServerConnections: collection.Map[RedisServer, RedisConnection] = {
     redisServers.map { server =>
       makeRedisConnection(server, defaultActive = true)
     }.toMap

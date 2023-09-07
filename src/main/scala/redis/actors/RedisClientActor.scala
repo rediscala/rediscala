@@ -90,7 +90,7 @@ class RedisClientActor(
     oldRepliesDecoder = None
   }
 
-  override val supervisorStrategy =
+  override val supervisorStrategy: SupervisorStrategy =
     OneForOneStrategy() { case _: Exception =>
       // Start a new decoder
       repliesDecoder = initRepliesDecoder()
