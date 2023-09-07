@@ -137,7 +137,7 @@ case class Sscan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Opti
   def isMasterOnly = false
   val encodedRequest = encode("SSCAN", withOptionalParams(Seq(keyAsString, redisCursor.serialize(cursor))))
 
-  val empty = Seq.empty
+  val empty: Seq[R] = Seq.empty
 
   def decodeResponses(responses: Seq[RedisReply]) =
     responses.map(response => deserializerR.deserialize(response.toByteString))

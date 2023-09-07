@@ -31,7 +31,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
   )
   val lockClusterSlots = new AtomicBoolean(true)
 
-  override val redisServerConnections = {
+  override val redisServerConnections: collection.Map[RedisServer, RedisConnection] = {
     redisServers.map { server =>
       makeRedisConnection(server, defaultActive = true)
     }.toMap
