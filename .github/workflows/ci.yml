@@ -19,9 +19,9 @@ jobs:
           - pekko3
           - akka3
         include:
-          - java: 17
+          - java: 21
             project: pekko2_13
-          - java: 17
+          - java: 21
             project: akka2_13
     env:
       REDIS_HOME: "redis-6.2.13/src"
