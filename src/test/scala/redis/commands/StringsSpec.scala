@@ -133,6 +133,22 @@ class StringsSpec extends RedisDockerServer {
       assert(Await.result(r, timeOut) == Some(dumbObject))
     }
 
+    "GETDEL" in {
+      val r = redis
+        .set("getKey", "Hello")
+        .flatMap(_ => {
+          redis.getdel("getKey")
+        })
+      assert(Await.result(r, timeOut) == Some(ByteString("Hello")))
+
+      val rr = for {
+        e <- redis.exists("getKey")
+      } yield {
+        assert(e == false)
+      }
+      Await.result(rr, timeOut)
+    }
+
     "GETBIT" in {
       val r = redis.getbit("getbitKeyNonexisting", 0)
       val r2 = redis
