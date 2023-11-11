@@ -52,6 +52,9 @@ trait Strings extends Request {
   def getset[V: ByteStringSerializer, R: ByteStringDeserializer](key: String, value: V): Future[Option[R]] =
     send(Getset(key, value))
 
+  def getdel[R: ByteStringDeserializer](key: String): Future[Option[R]] =
+    send(Getdel(key))
+
   def incr(key: String): Future[Long] =
     send(Incr(key))
 

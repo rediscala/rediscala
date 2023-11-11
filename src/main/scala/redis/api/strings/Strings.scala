@@ -84,6 +84,14 @@ case class Getset[K, V, R](key: K, value: V)(implicit
   val deserializer: ByteStringDeserializer[R] = deserializerR
 }
 
+case class Getdel[K, R](key: K)(implicit redisKey: ByteStringSerializer[K], deserializerR: ByteStringDeserializer[R])
+    extends SimpleClusterKey[K]
+    with RedisCommandBulkOptionByteString[R] {
+  def isMasterOnly = false
+  val encodedRequest: ByteString = RedisProtocolRequest.multiBulk("GETDEL", Seq(keyAsString))
+  val deserializer: ByteStringDeserializer[R] = deserializerR
+}
+
 case class Incr[K](key: K)(implicit redisKey: ByteStringSerializer[K]) extends SimpleClusterKey[K] with RedisCommandIntegerLong {
   def isMasterOnly = true
   val encodedRequest: ByteString = encode("INCR", Seq(keyAsString))
