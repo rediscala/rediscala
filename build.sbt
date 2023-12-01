@@ -153,7 +153,7 @@ lazy val rediscala = projectMatrix
       },
       libraryDependencies ++= Seq(
         "org.apache.pekko" %% "pekko-actor" % "1.0.2",
-        "org.apache.pekko" %% "pekko-testkit" % "1.0.1" % Test,
+        "org.apache.pekko" %% "pekko-testkit" % "1.0.2" % Test,
       )
     ),
   )
