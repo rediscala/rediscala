@@ -27,7 +27,7 @@ jobs:
       REDIS_HOME: "redis-6.2.13/src"
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-java@v3
+    - uses: actions/setup-java@v4
       with:
         java-version: ${{matrix.java}}
         distribution: adopt
