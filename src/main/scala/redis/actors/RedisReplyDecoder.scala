@@ -13,7 +13,7 @@ import redis.Operation
 
 class RedisReplyDecoder() extends Actor {
 
-  val queuePromises = mutable.Queue[Operation[_, _]]()
+  val queuePromises = mutable.Queue[Operation[?, ?]]()
 
   val log = Logging(context.system, this)
 
@@ -60,7 +60,7 @@ class RedisReplyDecoder() extends Actor {
     }
   }
 
-  def decodeRedisReply(operation: Operation[_, _], bs: ByteString): DecodeResult[Unit] = {
+  def decodeRedisReply(operation: Operation[?, ?], bs: ByteString): DecodeResult[Unit] = {
     if (operation.redisCommand.decodeRedisReply.isDefinedAt(bs)) {
       operation.decodeRedisReplyThenComplete(bs)
     } else if (RedisProtocolReply.decodeReplyError.isDefinedAt(bs)) {
@@ -107,4 +107,4 @@ trait DecodeReplies {
   def onDecodedReply(reply: RedisReply): Unit
 }
 
-case class QueuePromises(queue: mutable.Queue[Operation[_, _]])
+case class QueuePromises(queue: mutable.Queue[Operation[?, ?]])

@@ -34,13 +34,13 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     *
     * @return behave nicely with Future helpers like firstCompletedOf or sequence
     */
-  def broadcast[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Seq[Future[T]] = {
+  def broadcast[T](redisCommand: RedisCommand[? <: RedisReply, T]): Seq[Future[T]] = {
     redisConnectionPool.map(redisConnection => {
       send(redisConnection, redisCommand)
     })
   }
 
-  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T]
+  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[? <: RedisReply, T]): Future[T]
 
   def getConnectionsActive: Seq[ActorRef] = {
     redisServerConnections.collect {
@@ -74,7 +74,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     redisConnectionRef.set(actives)
   }
 
-  def getConnectOperations(server: RedisServer): () => Seq[Operation[_, _]] = () => {
+  def getConnectOperations(server: RedisServer): () => Seq[Operation[?, ?]] = () => {
     val self = this
     val redis = new BufferedRequest with RedisCommands {
       implicit val executionContext: ExecutionContext = self.executionContext
@@ -172,7 +172,7 @@ case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer]
 
   val slavesClients = RedisClientPool(slaves)
 
-  override def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  override def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     if (redisCommand.isMasterOnly || slaves.isEmpty) {
       masterClient.send(redisCommand)
     } else {
@@ -228,7 +228,7 @@ case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)
 
   def redisConnection: ActorRef = masterClient.redisConnection
 
-  override def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  override def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     if (redisCommand.isMasterOnly || slavesClients.redisConnectionPool.isEmpty) {
       masterClient.send(redisCommand)
     } else {

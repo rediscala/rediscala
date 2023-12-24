@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger
 trait Request {
   implicit val executionContext: ExecutionContext
 
-  def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T]
+  def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T]
 }
 
 trait ActorRequest {
@@ -19,7 +19,7 @@ trait ActorRequest {
 
   def redisConnection: ActorRef
 
-  def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     val promise = Promise[T]()
     redisConnection ! Operation(redisCommand, promise)
     promise.future
@@ -29,9 +29,9 @@ trait ActorRequest {
 trait BufferedRequest {
   implicit val executionContext: ExecutionContext
 
-  val operations = Queue.newBuilder[Operation[_, _]]
+  val operations = Queue.newBuilder[Operation[?, ?]]
 
-  def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     val promise = Promise[T]()
     operations += Operation(redisCommand, promise)
     promise.future
@@ -55,13 +55,13 @@ trait RoundRobinPoolRequest {
     }
   }
 
-  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     val promise = Promise[T]()
     redisConnection ! Operation(redisCommand, promise)
     promise.future
   }
 
-  def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     getNextConnection.fold(
       Future.failed[T](new RuntimeException("redis pool is empty"))
     ) { redisConnection =>
