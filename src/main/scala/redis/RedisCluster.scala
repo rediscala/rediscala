@@ -101,7 +101,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
     }
   }
 
-  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  protected def send[T](redisConnection: ActorRef, redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     val promise = Promise[T]()
     redisConnection ! Operation(redisCommand, promise)
     promise.future
@@ -125,7 +125,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
   }
 
   val redirectMessagePattern = """(MOVED|ASK) \d+ (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d+)""".r
-  override def send[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Future[T] = {
+  override def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
 
     val maybeRedisActor: Option[ActorRef] = getRedisActor(redisCommand)
 
@@ -158,7 +158,7 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
     }.getOrElse(Future.failed(new RuntimeException("server not found: no server available")))
   }
 
-  def getRedisActor[T](redisCommand: RedisCommand[_ <: RedisReply, T]): Option[ActorRef] = {
+  def getRedisActor[T](redisCommand: RedisCommand[? <: RedisReply, T]): Option[ActorRef] = {
     redisCommand match {
       case clusterKey: ClusterKey =>
         getRedisConnection(clusterKey.getSlot()).filter { _.active.get }.map(_.actor)

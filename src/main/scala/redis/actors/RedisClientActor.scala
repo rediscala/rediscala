@@ -14,7 +14,7 @@ object RedisClientActor {
 
   def props(
     address: InetSocketAddress,
-    getConnectOperations: () => Seq[Operation[_, _]],
+    getConnectOperations: () => Seq[Operation[?, ?]],
     onConnectStatus: Boolean => Unit,
     dispatcherName: String,
     connectTimeout: Option[FiniteDuration] = None
@@ -24,7 +24,7 @@ object RedisClientActor {
 
 class RedisClientActor(
   override val address: InetSocketAddress,
-  getConnectOperations: () => Seq[Operation[_, _]],
+  getConnectOperations: () => Seq[Operation[?, ?]],
   onConnectStatus: Boolean => Unit,
   dispatcherName: String,
   connectTimeout: Option[FiniteDuration] = None
@@ -40,10 +40,10 @@ class RedisClientActor(
   def initRepliesDecoder() =
     context.actorOf(Props(classOf[RedisReplyDecoder]).withDispatcher(dispatcherName))
 
-  var queuePromises = mutable.Queue[Operation[_, _]]()
+  var queuePromises = mutable.Queue[Operation[?, ?]]()
 
   def writing: Receive = {
-    case op: Operation[_, _] =>
+    case op: Operation[?, ?] =>
       queuePromises enqueue op
       write(op.redisCommand.encodedRequest)
     case Transaction(commands) =>
@@ -68,7 +68,7 @@ class RedisClientActor(
 
   def onWriteSent(): Unit = {
     repliesDecoder ! QueuePromises(queuePromises)
-    queuePromises = mutable.Queue[Operation[_, _]]()
+    queuePromises = mutable.Queue[Operation[?, ?]]()
   }
 
   def onConnectionClosed(): Unit = {
@@ -103,7 +103,7 @@ class RedisClientActor(
     val ops = getConnectOperations()
     val buffer = new ByteStringBuilder
 
-    val queuePromisesConnect = mutable.Queue[Operation[_, _]]()
+    val queuePromisesConnect = mutable.Queue[Operation[?, ?]]()
     ops.foreach(operation => {
       buffer.append(operation.redisCommand.encodedRequest)
       queuePromisesConnect enqueue operation

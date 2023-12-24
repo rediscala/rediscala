@@ -68,7 +68,7 @@ case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionC
   }
 }
 
-case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]], redisConnection: ActorRef)(implicit
+case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]], redisConnection: ActorRef)(implicit
   val executionContext: ExecutionContext
 ) {
 
@@ -76,7 +76,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]],
     val multiOp = Operation(Multi, Promise[Boolean]())
     val execOp = Operation(Exec, execPromise(promise))
 
-    val commands = Seq.newBuilder[Operation[_, _]]
+    val commands = Seq.newBuilder[Operation[?, ?]]
 
     val watchOp = watchOperation(watcher)
     watchOp.map(commands.+=(_))
@@ -87,7 +87,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]],
     redisConnection ! redis.Transaction(commands.result())
   }
 
-  def operationToQueuedOperation(op: Operation[_, _]) = {
+  def operationToQueuedOperation(op: Operation[?, ?]) = {
     val cmd = new RedisCommandStatusString {
       def isMasterOnly = true
       val encodedRequest: ByteString = op.redisCommand.encodedRequest
@@ -125,7 +125,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[_, _]],
       }
   }
 
-  def watchOperation(keys: Set[String]): Option[Operation[_, Boolean]] = {
+  def watchOperation(keys: Set[String]): Option[Operation[?, Boolean]] = {
     if (keys.nonEmpty) {
       Some(Operation(Watch(keys), Promise[Boolean]()))
     } else {

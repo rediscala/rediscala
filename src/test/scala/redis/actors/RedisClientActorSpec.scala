@@ -17,7 +17,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike w
 
   import scala.concurrent.duration._
 
-  val getConnectOperations: () => Seq[Operation[_, _]] = () => {
+  val getConnectOperations: () => Seq[Operation[?, ?]] = () => {
     Seq()
   }
 
@@ -37,7 +37,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike w
       val getCmd = Get("key")
       val opConnectGet = Operation(getCmd, promiseConnect2)
 
-      val getConnectOperations: () => Seq[Operation[_, _]] = () => {
+      val getConnectOperations: () => Seq[Operation[?, ?]] = () => {
         Seq(opConnectPing, opConnectGet)
       }
 
@@ -139,7 +139,7 @@ class RedisClientActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike w
 class RedisClientActorMock(
   probeReplyDecoder: ActorRef,
   probeMock: ActorRef,
-  getConnectOperations: () => Seq[Operation[_, _]],
+  getConnectOperations: () => Seq[Operation[?, ?]],
   onConnectStatus: Boolean => Unit
 ) extends RedisClientActor(new InetSocketAddress("localhost", 6379), getConnectOperations, onConnectStatus, Redis.dispatcher.name) {
   override def initRepliesDecoder() = probeReplyDecoder

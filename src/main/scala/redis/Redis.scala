@@ -62,7 +62,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
 
   def onConnectStatus: Boolean => Unit = (status: Boolean) => {}
 
-  def getConnectOperations: () => Seq[Operation[_, _]] = () => {
+  def getConnectOperations: () => Seq[Operation[?, ?]] = () => {
     val self = this
     val redis = new BufferedRequest with RedisCommands {
       implicit val executionContext: ExecutionContext = self.executionContext
