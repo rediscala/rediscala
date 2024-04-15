@@ -132,7 +132,7 @@ lazy val rediscala = projectMatrix
     libraryDependencies ++= {
       if (scalaBinaryVersion.value == "2.12") {
         Seq(
-          "org.scala-lang.modules" %% "scala-collection-compat" % "2.11.0" % Test,
+          "org.scala-lang.modules" %% "scala-collection-compat" % "2.12.0" % Test,
         )
       } else {
         Nil
