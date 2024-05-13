@@ -23,7 +23,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-def scalaVersions = Seq("2.12.19", "2.13.14", "3.3.3")
+def scalaVersions = Seq("2.12.19", "2.13.14", "3.4.2")
 
 lazy val commonSettings = Def.settings(
   organization := "io.github.rediscala",
