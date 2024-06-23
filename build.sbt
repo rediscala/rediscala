@@ -140,7 +140,7 @@ lazy val rediscala = projectMatrix
     },
     libraryDependencies ++= Seq(
       "com.dimafeng" %% "testcontainers-scala" % "0.41.4" % Test,
-      "org.scalatest" %% "scalatest-wordspec" % "3.2.18" % Test,
+      "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
       "org.scalacheck" %% "scalacheck" % "1.18.0" % Test,
     )
   )
