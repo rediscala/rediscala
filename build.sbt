@@ -152,8 +152,8 @@ lazy val rediscala = projectMatrix
         (Compile / scalaSource).value.getParentFile / "resources-pekko"
       },
       libraryDependencies ++= Seq(
-        "org.apache.pekko" %% "pekko-actor" % "1.0.2",
-        "org.apache.pekko" %% "pekko-testkit" % "1.0.2" % Test,
+        "org.apache.pekko" %% "pekko-actor" % "1.0.3",
+        "org.apache.pekko" %% "pekko-testkit" % "1.0.3" % Test,
       )
     ),
   )
