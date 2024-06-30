@@ -57,9 +57,19 @@ lazy val standardSettings = Def.settings(
     "-feature",
     "-unchecked"
   ),
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, 13)) =>
+        Seq("-Xsource:3-cross")
+      case Some((2, 12)) =>
+        Seq("-Xsource:3")
+      case _ =>
+        Nil
+    }
+  },
   scalacOptions ++= PartialFunction
     .condOpt(CrossVersion.partialVersion(scalaVersion.value)) { case Some((2, _)) =>
-      Seq("-Xlint", "-Xsource:3")
+      Seq("-Xlint")
     }
     .toList
     .flatten,
