@@ -136,6 +136,6 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
 
 case class TransactionExecException(reply: RedisReply) extends Exception(s"Expected MultiBulk response, got : $reply")
 
-case object TransactionDiscardedException extends Exception
+case object TransactionDiscardedException extends Exception(null, null, true, false)
 
 case class TransactionWatchException(message: String = "One watched key has been modified, transaction has failed") extends Exception(message)

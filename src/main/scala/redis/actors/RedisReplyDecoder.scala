@@ -76,7 +76,7 @@ class RedisReplyDecoder() extends Actor {
 
 case class ReplyErrorException(message: String) extends Exception(message)
 
-object InvalidRedisReply extends RuntimeException("Could not decode the redis reply (Connection closed)")
+object InvalidRedisReply extends RuntimeException("Could not decode the redis reply (Connection closed)", null, true, false)
 
 trait DecodeReplies {
   var partiallyDecoded: DecodeResult[Unit] = DecodeResult.unit
