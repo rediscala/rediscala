@@ -114,6 +114,6 @@ class RedisClientActor(
 
 }
 
-case object NoConnectionException extends RuntimeException("No Connection established")
+case object NoConnectionException extends RuntimeException("No Connection established", null, true, false)
 
 case object KillOldRepliesDecoder
