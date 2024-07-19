@@ -1,9 +1,9 @@
 package redis.commands
 
-import redis._
+import redis.*
 import scala.concurrent.Future
-import redis.api.strings._
-import redis.api._
+import redis.api.strings.*
+import redis.api.*
 
 trait Strings extends Request {
 
@@ -17,13 +17,13 @@ trait Strings extends Request {
     send(BitcountRange(key, start, end))
 
   def bitopAND(destkey: String, keys: String*): Future[Long] =
-    bitop(AND, destkey, keys: _*)
+    bitop(AND, destkey, keys*)
 
   def bitopOR(destkey: String, keys: String*): Future[Long] =
-    bitop(OR, destkey, keys: _*)
+    bitop(OR, destkey, keys*)
 
   def bitopXOR(destkey: String, keys: String*): Future[Long] =
-    bitop(XOR, destkey, keys: _*)
+    bitop(XOR, destkey, keys*)
 
   def bitopNOT(destkey: String, key: String): Future[Long] =
     bitop(NOT, destkey, key)

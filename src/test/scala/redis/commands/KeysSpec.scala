@@ -1,10 +1,10 @@
 package redis.commands
 
-import redis._
+import redis.*
 import scala.concurrent.Future
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
-import redis.api._
+import redis.api.*
 
 class KeysSpec extends RedisStandaloneServer {
 
@@ -103,7 +103,7 @@ class KeysSpec extends RedisStandaloneServer {
     }
 
     "MIGRATE" in {
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       withRedisServer(port => {
         val redisMigrate = RedisClient("localhost", port)
@@ -123,7 +123,7 @@ class KeysSpec extends RedisStandaloneServer {
     }
 
     "MIGRATE COPY" in {
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       withRedisServer(port => {
         val redisMigrate = RedisClient("localhost", port)
@@ -143,7 +143,7 @@ class KeysSpec extends RedisStandaloneServer {
     }
 
     "MIGRATE KEYS" in {
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       withRedisServer(port => {
         val redisMigrate = RedisClient("localhost", port)
@@ -165,7 +165,7 @@ class KeysSpec extends RedisStandaloneServer {
     }
 
     "MIGRATE REPLACE" in {
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       withRedisServer(port => {
         val redisMigrate = RedisClient("localhost", port)

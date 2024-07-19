@@ -1,7 +1,7 @@
 package redis
 
 import scala.concurrent.Await
-import redis.api.pubsub._
+import redis.api.pubsub.*
 import redis.actors.RedisSubscriberActor
 import java.net.InetSocketAddress
 import redis.RediscalaCompat.actor.Props
@@ -53,7 +53,7 @@ class RedisPubSubSpec extends RedisDockerServer {
           .withDispatcher(Redis.dispatcher.name),
         "SubscriberActor"
       )
-      import scala.concurrent.duration._
+      import scala.concurrent.duration.*
 
       system.scheduler.scheduleOnce(2.seconds)(redis.publish("channel", "value"))
 

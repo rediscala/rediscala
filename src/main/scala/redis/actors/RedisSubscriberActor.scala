@@ -4,7 +4,7 @@ import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Error
 import redis.protocol.MultiBulk
 import redis.protocol.RedisReply
-import redis.api.pubsub._
+import redis.api.pubsub.*
 import java.net.InetSocketAddress
 import redis.api.connection.Auth
 
@@ -53,10 +53,10 @@ abstract class RedisSubscriberActor(
   override def preStart(): Unit = {
     super.preStart()
     if (channelsSubscribed.nonEmpty) {
-      write(SUBSCRIBE(channelsSubscribed.toSeq: _*).toByteString)
+      write(SUBSCRIBE(channelsSubscribed.toSeq*).toByteString)
     }
     if (patternsSubscribed.nonEmpty) {
-      write(PSUBSCRIBE(patternsSubscribed.toSeq: _*).toByteString)
+      write(PSUBSCRIBE(patternsSubscribed.toSeq*).toByteString)
     }
   }
 
@@ -73,19 +73,19 @@ abstract class RedisSubscriberActor(
   }
 
   def subscribe(channels: String*): Unit = {
-    self ! SUBSCRIBE(channels: _*)
+    self ! SUBSCRIBE(channels*)
   }
 
   def unsubscribe(channels: String*): Unit = {
-    self ! UNSUBSCRIBE(channels: _*)
+    self ! UNSUBSCRIBE(channels*)
   }
 
   def psubscribe(patterns: String*): Unit = {
-    self ! PSUBSCRIBE(patterns: _*)
+    self ! PSUBSCRIBE(patterns*)
   }
 
   def punsubscribe(patterns: String*): Unit = {
-    self ! PUNSUBSCRIBE(patterns: _*)
+    self ! PUNSUBSCRIBE(patterns*)
   }
 
   def onConnectionClosed(): Unit = {}

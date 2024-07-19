@@ -1,7 +1,7 @@
 package redis.commands
 
-import redis.api._
-import redis.api.sortedsets._
+import redis.api.*
+import redis.api.sortedsets.*
 import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.Cursor

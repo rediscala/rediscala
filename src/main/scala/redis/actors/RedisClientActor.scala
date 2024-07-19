@@ -2,7 +2,7 @@ package redis.actors
 
 import java.net.InetSocketAddress
 import redis.RediscalaCompat.actor.SupervisorStrategy.Stop
-import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.actor.*
 import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaCompat.util.ByteStringBuilder
 import redis.Operation
@@ -30,7 +30,7 @@ class RedisClientActor(
   connectTimeout: Option[FiniteDuration] = None
 ) extends RedisWorkerIO(address, onConnectStatus, connectTimeout) {
 
-  import context._
+  import context.*
 
   var repliesDecoder = initRepliesDecoder()
 

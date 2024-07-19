@@ -5,7 +5,7 @@ import redis.ByteStringSerializer
 import redis.Request
 import scala.concurrent.Future
 import redis.protocol.Status
-import redis.api.connection._
+import redis.api.connection.*
 
 trait Connection extends Request {
   def auth[V: ByteStringSerializer](password: V): Future[Status] =

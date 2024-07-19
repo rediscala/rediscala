@@ -1,6 +1,6 @@
 package redis.commands
 
-import redis._
+import redis.*
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 
@@ -179,7 +179,7 @@ class SetsSpec extends RedisDockerServer {
 
     "SSCAN" in {
       val r = for {
-        _ <- redis.sadd("sscan", (1 to 20).map(_.toString): _*)
+        _ <- redis.sadd("sscan", (1 to 20).map(_.toString)*)
         scanResult <- redis.sscan[String]("sscan", count = Some(100))
       } yield {
         assert(scanResult.index == 0)

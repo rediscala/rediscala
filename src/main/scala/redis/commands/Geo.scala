@@ -6,7 +6,7 @@ import redis.api.geo.DistUnits.Measurement
 import redis.api.geo.DistUnits.Meter
 import redis.api.geo.GeoOptions.WithDist
 import redis.api.geo.GeoOptions.WithOption
-import redis.api.geo._
+import redis.api.geo.*
 import scala.concurrent.Future
 
 trait Geo extends Request {

@@ -28,7 +28,7 @@ object DumbClass {
 
 class ConverterSpec extends AnyWordSpec {
 
-  import redis.ByteStringSerializer._
+  import redis.ByteStringSerializer.*
 
   "ByteStringSerializer" should {
     "String" in {

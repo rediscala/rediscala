@@ -1,7 +1,7 @@
 package redis
 
 import redis.RediscalaCompat.util.ByteString
-import redis.protocol._
+import redis.protocol.*
 
 trait RedisCommand[RedisReplyT <: RedisReply, +T] {
   def isMasterOnly: Boolean

@@ -1,7 +1,7 @@
 package redis
 
 import redis.RediscalaCompat.util.ByteString
-import redis.protocol._
+import redis.protocol.*
 import scala.util.Try
 import scala.annotation.tailrec
 import scala.annotation.implicitNotFound

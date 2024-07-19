@@ -1,13 +1,13 @@
 package redis.commands
 
-import redis._
+import redis.*
 import scala.concurrent.Promise
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
-import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.actor.*
 import scala.collection.immutable.Queue
 import redis.actors.ReplyErrorException
-import redis.protocol._
+import redis.protocol.*
 import redis.protocol.MultiBulk
 import scala.util.Failure
 import scala.util.Success
@@ -30,7 +30,7 @@ trait Transactions extends ActorRequest {
 
   def watch(watchKeys: String*): TransactionBuilder = {
     val builder = transaction()
-    builder.watch(watchKeys: _*)
+    builder.watch(watchKeys*)
     builder
   }
 

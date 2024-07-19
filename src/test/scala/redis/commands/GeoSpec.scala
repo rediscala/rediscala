@@ -1,11 +1,11 @@
 package redis.commands
 
-import redis._
-import redis.api.geo.DistUnits._
+import redis.*
+import redis.api.geo.DistUnits.*
 import scala.concurrent.Await
 
 class GeoSpec extends RedisDockerServer {
-  import concurrent.duration._
+  import concurrent.duration.*
 
   val testKey = "Sicily"
 

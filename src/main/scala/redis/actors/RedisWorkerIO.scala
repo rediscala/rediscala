@@ -7,7 +7,7 @@ import redis.RediscalaCompat.io.Tcp
 import redis.RediscalaCompat.util.ByteStringBuilder
 import redis.RediscalaCompat.util.ByteString
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.io.Tcp._
+import redis.RediscalaCompat.io.Tcp.*
 import redis.RediscalaCompat.io.Tcp.Connected
 import redis.RediscalaCompat.io.Tcp.Register
 import redis.RediscalaCompat.io.Tcp.Connect
@@ -22,7 +22,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
 
   private var currAddress = address
 
-  import context._
+  import context.*
   import scala.concurrent.duration.DurationInt
   import scala.concurrent.duration.FiniteDuration
 

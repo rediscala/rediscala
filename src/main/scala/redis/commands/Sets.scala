@@ -5,7 +5,7 @@ import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.Request
 import scala.concurrent.Future
-import redis.api.sets._
+import redis.api.sets.*
 
 trait Sets extends Request {
 

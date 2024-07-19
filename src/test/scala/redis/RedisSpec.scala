@@ -10,14 +10,14 @@ import redis.RediscalaTestCompat.testkit.TestKit
 import redis.RediscalaCompat.util.Timeout
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 import scala.concurrent.ExecutionContext
 import scala.io.Source
 import scala.sys.process.ProcessIO
-import scala.sys.process._
+import scala.sys.process.*
 import scala.util.Try
 import scala.util.control.NonFatal
-import redis.RedisServerHelper._
+import redis.RedisServerHelper.*
 
 object RedisServerHelper {
   val redisHost = "127.0.0.1"
@@ -43,7 +43,7 @@ object RedisServerHelper {
 
 abstract class RedisHelper extends TestKit(ActorSystem()) with AnyWordSpecLike with BeforeAndAfterAll {
 
-  import scala.concurrent.duration._
+  import scala.concurrent.duration.*
 
   implicit val executionContext: ExecutionContext = system.dispatchers.lookup(Redis.dispatcher.name)
 
@@ -104,7 +104,7 @@ abstract class RedisStandaloneServer extends RedisHelper {
 
 abstract class RedisSentinelClients(val masterName: String = "mymaster") extends RedisHelper {
 
-  import RedisServerHelper._
+  import RedisServerHelper.*
 
   val masterPort = portNumber.getAndIncrement()
   val slavePort1 = portNumber.getAndIncrement()
@@ -149,7 +149,7 @@ abstract class RedisSentinelClients(val masterName: String = "mymaster") extends
 
 class RedisManager {
 
-  import RedisServerHelper._
+  import RedisServerHelper.*
 
   var processes: Seq[RedisProcess] = Seq.empty
 
@@ -183,7 +183,7 @@ class RedisManager {
 
 abstract class RedisClusterClients() extends RedisHelper {
 
-  import RedisServerHelper._
+  import RedisServerHelper.*
 
   var processes: Seq[Process] = Seq.empty
   val fileDir = new java.io.File("/tmp/redis" + System.currentTimeMillis())

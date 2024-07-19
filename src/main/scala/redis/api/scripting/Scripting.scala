@@ -4,7 +4,7 @@ import java.io.File
 import java.security.MessageDigest
 import redis.protocol.MultiBulk
 import redis.protocol.Bulk
-import redis._
+import redis.*
 import redis.RediscalaCompat.util.ByteString
 
 object RedisScript {

@@ -1,6 +1,6 @@
 package redis.api
 
-import redis._
+import redis.*
 import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
 

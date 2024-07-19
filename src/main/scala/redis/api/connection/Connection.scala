@@ -1,6 +1,6 @@
 package redis.api.connection
 
-import redis._
+import redis.*
 import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Status
 
