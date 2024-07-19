@@ -113,14 +113,19 @@ case class Hmset[K, KK, V](key: K, keysValues: Map[KK, V])(implicit
   )
 }
 
-case class Hset[K, KK, V](key: K, field: KK, value: V)(implicit
+case class Hset[K, KK, V](key: K, keysValues: Map[KK, V])(implicit
   redisKey: ByteStringSerializer[K],
   redisFields: ByteStringSerializer[KK],
   convert: ByteStringSerializer[V]
 ) extends SimpleClusterKey[K]
-    with RedisCommandIntegerBoolean {
+    with RedisCommandIntegerLong {
   def isMasterOnly = true
-  val encodedRequest: ByteString = encode("HSET", Seq(keyAsString, redisFields.serialize(field), convert.serialize(value)))
+  val encodedRequest: ByteString = encode(
+    "HSET",
+    keyAsString :: keysValues.foldLeft(List.empty[ByteString]) { case (acc, (k, v)) =>
+      redisFields.serialize(k) :: convert.serialize(v) :: acc
+    }
+  )
 }
 
 case class Hsetnx[K, KK, V](key: K, field: KK, value: V)(implicit

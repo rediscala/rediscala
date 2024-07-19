@@ -40,7 +40,10 @@ trait Hashes extends Request {
     send(Hmset(key, keysValues))
 
   def hset[V: ByteStringSerializer](key: String, field: String, value: V): Future[Boolean] =
-    send(Hset(key, field, value))
+    send(Hset(key, Map((field, value)))).map(_ == 1L)
+
+  def hset[V: ByteStringSerializer](key: String, keysValues: Map[String, V]): Future[Long] =
+    send(Hset(key, keysValues))
 
   def hsetnx[V: ByteStringSerializer](key: String, field: String, value: V): Future[Boolean] =
     send(Hsetnx(key, field, value))
