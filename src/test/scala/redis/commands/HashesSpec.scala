@@ -3,6 +3,8 @@ package redis.commands
 import redis.*
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
+import redis.actors.ReplyErrorException
+import scala.util.Success
 
 class HashesSpec extends RedisDockerServer {
 
@@ -125,10 +127,19 @@ class HashesSpec extends RedisDockerServer {
         set <- redis.hset("hsetKey", "field", "value")
         update <- redis.hset("hsetKey", "field", "value2")
         v1 <- redis.hget("hsetKey", "field")
+        empty <- redis.hset("hsetKey", Map.empty[String, String]).transform(Success.apply)
+        v2 <- redis.hget("hsetKey", "field")
+        values = (1 to 5).map(_.toString).map(n => (n, n)).toMap + ("field" -> "aaa")
+        update2 <- redis.hset("hsetKey", values)
+        v3 <- redis.hgetall[String]("hsetKey")
       } yield {
         assert(set)
         assert(update == false)
         assert(v1 == Some(ByteString("value2")))
+        assert(empty.toEither.left.exists(_.isInstanceOf[ReplyErrorException]))
+        assert(v2 == Some(ByteString("value2")))
+        assert(update2 == 5L)
+        assert(v3 == values)
       }
       Await.result(r, timeOut)
     }
