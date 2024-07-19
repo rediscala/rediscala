@@ -24,7 +24,7 @@ jobs:
           - java: 21
             project: akka2_13
     env:
-      REDIS_HOME: "redis-6.2.13/src"
+      REDIS_HOME: "redis-6.2.14/src"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-java@v4
