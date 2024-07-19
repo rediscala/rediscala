@@ -1,12 +1,12 @@
 package redis.commands
 
-import redis._
+import redis.*
 import redis.protocol.Status
 import scala.concurrent.Await
 import java.io.InputStream
 import java.io.OutputStream
 import scala.io.Source
-import scala.sys.process._
+import scala.sys.process.*
 
 class AuthUsernameAndPasswordSpec extends RedisStandaloneServer {
 

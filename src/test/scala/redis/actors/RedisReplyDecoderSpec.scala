@@ -1,6 +1,6 @@
 package redis.actors
 
-import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.actor.*
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.RediscalaCompat.util.ByteString
 import redis.api.hashes.Hgetall
@@ -14,7 +14,7 @@ import redis.Redis
 import redis.Operation
 import redis.api.connection.Ping
 import redis.RediscalaTestCompat
-import redis.RediscalaTestCompat.testkit._
+import redis.RediscalaTestCompat.testkit.*
 
 class RedisReplyDecoderSpec
     extends TestKit(
@@ -23,7 +23,7 @@ class RedisReplyDecoderSpec
     with AnyWordSpecLike
     with ImplicitSender {
 
-  import scala.concurrent.duration._
+  import scala.concurrent.duration.*
 
   val timeout = 5.seconds.dilated
 

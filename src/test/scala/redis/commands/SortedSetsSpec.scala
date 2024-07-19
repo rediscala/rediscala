@@ -1,7 +1,7 @@
 package redis.commands
 
-import redis._
-import redis.api._
+import redis.*
+import redis.api.*
 import redis.api.ZaddOption.CH
 import redis.api.ZaddOption.NX
 import redis.api.ZaddOption.XX
@@ -262,7 +262,7 @@ class SortedSetsSpec extends RedisDockerServer {
     "ZSCAN" in {
       val r = for {
         _ <- redis.del("zscan")
-        _ <- redis.zadd("zscan", (1 to 20).map(x => x.toDouble -> x.toString): _*)
+        _ <- redis.zadd("zscan", (1 to 20).map(x => x.toDouble -> x.toString)*)
         scanResult <- redis.zscan[String]("zscan", count = Some(100))
       } yield {
         assert(scanResult.index == 0)

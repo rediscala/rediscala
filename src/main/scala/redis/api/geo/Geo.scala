@@ -1,10 +1,10 @@
 package redis.api.geo
 
 import redis.RediscalaCompat.util.ByteString
-import redis._
+import redis.*
 import redis.api.geo.DistUnits.Measurement
 import redis.api.geo.GeoOptions.WithOption
-import redis.protocol._
+import redis.protocol.*
 
 case class GeoAdd[K](key: K, lat: Double, lng: Double, loc: String)(implicit redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

@@ -1,6 +1,6 @@
 package redis.commands
 
-import redis.api.hyperloglog._
+import redis.api.hyperloglog.*
 import redis.ByteStringSerializer
 import redis.Request
 import scala.concurrent.Future

@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
 import redis.RediscalaCompat.util.ByteString
-import redis._
+import redis.*
 import redis.api.Aggregate
 import redis.api.Limit
 import redis.api.SUM

@@ -1,7 +1,7 @@
 package redis.commands
 
 import redis.Request
-import redis.api.servers._
+import redis.api.servers.*
 import scala.concurrent.Future
 import redis.api.ShutdownModifier
 

@@ -1,8 +1,8 @@
 package redis
 
 import redis.RedisServerHelper.redisHost
-import scala.concurrent._
-import scala.concurrent.duration._
+import scala.concurrent.*
+import scala.concurrent.duration.*
 
 class SentinelMutablePoolSpec extends RedisSentinelClients("SentinelMutablePoolSpec") {
 

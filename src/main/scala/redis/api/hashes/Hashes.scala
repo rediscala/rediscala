@@ -1,6 +1,6 @@
 package redis.api.hashes
 
-import redis._
+import redis.*
 import redis.RediscalaCompat.util.ByteString
 import scala.collection.mutable
 import scala.annotation.tailrec

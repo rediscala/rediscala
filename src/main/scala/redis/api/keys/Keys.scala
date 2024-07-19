@@ -1,8 +1,8 @@
 package redis.api.keys
 
-import redis._
+import redis.*
 import redis.RediscalaCompat.util.ByteString
-import redis.protocol._
+import redis.protocol.*
 import scala.concurrent.duration.FiniteDuration
 import redis.api.Order
 import redis.api.LimitOffsetCount

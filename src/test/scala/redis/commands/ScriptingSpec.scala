@@ -1,12 +1,12 @@
 package redis.commands
 
 import java.io.File
-import redis._
+import redis.*
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.SpanSugar._
+import org.scalatest.time.SpanSugar.*
 import redis.protocol.Bulk
 import redis.protocol.MultiBulk
 import redis.actors.ReplyErrorException

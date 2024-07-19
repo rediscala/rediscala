@@ -4,7 +4,7 @@ import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.Request
 import scala.concurrent.Future
-import redis.api.lists._
+import redis.api.lists.*
 import redis.api.AFTER
 import redis.api.BEFORE
 import redis.api.ListPivot

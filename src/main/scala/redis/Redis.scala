@@ -1,13 +1,13 @@
 package redis
 
-import redis.RediscalaCompat.actor._
+import redis.RediscalaCompat.actor.*
 import redis.RediscalaCompat.util.Helpers
-import redis.commands._
-import scala.concurrent._
+import redis.commands.*
+import scala.concurrent.*
 import java.net.InetSocketAddress
 import redis.actors.RedisSubscriberActorWithCallback
 import redis.actors.RedisClientActor
-import redis.api.pubsub._
+import redis.api.pubsub.*
 import java.util.concurrent.atomic.AtomicLong
 import scala.concurrent.duration.FiniteDuration
 
@@ -139,19 +139,19 @@ case class RedisPubSub(
   }
 
   def subscribe(channels: String*): Unit = {
-    redisConnection ! SUBSCRIBE(channels: _*)
+    redisConnection ! SUBSCRIBE(channels*)
   }
 
   def unsubscribe(channels: String*): Unit = {
-    redisConnection ! UNSUBSCRIBE(channels: _*)
+    redisConnection ! UNSUBSCRIBE(channels*)
   }
 
   def psubscribe(patterns: String*): Unit = {
-    redisConnection ! PSUBSCRIBE(patterns: _*)
+    redisConnection ! PSUBSCRIBE(patterns*)
   }
 
   def punsubscribe(patterns: String*): Unit = {
-    redisConnection ! PUNSUBSCRIBE(patterns: _*)
+    redisConnection ! PUNSUBSCRIBE(patterns*)
   }
 
   def onConnectStatus(): Boolean => Unit = (status: Boolean) => {}

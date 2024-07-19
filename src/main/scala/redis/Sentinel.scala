@@ -124,7 +124,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
 
   val sentinelClients =
     collection.mutable.Map(
-      sentinels.map(hp => (makeSentinelClientKey(hp._1, hp._2), makeSentinelClient(hp._1, hp._2))): _*
+      sentinels.map(hp => (makeSentinelClientKey(hp._1, hp._2), makeSentinelClient(hp._1, hp._2)))*
     )
 
   def makeSentinelClientKey(host: String, port: Int) = s"$host:$port"
@@ -173,7 +173,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
   }
 
   def withMasterAddr[T](initFunction: (String, Int) => T): T = {
-    import scala.concurrent.duration._
+    import scala.concurrent.duration.*
 
     val f = sentinelClients.values.map(_.getMasterAddr(master))
     val ff = Future.sequence(f).map { listAddr =>
@@ -186,7 +186,7 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
   }
 
   def withSlavesAddr[T](initFunction: Seq[(String, Int)] => T): T = {
-    import scala.concurrent.duration._
+    import scala.concurrent.duration.*
 
     val fslaves = Future.sequence(sentinelClients.values.map(_.slaves(master))).map { lm =>
       val ipPortBuilder = Set.newBuilder[(String, Int)]

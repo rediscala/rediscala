@@ -1,6 +1,6 @@
 package redis.commands
 
-import redis._
+import redis.*
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException

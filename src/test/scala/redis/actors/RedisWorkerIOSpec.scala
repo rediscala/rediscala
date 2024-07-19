@@ -1,12 +1,12 @@
 package redis.actors
 
-import redis.RediscalaTestCompat.testkit._
+import redis.RediscalaTestCompat.testkit.*
 import redis.RediscalaCompat.actor.ActorRef
 import redis.RediscalaCompat.actor.Props
 import redis.RediscalaCompat.actor.ActorSystem
 import org.scalatest.wordspec.AnyWordSpecLike
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.io.Tcp._
+import redis.RediscalaCompat.io.Tcp.*
 import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaCompat.io.Tcp.ErrorClosed
 import redis.RediscalaCompat.io.Tcp.Connected
@@ -17,7 +17,7 @@ import redis.Redis
 
 class RedisWorkerIOSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 
-  import scala.concurrent.duration._
+  import scala.concurrent.duration.*
 
   val timeout = 120.seconds.dilated
 

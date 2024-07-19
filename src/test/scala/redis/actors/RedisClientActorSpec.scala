@@ -1,8 +1,8 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor._
-import redis.RediscalaTestCompat.testkit._
+import redis.RediscalaCompat.actor.*
+import redis.RediscalaTestCompat.testkit.*
 import redis.RediscalaCompat.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.api.connection.Ping
@@ -15,7 +15,7 @@ import scala.concurrent.Promise
 
 class RedisClientActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 
-  import scala.concurrent.duration._
+  import scala.concurrent.duration.*
 
   val getConnectOperations: () => Seq[Operation[?, ?]] = () => {
     Seq()
