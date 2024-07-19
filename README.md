@@ -87,24 +87,24 @@ You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then
 ### Redis Commands
 
 All commands are supported :
-* [Keys](https://redis.io/commands#generic) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Keys.html))
-* [Strings](https://redis.io/commands#string) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Strings.html))
-* [Hashes](https://redis.io/commands#hash) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Hashes.html))
-* [Lists](https://redis.io/commands#list)
-  * non-blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Lists.html))
-  * blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/BLists.html))
-* [Sets](https://redis.io/commands#set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Sets.html))
-* [Sorted Sets](https://redis.io/commands#sorted_set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/SortedSets.html))
-* [Pub/Sub](https://redis.io/commands#pubsub) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Publish.html))
-* [Transactions](https://redis.io/commands#transactions) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Transactions.html))
-* [Connection](https://redis.io/commands#connection) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Connection.html))
-* [Scripting](https://redis.io/commands#scripting) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Scripting.html))
-* [Server](https://redis.io/commands#server) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/Server.html))
-* [HyperLogLog](https://redis.io/commands#hyperloglog) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/HyperLogLog.html))
+* [Keys](https://redis.io/docs/latest/commands/?group=generic) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Keys.html))
+* [Strings](https://redis.io/docs/latest/commands/?group=string) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Strings.html))
+* [Hashes](https://redis.io/docs/latest/commands/?group=hash) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Hashes.html))
+* [Lists](https://redis.io/docs/latest/commands/?group=list)
+  * non-blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Lists.html))
+  * blocking ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/BLists.html))
+* [Sets](https://redis.io/docs/latest/commands/?group=set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Sets.html))
+* [Sorted Sets](https://redis.io/docs/latest/commands/?group=sorted_set) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/SortedSets.html))
+* [Pub/Sub](https://redis.io/docs/latest/commands/?group=pubsub) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Publish.html))
+* [Transactions](https://redis.io/docs/latest/commands/?group=transactions) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Transactions.html))
+* [Connection](https://redis.io/docs/latest/commands/?group=connection) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Connection.html))
+* [Scripting](https://redis.io/docs/latest/commands/?group=scripting) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Scripting.html))
+* [Server](https://redis.io/docs/latest/commands/?group=server) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/Server.html))
+* [HyperLogLog](https://redis.io/docs/latest/commands/?group=hyperloglog) ([scaladoc](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/HyperLogLog.html))
 
 ### Blocking commands
 
-[RedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisBlockingClient.html) is the instance allowing access to blocking commands :
+[RedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/RedisBlockingClient.html) is the instance allowing access to blocking commands :
 * blpop
 * brpop
 * brpopplush
@@ -124,7 +124,7 @@ You can fork with: `git clone git@github.com:rediscala/rediscala-demo.git` then 
 ### Transactions
 
 The idea behind transactions in Rediscala is to start a transaction outside of a redis connection.
-We use the [TransactionBuilder](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/commands/TransactionBuilder.html) to store call to redis commands (and for each command we give back a future).
+We use the [TransactionBuilder](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/commands/TransactionBuilder.html) to store call to redis commands (and for each command we give back a future).
 When `exec` is called, `TransactionBuilder` will build and send all the commands together to the server. Then the futures will be completed.
 By doing that we can use a normal connection with pipelining, and avoiding to trap a command from outside, in the transaction...
 
@@ -145,8 +145,8 @@ You can fork with : `git clone git@github.com:rediscala/rediscala-demo.git` then
 
 ### Pub/Sub
 
-You can use a case class with callbacks [RedisPubSub](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisPubSub.html)
-or extend the actor [RedisSubscriberActor](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/actors/RedisSubscriberActor.html) as shown in the example below
+You can use a case class with callbacks [RedisPubSub](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/RedisPubSub.html)
+or extend the actor [RedisSubscriberActor](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/actors/RedisSubscriberActor.html) as shown in the example below
 
 ```scala
 object ExamplePubSub {
@@ -207,20 +207,20 @@ Full example: [ExampleScripting](https://github.com/rediscala/rediscala-demo/blo
 
 ### Redis Sentinel
 
-[SentinelClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelClient.html) connect to a redis sentinel server.
+[SentinelClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/SentinelClient.html) connect to a redis sentinel server.
 
-[SentinelMonitoredRedisClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelMonitoredRedisClient.html) connect to a sentinel server to find the master addresse then start a connection. In case the master change your RedisClient connection will automatically connect to the new master server.
-If you are using a blocking client, you can use [SentinelMonitoredRedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/SentinelMonitoredRedisBlockingClient.html)
+[SentinelMonitoredRedisClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/SentinelMonitoredRedisClient.html) connect to a sentinel server to find the master addresse then start a connection. In case the master change your RedisClient connection will automatically connect to the new master server.
+If you are using a blocking client, you can use [SentinelMonitoredRedisBlockingClient](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/SentinelMonitoredRedisBlockingClient.html)
 
 ### Pool
 
-[RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientPool.html) connect to a pool of redis servers.
+[RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/RedisClientPool.html) connect to a pool of redis servers.
 Redis commands are dispatched to redis connection in a round robin way.
 
 ### Master Slave
 
-[RedisClientMasterSlaves](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientMasterSlaves.html) connect to a master and a pool of slaves.
-The `write` commands are sent to the master, while the read commands are sent to the slaves in the [RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/RedisClientPool.html)
+[RedisClientMasterSlaves](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/RedisClientMasterSlaves.html) connect to a master and a pool of slaves.
+The `write` commands are sent to the master, while the read commands are sent to the slaves in the [RedisClientPool](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/RedisClientPool.html)
 
 ### Config Which Dispatcher to Use
 
@@ -232,11 +232,11 @@ implicit val redisDispatcher = RedisDispatcher("akka.actor.default-dispatcher")
 
 ### ByteStringSerializer ByteStringDeserializer ByteStringFormatter
 
-[ByteStringSerializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringSerializer.html)
+[ByteStringSerializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/ByteStringSerializer.html)
 
-[ByteStringDeserializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringDeserializer.html)
+[ByteStringDeserializer](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/ByteStringDeserializer.html)
 
-[ByteStringFormatter](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.10.0/redis/ByteStringFormatter.html)
+[ByteStringFormatter](https://javadoc.io/doc/io.github.rediscala/rediscala_3/1.14.1-pekko/redis/ByteStringFormatter.html)
 
 ```scala
 case class DumbClass(s1: String, s2: String)
