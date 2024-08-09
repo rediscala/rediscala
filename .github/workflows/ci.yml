@@ -11,18 +11,10 @@ jobs:
       matrix:
         java:
           - 8
+          - 21
         project:
-          - pekko2_12
-          - akka2_12
-          - pekko2_13
-          - akka2_13
-          - pekko3
-          - akka3
-        include:
-          - java: 21
-            project: pekko2_13
-          - java: 21
-            project: akka2_13
+          - 2_13
+          - 3
     env:
       REDIS_HOME: "redis-6.2.14/src"
     steps:
@@ -33,9 +25,9 @@ jobs:
         distribution: adopt
     - uses: coursier/cache-action@v6
     - run: ./install-redis.sh
-    - run: sbt scalafmtSbtCheck "project rediscala-${{ matrix.project }}" scalafmtCheckAll Test/compile
+    - run: sbt scalafmtSbtCheck "project rediscala${{ matrix.project }}" scalafmtCheckAll Test/compile
     - uses: nick-invision/retry@v3
       with:
         timeout_minutes: 20
         max_attempts: 3
-        command: sbt "project rediscala-${{ matrix.project }}" "onFailure testQuick" test
+        command: sbt "project rediscala${{ matrix.project }}" "onFailure testQuick" test
