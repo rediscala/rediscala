@@ -2,9 +2,6 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
 
-val pekko = ActorLibCross("-pekko", "-pekko")
-val akka = ActorLibCross("-akka", "-akka")
-
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
@@ -23,7 +20,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-def scalaVersions = Seq("2.12.19", "2.13.14", "3.3.3")
+def scalaVersions = Seq("2.13.14", "3.3.3")
 
 lazy val commonSettings = Def.settings(
   organization := "io.github.rediscala",
@@ -61,8 +58,6 @@ lazy val standardSettings = Def.settings(
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 13)) =>
         Seq("-Xsource:3-cross")
-      case Some((2, 12)) =>
-        Seq("-Xsource:3")
       case _ =>
         Nil
     }
@@ -110,28 +105,6 @@ lazy val standardSettings = Def.settings(
       baseSourceUrl + branch + "€{FILE_PATH}.scala"
     )
   },
-  version := {
-    if (baseDirectory.value == (LocalRootProject / baseDirectory).value) {
-      version.value
-    } else {
-      val v = version.value
-      val snapshotSuffix = "-SNAPSHOT"
-      val axes = virtualAxes.?.value.getOrElse(Nil)
-      val suffix = (axes.contains(pekko), axes.contains(akka)) match {
-        case (true, false) =>
-          "-pekko"
-        case (false, true) =>
-          "-akka"
-        case _ =>
-          sys.error(axes.toString)
-      }
-      if (v.endsWith(snapshotSuffix)) {
-        v.dropRight(snapshotSuffix.length) + suffix + snapshotSuffix
-      } else {
-        v + suffix
-      }
-    }
-  },
 )
 
 lazy val rediscala = projectMatrix
@@ -139,46 +112,16 @@ lazy val rediscala = projectMatrix
   .in(file("."))
   .settings(
     standardSettings,
-    libraryDependencies ++= {
-      if (scalaBinaryVersion.value == "2.12") {
-        Seq(
-          "org.scala-lang.modules" %% "scala-collection-compat" % "2.12.0" % Test,
-        )
-      } else {
-        Nil
-      }
-    },
     libraryDependencies ++= Seq(
       "com.dimafeng" %% "testcontainers-scala" % "0.41.4" % Test,
       "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
       "org.scalacheck" %% "scalacheck" % "1.18.0" % Test,
+      "org.apache.pekko" %% "pekko-actor" % "1.0.3",
+      "org.apache.pekko" %% "pekko-testkit" % "1.0.3" % Test,
     )
   )
   .jvmPlatform(
     scalaVersions = scalaVersions,
-    axisValues = Seq(pekko),
-    settings = Def.settings(
-      Compile / unmanagedResourceDirectories += {
-        (Compile / scalaSource).value.getParentFile / "resources-pekko"
-      },
-      libraryDependencies ++= Seq(
-        "org.apache.pekko" %% "pekko-actor" % "1.0.3",
-        "org.apache.pekko" %% "pekko-testkit" % "1.0.3" % Test,
-      )
-    ),
-  )
-  .jvmPlatform(
-    scalaVersions = scalaVersions,
-    axisValues = Seq(akka),
-    settings = Def.settings(
-      Compile / unmanagedResourceDirectories += {
-        (Compile / scalaSource).value.getParentFile / "resources-akka"
-      },
-      libraryDependencies ++= Seq(
-        "com.typesafe.akka" %% "akka-actor" % "2.6.21",
-        "com.typesafe.akka" %% "akka-testkit" % "2.6.21" % Test,
-      )
-    ),
   )
 
 Compile / sources := Nil
