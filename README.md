@@ -57,11 +57,11 @@ import redis.RedisClient
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 
 object Main {
   def main(args: Array[String]): Unit = {
-    implicit val akkaSystem: ActorSystem = ActorSystem()
+    implicit val system: ActorSystem = ActorSystem()
 
     val redis = RedisClient()
 
@@ -72,7 +72,7 @@ object Main {
     })
     Await.result(futurePong, 5.seconds)
 
-    akkaSystem.shutdown()
+    system.shutdown()
   }
 }
 ```
@@ -151,20 +151,20 @@ or extend the actor [RedisSubscriberActor](https://javadoc.io/doc/io.github.redi
 ```scala
 object ExamplePubSub {
   def main(args: Array[String]): Unit = {
-    implicit val akkaSystem: ActorSystem = akka.actor.ActorSystem()
+    implicit val system: ActorSystem = org.apache.pekko.actor.ActorSystem()
 
     val redis = RedisClient()
 
     // publish after 2 seconds every 2 or 5 seconds
-    akkaSystem.scheduler.schedule(2.seconds, 2.seconds)(redis.publish("time", System.currentTimeMillis()))
-    akkaSystem.scheduler.schedule(2.seconds, 5.seconds)(redis.publish("pattern.match", "pattern value"))
-    // shutdown Akka in 20 seconds
-    akkaSystem.scheduler.scheduleOnce(20.seconds)(akkaSystem.shutdown())
+    system.scheduler.schedule(2.seconds, 2.seconds)(redis.publish("time", System.currentTimeMillis()))
+    system.scheduler.schedule(2.seconds, 5.seconds)(redis.publish("pattern.match", "pattern value"))
+    // shutdown pekko in 20 seconds
+    system.scheduler.scheduleOnce(20.seconds)(system.shutdown())
 
     val channels = Seq("time")
     val patterns = Seq("pattern.*")
     // create SubscribeActor instance
-    akkaSystem.actorOf(Props(classOf[SubscribeActor], channels, patterns).withDispatcher("rediscala.rediscala-client-worker-dispatcher"))
+    system.actorOf(Props(classOf[SubscribeActor], channels, patterns).withDispatcher("rediscala.rediscala-client-worker-dispatcher"))
   }
 }
 
@@ -227,7 +227,7 @@ The `write` commands are sent to the master, while the read commands are sent to
 By default, the actors in this project will use the dispatcher `rediscala.rediscala-client-worker-dispatcher`. If you want to use another dispatcher, just config the implicit value of `redisDispatcher`:
 
 ```scala
-implicit val redisDispatcher = RedisDispatcher("akka.actor.default-dispatcher")
+implicit val redisDispatcher = RedisDispatcher("pekko.actor.default-dispatcher")
 ```
 
 ### ByteStringSerializer ByteStringDeserializer ByteStringFormatter
