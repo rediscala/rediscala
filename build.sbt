@@ -20,7 +20,9 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-def scalaVersions = Seq("2.13.14", "3.3.3")
+def Scala213 = "2.13.14"
+
+def scalaVersions = Seq(Scala213, "3.3.3")
 
 lazy val commonSettings = Def.settings(
   organization := "io.github.rediscala",
@@ -105,6 +107,13 @@ lazy val standardSettings = Def.settings(
       baseSourceUrl + branch + "€{FILE_PATH}.scala"
     )
   },
+  libraryDependencies ++= Seq(
+    "com.dimafeng" %% "testcontainers-scala" % "0.41.4" % Test,
+    "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
+    "org.scalacheck" %% "scalacheck" % "1.18.0" % Test,
+    "org.apache.pekko" %% "pekko-actor" % "1.0.3",
+    "org.apache.pekko" %% "pekko-testkit" % "1.0.3" % Test,
+  )
 )
 
 lazy val rediscala = projectMatrix
@@ -112,18 +121,13 @@ lazy val rediscala = projectMatrix
   .in(file("."))
   .settings(
     standardSettings,
-    libraryDependencies ++= Seq(
-      "com.dimafeng" %% "testcontainers-scala" % "0.41.4" % Test,
-      "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
-      "org.scalacheck" %% "scalacheck" % "1.18.0" % Test,
-      "org.apache.pekko" %% "pekko-actor" % "1.0.3",
-      "org.apache.pekko" %% "pekko-testkit" % "1.0.3" % Test,
-    )
   )
   .jvmPlatform(
     scalaVersions = scalaVersions,
   )
 
+standardSettings
 Compile / sources := Nil
 Test / sources := Nil
 publish / skip := true
+scalaVersion := Scala213
