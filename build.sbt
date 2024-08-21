@@ -78,25 +78,6 @@ lazy val standardSettings = Def.settings(
   },
   autoAPIMappings := true,
   Test / fork := true,
-  TaskKey[Unit]("runDockerTests") := Def.taskDyn {
-    val dockerTests = (Test / compile).value
-      .asInstanceOf[sbt.internal.inc.Analysis]
-      .apis
-      .internal
-      .collect {
-        case (className, analyzed) if analyzed.api.classApi.structure.parents.collect { case p: xsbti.api.Projection =>
-              p.id
-            }.exists(Set("RedisDockerServer")) =>
-          className
-      }
-      .toList
-      .sorted
-    assert(dockerTests.nonEmpty)
-    streams.value.log.info(dockerTests.mkString("testOnly ", ", ", ""))
-    Def.task {
-      (Test / testOnly).toTask(dockerTests.mkString(" ", " ", "")).value
-    }
-  }.value,
   Compile / doc / scalacOptions ++= {
     val branch = {
       if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
@@ -121,6 +102,25 @@ lazy val rediscala = projectMatrix
   .in(file("."))
   .settings(
     standardSettings,
+    TaskKey[Unit]("runDockerTests") := Def.taskDyn {
+      val dockerTests = (Test / compile).value
+        .asInstanceOf[sbt.internal.inc.Analysis]
+        .apis
+        .internal
+        .collect {
+          case (className, analyzed) if analyzed.api.classApi.structure.parents.collect { case p: xsbti.api.Projection =>
+                p.id
+              }.exists(Set("RedisDockerServer")) =>
+            className
+        }
+        .toList
+        .sorted
+      assert(dockerTests.nonEmpty)
+      streams.value.log.info(dockerTests.mkString("testOnly ", ", ", ""))
+      Def.task {
+        (Test / testOnly).toTask(dockerTests.mkString(" ", " ", "")).value
+      }
+    }.value,
   )
   .jvmPlatform(
     scalaVersions = scalaVersions,
