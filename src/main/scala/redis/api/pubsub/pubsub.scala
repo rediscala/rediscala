@@ -3,10 +3,6 @@ package redis.api.pubsub
 import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisProtocolRequest
 
-case class Message(channel: String, data: ByteString)
-
-case class PMessage(patternMatched: String, channel: String, data: ByteString)
-
 sealed trait SubscribeMessage extends Product with Serializable {
   def cmd: String
 
