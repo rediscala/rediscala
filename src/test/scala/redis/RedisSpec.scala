@@ -13,7 +13,6 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import scala.jdk.CollectionConverters.*
 import scala.concurrent.ExecutionContext
 import scala.io.Source
-import scala.sys.process.ProcessIO
 import scala.sys.process.*
 import scala.util.Try
 import scala.util.control.NonFatal
