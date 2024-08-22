@@ -113,12 +113,14 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
   def dispatchExecReply(multiBulk: MultiBulk) = {
     multiBulk.responses
       .map(replies => {
-        (replies, operations).zipped.map((reply, operation) => {
-          reply match {
-            case e: Error => operation.completeFailed(ReplyErrorException(e.toString()))
-            case _ => operation.tryCompleteSuccess(reply)
-          }
-        })
+        replies
+          .lazyZip(operations)
+          .map((reply, operation) => {
+            reply match {
+              case e: Error => operation.completeFailed(ReplyErrorException(e.toString()))
+              case _ => operation.tryCompleteSuccess(reply)
+            }
+          })
       })
       .getOrElse {
         operations.foreach(_.completeFailed(TransactionWatchException()))
