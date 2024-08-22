@@ -3,17 +3,9 @@ package redis.api.clusters
 import redis.RediscalaCompat.util.ByteString
 import redis.RedisCommand
 import redis.protocol.DecodeResult
-import redis.protocol.Bulk
 import redis.protocol.MultiBulk
 import redis.protocol.RedisProtocolReply
 import redis.protocol.RedisReply
-
-case class ClusterNode(host: String, port: Int, id: String)
-case class ClusterSlot(begin: Int, end: Int, master: ClusterNode, slaves: Seq[ClusterNode]) extends Comparable[ClusterSlot] {
-  override def compareTo(x: ClusterSlot): Int = {
-    this.begin.compare(x.begin)
-  }
-}
 
 case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
   def isMasterOnly = false
@@ -69,44 +61,5 @@ case class ClusterSlots() extends RedisCommand[MultiBulk, Seq[ClusterSlot]] {
     case bs =>
       RedisProtocolReply.decodeReplyMultiBulk(bs)
 
-  }
-}
-
-case class ClusterInfo() extends RedisCommand[Bulk, Map[String, String]] {
-  def isMasterOnly = false
-  val encodedRequest: ByteString = encode("CLUSTER INFO")
-  def decodeReply(b: Bulk): Map[String, String] = {
-    b.response.map(_.utf8String.split("\r\n").map(_.split(":")).map(s => (s(0), s(1))).toMap).getOrElse(Map.empty)
-  }
-  override val decodeRedisReply: PartialFunction[ByteString, DecodeResult[Bulk]] = { case s =>
-    RedisProtocolReply.decodeReplyBulk(s)
-  }
-}
-case class ClusterNodeInfo(
-  id: String,
-  ip_port: String,
-  flags: String,
-  master: String,
-  ping_sent: Long,
-  pong_recv: Long,
-  config_epoch: Long,
-  link_state: String,
-  slots: Array[String]
-)
-case class ClusterNodes() extends RedisCommand[Bulk, Array[ClusterNodeInfo]] {
-  def isMasterOnly = false
-  val encodedRequest: ByteString = encode("CLUSTER NODES")
-  def decodeReply(b: Bulk): Array[ClusterNodeInfo] = {
-    b.response
-      .map(
-        _.utf8String
-          .split("\n")
-          .map(_.split(" "))
-          .map(s => ClusterNodeInfo(s(0), s(1), s(2), s(3), s(4).toLong, s(5).toLong, s(6).toLong, s(7), s.drop(8)))
-      )
-      .getOrElse(Array.empty)
-  }
-  override val decodeRedisReply: PartialFunction[ByteString, DecodeResult[Bulk]] = { case s =>
-    RedisProtocolReply.decodeReplyBulk(s)
   }
 }

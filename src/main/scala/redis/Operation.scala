@@ -27,5 +27,3 @@ case class Operation[RedisReplyT <: RedisReply, T](redisCommand: RedisCommand[Re
 
   def completeFailed(t: Throwable) = promise.failure(t)
 }
-
-case class Transaction(commands: Seq[Operation[?, ?]])
