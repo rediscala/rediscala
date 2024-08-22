@@ -14,7 +14,7 @@ import redis.RediscalaCompat.io.Tcp.Connect
 import redis.RediscalaCompat.io.Tcp.CommandFailed
 import redis.RediscalaCompat.io.Tcp.Received
 import redis.RediscalaCompat.io.IO
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.duration.*
 
 abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Boolean => Unit, connectTimeout: Option[FiniteDuration] = None)
     extends Actor
@@ -23,8 +23,6 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   private var currAddress = address
 
   import context.*
-  import scala.concurrent.duration.DurationInt
-  import scala.concurrent.duration.FiniteDuration
 
   val tcp = IO(Tcp)(context.system)
 
