@@ -190,7 +190,3 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   }
 
 }
-
-object WriteAck extends Event
-
-object Reconnect
