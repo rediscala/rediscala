@@ -5,11 +5,9 @@ import java.util.concurrent.TimeUnit
 import redis.RediscalaCompat.actor.ActorRef
 import redis.RediscalaCompat.actor.ActorSystem
 import redis.RediscalaCompat.event.Logging
-import redis.RediscalaCompat.util.ByteString
 import redis.api.clusters.ClusterNode
 import redis.api.clusters.ClusterSlot
 import redis.protocol.RedisReply
-import redis.util.CRC16
 import scala.concurrent.duration.Duration
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.atomic.AtomicBoolean
@@ -185,45 +183,4 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
   }
 
   Await.result(asyncRefreshClusterSlots(force = true), Duration(10, TimeUnit.SECONDS))
-}
-
-object RedisComputeSlot {
-  val MAX_SLOTS = 16384
-
-  def hashSlot(key: String) = {
-    val indexBegin = key.indexOf("{")
-    val keytag = if (indexBegin != -1) {
-      val indexEnd = key.indexOf("}", indexBegin)
-      if (indexEnd != -1) {
-        key.substring(indexBegin + 1, indexEnd)
-      } else {
-        key
-      }
-    } else {
-      key
-    }
-    CRC16.crc16(keytag) % MAX_SLOTS
-  }
-
-}
-
-trait ClusterKey {
-  def getSlot(): Int
-}
-
-object MultiClusterKey {
-  def getHeadSlot[K](redisKey: ByteStringSerializer[K], keys: Seq[K]): Int = {
-    RedisComputeSlot.hashSlot(redisKey.serialize(keys.headOption.getOrElse(throw new RuntimeException("operation has not keys"))).utf8String)
-  }
-}
-
-abstract class SimpleClusterKey[K](implicit redisKey: ByteStringSerializer[K]) extends ClusterKey {
-  val key: K
-  val keyAsString: ByteString = redisKey.serialize(key)
-  def getSlot(): Int = RedisComputeSlot.hashSlot(keyAsString.utf8String)
-}
-
-abstract class MultiClusterKey[K](implicit redisKey: ByteStringSerializer[K]) extends ClusterKey {
-  val keys: Seq[K]
-  def getSlot(): Int = MultiClusterKey.getHeadSlot(redisKey, keys)
 }
