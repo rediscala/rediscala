@@ -1,9 +1,9 @@
 package redis
 
-import redis.RediscalaCompat.actor.*
-import scala.concurrent.*
 import java.net.InetSocketAddress
+import redis.RediscalaCompat.actor.*
 import redis.actors.RedisClientActor
+import scala.concurrent.*
 import scala.concurrent.duration.FiniteDuration
 
 abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisDispatcher, connectTimeout: Option[FiniteDuration] = None)

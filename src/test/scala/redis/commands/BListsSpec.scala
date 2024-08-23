@@ -1,9 +1,9 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 import redis.api.ListDirection
+import scala.concurrent.Await
 import scala.concurrent.duration.*
 
 class BListsSpec extends RedisDockerServer {

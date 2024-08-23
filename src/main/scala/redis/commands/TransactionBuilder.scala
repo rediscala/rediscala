@@ -1,11 +1,11 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Promise
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
 import redis.RediscalaCompat.actor.*
 import redis.protocol.MultiBulk
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.Promise
 
 case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionContext: ExecutionContext) extends BufferedRequest with RedisCommands {
 

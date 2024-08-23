@@ -1,9 +1,9 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
+import scala.concurrent.Await
 import scala.util.Success
 
 class HashesSpec extends RedisDockerServer {

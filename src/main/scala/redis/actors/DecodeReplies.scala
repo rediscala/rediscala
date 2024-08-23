@@ -1,9 +1,9 @@
 package redis.actors
 
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.DecodeResult
 import redis.protocol.RedisProtocolReply
 import redis.protocol.RedisReply
-import redis.RediscalaCompat.util.ByteString
 import scala.annotation.tailrec
 
 trait DecodeReplies {

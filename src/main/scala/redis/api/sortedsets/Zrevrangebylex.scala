@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 
 case class Zrevrangebylex[K, R](key: K, max: String, min: String, limit: Option[(Long, Long)] = None)(implicit
   keySeria: ByteStringSerializer[K],

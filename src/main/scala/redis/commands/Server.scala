@@ -1,9 +1,9 @@
 package redis.commands
 
 import redis.Request
+import redis.api.ShutdownModifier
 import redis.api.servers.*
 import scala.concurrent.Future
-import redis.api.ShutdownModifier
 
 trait Server extends Request {
   def bgrewriteaof(): Future[String] = send(Bgrewriteaof)

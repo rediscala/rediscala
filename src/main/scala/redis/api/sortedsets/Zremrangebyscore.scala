@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 import redis.api.Limit
 
 case class Zremrangebyscore[K](key: K, min: Limit, max: Limit)(implicit keySeria: ByteStringSerializer[K])

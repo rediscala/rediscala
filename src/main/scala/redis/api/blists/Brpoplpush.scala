@@ -1,11 +1,11 @@
 package redis.api.blists
 
-import scala.concurrent.duration.Duration
-import scala.concurrent.duration.FiniteDuration
 import redis.*
 import redis.RediscalaCompat.util.ByteString
-import redis.protocol.RedisReply
 import redis.protocol.Bulk
+import redis.protocol.RedisReply
+import scala.concurrent.duration.Duration
+import scala.concurrent.duration.FiniteDuration
 
 case class Brpoplpush[KS, KD, R](source: KS, destination: KD, timeout: FiniteDuration = Duration.Zero)(implicit
   bsSource: ByteStringSerializer[KS],

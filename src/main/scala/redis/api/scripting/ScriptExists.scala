@@ -1,8 +1,8 @@
 package redis.api.scripting
 
-import redis.protocol.MultiBulk
 import redis.*
 import redis.RediscalaCompat.util.ByteString
+import redis.protocol.MultiBulk
 
 case class ScriptExists(sha1: Seq[String]) extends RedisCommandMultiBulk[Seq[Boolean]] {
   def isMasterOnly = true

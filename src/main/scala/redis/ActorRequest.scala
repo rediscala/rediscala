@@ -1,10 +1,10 @@
 package redis
 
+import redis.RediscalaCompat.actor.ActorRef
 import redis.protocol.RedisReply
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Promise
 import scala.concurrent.Future
-import redis.RediscalaCompat.actor.ActorRef
+import scala.concurrent.Promise
 
 trait ActorRequest {
   implicit val executionContext: ExecutionContext

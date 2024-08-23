@@ -1,8 +1,8 @@
 package redis.commands
 
-import redis.api.hyperloglog.*
 import redis.ByteStringSerializer
 import redis.Request
+import redis.api.hyperloglog.*
 import scala.concurrent.Future
 
 trait HyperLogLog extends Request {

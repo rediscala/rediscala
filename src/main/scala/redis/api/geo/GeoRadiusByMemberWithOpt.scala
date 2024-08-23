@@ -1,7 +1,7 @@
 package redis.api.geo
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 import redis.api.geo.DistUnits.Measurement
 import redis.api.geo.GeoOptions.WithOption
 import redis.protocol.*

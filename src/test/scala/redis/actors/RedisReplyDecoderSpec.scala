@@ -1,20 +1,20 @@
 package redis.actors
 
-import redis.RediscalaCompat.actor.*
-import org.scalatest.wordspec.AnyWordSpecLike
-import redis.RediscalaCompat.util.ByteString
-import redis.api.hashes.Hgetall
-import redis.protocol.MultiBulk
-import scala.concurrent.Await
-import scala.concurrent.Promise
-import scala.collection.mutable
-import java.net.InetSocketAddress
 import com.typesafe.config.ConfigFactory
-import redis.Redis
+import java.net.InetSocketAddress
+import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Operation
-import redis.api.connection.Ping
+import redis.Redis
+import redis.RediscalaCompat.actor.*
+import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaTestCompat
 import redis.RediscalaTestCompat.testkit.*
+import redis.api.connection.Ping
+import redis.api.hashes.Hgetall
+import redis.protocol.MultiBulk
+import scala.collection.mutable
+import scala.concurrent.Await
+import scala.concurrent.Promise
 
 class RedisReplyDecoderSpec
     extends TestKit(

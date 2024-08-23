@@ -132,3 +132,7 @@ Compile / sources := Nil
 Test / sources := Nil
 publish / skip := true
 scalaVersion := Scala213
+
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+scalafixAll := {}

@@ -1,8 +1,8 @@
 package redis
 
 import com.dimafeng.testcontainers.GenericContainer
-import scala.concurrent.Future
 import org.scalatest.BeforeAndAfterAll
+import scala.concurrent.Future
 
 abstract class RedisDockerServer extends RedisHelper with BeforeAndAfterAll {
 

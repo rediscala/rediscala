@@ -1,8 +1,8 @@
 package redis.protocol
 
-import redis.RediscalaCompat.util.ByteString
-import java.nio.charset.Charset
 import java.lang.System.arraycopy
+import java.nio.charset.Charset
+import redis.RediscalaCompat.util.ByteString
 
 object RedisProtocolRequest {
   val UTF8_CHARSET = Charset.forName("UTF-8")

@@ -3,9 +3,9 @@ package redis.commands
 import redis.ByteStringDeserializer
 import redis.Request
 import redis.api.ListDirection
+import redis.api.blists.*
 import scala.concurrent.Future
 import scala.concurrent.duration.*
-import redis.api.blists.*
 
 /**
  * Blocking commands on the Lists

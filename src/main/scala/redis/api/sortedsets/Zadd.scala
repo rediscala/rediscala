@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 import redis.api.ZaddOption
 
 case class Zadd[K, V](key: K, options: Seq[ZaddOption], scoreMembers: Seq[(Double, V)])(implicit

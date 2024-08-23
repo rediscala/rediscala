@@ -2,10 +2,10 @@ package redis.api.hashes
 
 import redis.*
 import redis.RediscalaCompat.util.ByteString
-import scala.collection.mutable
-import scala.annotation.tailrec
-import redis.protocol.RedisReply
 import redis.protocol.MultiBulk
+import redis.protocol.RedisReply
+import scala.annotation.tailrec
+import scala.collection.mutable
 
 case class Hgetall[K, R](key: K)(implicit redisKey: ByteStringSerializer[K], deserializerR: ByteStringDeserializer[R])
     extends SimpleClusterKey[K]

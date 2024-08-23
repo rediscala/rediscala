@@ -1,19 +1,19 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Promise
-import scala.concurrent.ExecutionContext
 import redis.RediscalaCompat.actor.*
-import scala.collection.immutable.Queue
+import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
-import redis.protocol.*
-import redis.protocol.MultiBulk
-import scala.util.Failure
-import scala.util.Success
-import redis.api.transactions.Watch
 import redis.api.transactions.Exec
 import redis.api.transactions.Multi
-import redis.RediscalaCompat.util.ByteString
+import redis.api.transactions.Watch
+import redis.protocol.*
+import redis.protocol.MultiBulk
+import scala.collection.immutable.Queue
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Promise
+import scala.util.Failure
+import scala.util.Success
 
 case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]], redisConnection: ActorRef)(implicit
   val executionContext: ExecutionContext

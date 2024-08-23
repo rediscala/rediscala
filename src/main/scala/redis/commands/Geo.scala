@@ -1,12 +1,12 @@
 package redis.commands
 
 import redis.Request
+import redis.api.geo.*
 import redis.api.geo.DistUnits.Kilometer
 import redis.api.geo.DistUnits.Measurement
 import redis.api.geo.DistUnits.Meter
 import redis.api.geo.GeoOptions.WithDist
 import redis.api.geo.GeoOptions.WithOption
-import redis.api.geo.*
 import scala.concurrent.Future
 
 trait Geo extends Request {

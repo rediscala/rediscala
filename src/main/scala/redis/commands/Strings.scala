@@ -1,9 +1,9 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Future
-import redis.api.strings.*
 import redis.api.*
+import redis.api.strings.*
+import scala.concurrent.Future
 
 trait Strings extends Request {
 

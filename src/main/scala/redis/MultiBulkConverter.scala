@@ -1,9 +1,9 @@
 package redis
 
 import redis.protocol.*
-import scala.util.Try
 import scala.annotation.tailrec
 import scala.collection.mutable
+import scala.util.Try
 
 object MultiBulkConverter {
 

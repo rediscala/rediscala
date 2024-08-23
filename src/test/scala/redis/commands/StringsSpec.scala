@@ -1,10 +1,10 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Await
-import scala.concurrent.Future
 import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
+import scala.concurrent.Await
+import scala.concurrent.Future
 
 class StringsSpec extends RedisDockerServer {
 

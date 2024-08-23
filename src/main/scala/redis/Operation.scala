@@ -1,9 +1,9 @@
 package redis
 
-import scala.concurrent.Promise
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.DecodeResult
 import redis.protocol.RedisReply
-import redis.RediscalaCompat.util.ByteString
+import scala.concurrent.Promise
 
 case class Operation[RedisReplyT <: RedisReply, T](redisCommand: RedisCommand[RedisReplyT, T], promise: Promise[T]) {
   def decodeRedisReplyThenComplete(bs: ByteString): DecodeResult[Unit] = {

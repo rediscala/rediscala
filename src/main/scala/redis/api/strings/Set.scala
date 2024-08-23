@@ -2,9 +2,9 @@ package redis.api.strings
 
 import redis.*
 import redis.RediscalaCompat.util.ByteString
+import redis.protocol.RedisProtocolRequest
 import redis.protocol.RedisReply
 import redis.protocol.Status
-import redis.protocol.RedisProtocolRequest
 
 case class Set[K, V](key: K, value: V, exSeconds: Option[Long] = None, pxMilliseconds: Option[Long] = None, NX: Boolean = false, XX: Boolean = false)(
   implicit

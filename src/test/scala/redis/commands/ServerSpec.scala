@@ -1,10 +1,10 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Await
 import redis.actors.InvalidRedisReply
 import redis.actors.ReplyErrorException
 import redis.api.NOSAVE
+import scala.concurrent.Await
 
 class ServerSpec extends RedisStandaloneServer {
 

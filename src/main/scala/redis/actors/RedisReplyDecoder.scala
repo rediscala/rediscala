@@ -1,14 +1,14 @@
 package redis.actors
 
-import redis.RediscalaCompat.actor.Actor
-import scala.collection.mutable
-import redis.protocol.FullyDecoded
-import redis.protocol.DecodeResult
-import redis.protocol.RedisProtocolReply
-import redis.RediscalaCompat.util.ByteString
-import redis.RediscalaCompat.event.Logging
-import scala.annotation.tailrec
 import redis.Operation
+import redis.RediscalaCompat.actor.Actor
+import redis.RediscalaCompat.event.Logging
+import redis.RediscalaCompat.util.ByteString
+import redis.protocol.DecodeResult
+import redis.protocol.FullyDecoded
+import redis.protocol.RedisProtocolReply
+import scala.annotation.tailrec
+import scala.collection.mutable
 
 class RedisReplyDecoder() extends Actor {
 
