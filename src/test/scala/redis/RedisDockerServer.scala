@@ -6,8 +6,8 @@ import org.scalatest.BeforeAndAfterAll
 
 abstract class RedisDockerServer extends RedisHelper with BeforeAndAfterAll {
 
-  private[this] def exportPort = 6379
-  private[this] val container = GenericContainer(
+  private def exportPort = 6379
+  private val container = GenericContainer(
     dockerImage = "redis:6.2.14",
     exposedPorts = Seq(exportPort)
   )
