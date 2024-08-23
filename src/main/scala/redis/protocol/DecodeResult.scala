@@ -7,7 +7,7 @@ sealed trait DecodeResult[+A] {
 
   def isFullyDecoded: Boolean
 
-  def foreach[B](f: A => Unit): DecodeResult[Unit] = this match {
+  def foreach(f: A => Unit): DecodeResult[Unit] = this match {
     case p @ PartiallyDecoded(_, _) => PartiallyDecoded(ByteString(), bs => p.f(p.rest ++ bs).foreach(f))
     case fd @ FullyDecoded(_, _) => FullyDecoded(f(fd.result), fd.rest)
   }
