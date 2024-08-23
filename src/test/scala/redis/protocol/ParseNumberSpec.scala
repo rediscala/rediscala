@@ -5,8 +5,6 @@ import redis.RediscalaCompat.util.ByteString
 
 class ParseNumberSpec extends AnyWordSpec {
 
-  import java.lang.Integer
-
   "ParseNumber.parseInt" should {
     "ok" in {
       assert(ParseNumber.parseInt(ByteString("0")) == 0)
@@ -39,13 +37,13 @@ class ParseNumberSpec extends AnyWordSpec {
     }
 
     "limit min" in {
-      val l1: Long = Integer.MIN_VALUE
+      val l1: Long = java.lang.Integer.MIN_VALUE
       val l = l1 - 1
       assertThrows[NumberFormatException] { ParseNumber.parseInt(ByteString(l.toString)) }
     }
 
     "limit max" in {
-      val l1: Long = Integer.MAX_VALUE
+      val l1: Long = java.lang.Integer.MAX_VALUE
       val l = l1 + 1
       assertThrows[NumberFormatException] { ParseNumber.parseInt(ByteString(l.toString)) }
     }
