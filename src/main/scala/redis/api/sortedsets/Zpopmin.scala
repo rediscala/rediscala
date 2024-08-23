@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 
 case class Zpopmin[K, R](key: K, count: Long)(implicit
   keySeria: ByteStringSerializer[K],

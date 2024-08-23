@@ -1,14 +1,14 @@
 package redis
 
-import scala.concurrent.Await
-import redis.api.pubsub.*
-import redis.actors.RedisSubscriberActor
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.Props
 import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaCompat.actor.Props
+import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaTestCompat.testkit.TestActorRef
 import redis.RediscalaTestCompat.testkit.TestProbe
-import redis.RediscalaCompat.util.ByteString
+import redis.actors.RedisSubscriberActor
+import redis.api.pubsub.*
+import scala.concurrent.Await
 
 class RedisPubSubSpec extends RedisDockerServer {
 

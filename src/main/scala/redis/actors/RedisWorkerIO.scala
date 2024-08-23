@@ -1,19 +1,19 @@
 package redis.actors
 
+import java.net.InetSocketAddress
+import redis.RediscalaCompat.actor.Actor
 import redis.RediscalaCompat.actor.ActorLogging
 import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.Actor
-import redis.RediscalaCompat.io.Tcp
-import redis.RediscalaCompat.util.ByteStringBuilder
-import redis.RediscalaCompat.util.ByteString
-import java.net.InetSocketAddress
-import redis.RediscalaCompat.io.Tcp.*
-import redis.RediscalaCompat.io.Tcp.Connected
-import redis.RediscalaCompat.io.Tcp.Register
-import redis.RediscalaCompat.io.Tcp.Connect
-import redis.RediscalaCompat.io.Tcp.CommandFailed
-import redis.RediscalaCompat.io.Tcp.Received
 import redis.RediscalaCompat.io.IO
+import redis.RediscalaCompat.io.Tcp
+import redis.RediscalaCompat.io.Tcp.*
+import redis.RediscalaCompat.io.Tcp.CommandFailed
+import redis.RediscalaCompat.io.Tcp.Connect
+import redis.RediscalaCompat.io.Tcp.Connected
+import redis.RediscalaCompat.io.Tcp.Received
+import redis.RediscalaCompat.io.Tcp.Register
+import redis.RediscalaCompat.util.ByteString
+import redis.RediscalaCompat.util.ByteStringBuilder
 import scala.concurrent.duration.*
 
 abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Boolean => Unit, connectTimeout: Option[FiniteDuration] = None)

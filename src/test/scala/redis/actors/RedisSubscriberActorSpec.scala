@@ -1,15 +1,15 @@
 package redis.actors
 
-import redis.RediscalaTestCompat.testkit.*
-import redis.RediscalaCompat.actor.*
-import org.scalatest.wordspec.AnyWordSpecLike
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.util.ByteString
-import redis.protocol.RedisProtocolRequest
+import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Redis
+import redis.RediscalaCompat.actor.*
 import redis.RediscalaCompat.io.Tcp.*
+import redis.RediscalaCompat.util.ByteString
+import redis.RediscalaTestCompat.testkit.*
 import redis.api.pubsub.Message
 import redis.api.pubsub.PMessage
+import redis.protocol.RedisProtocolRequest
 
 class RedisSubscriberActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 

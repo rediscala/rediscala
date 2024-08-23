@@ -1,11 +1,11 @@
 package redis
 
+import java.util.concurrent.atomic.AtomicInteger
+import redis.RediscalaCompat.actor.ActorRef
 import redis.protocol.RedisReply
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Promise
 import scala.concurrent.Future
-import redis.RediscalaCompat.actor.ActorRef
-import java.util.concurrent.atomic.AtomicInteger
+import scala.concurrent.Promise
 
 trait RoundRobinPoolRequest {
   implicit val executionContext: ExecutionContext

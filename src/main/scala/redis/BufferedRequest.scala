@@ -1,10 +1,10 @@
 package redis
 
 import redis.protocol.RedisReply
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Promise
-import scala.concurrent.Future
 import scala.collection.immutable.Queue
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
+import scala.concurrent.Promise
 
 trait BufferedRequest {
   implicit val executionContext: ExecutionContext

@@ -5,18 +5,18 @@ import java.io.OutputStream
 import java.net.Socket
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaTestCompat.testkit.TestKit
-import redis.RediscalaCompat.util.Timeout
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
-import scala.jdk.CollectionConverters.*
+import redis.RedisServerHelper.*
+import redis.RediscalaCompat.actor.ActorSystem
+import redis.RediscalaCompat.util.Timeout
+import redis.RediscalaTestCompat.testkit.TestKit
 import scala.concurrent.ExecutionContext
 import scala.io.Source
+import scala.jdk.CollectionConverters.*
 import scala.sys.process.*
 import scala.util.Try
 import scala.util.control.NonFatal
-import redis.RedisServerHelper.*
 
 object RedisServerHelper {
   val redisHost = "127.0.0.1"

@@ -1,3 +1,5 @@
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.12.1")
+
 addSbtPlugin("com.eed3si9n" % "sbt-projectmatrix" % "0.10.0")
 
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.21")

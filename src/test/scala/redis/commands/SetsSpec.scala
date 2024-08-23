@@ -1,8 +1,8 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
+import scala.concurrent.Await
 
 class SetsSpec extends RedisDockerServer {
 

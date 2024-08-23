@@ -1,8 +1,8 @@
 package redis.commands
 
 import redis.Request
-import scala.concurrent.Future
 import redis.api.clusters.*
+import scala.concurrent.Future
 
 /**
  * Blocking commands on the Lists

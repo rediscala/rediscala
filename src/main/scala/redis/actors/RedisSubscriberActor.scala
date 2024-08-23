@@ -1,12 +1,12 @@
 package redis.actors
 
+import java.net.InetSocketAddress
 import redis.RediscalaCompat.util.ByteString
+import redis.api.connection.Auth
+import redis.api.pubsub.*
 import redis.protocol.Error
 import redis.protocol.MultiBulk
 import redis.protocol.RedisReply
-import redis.api.pubsub.*
-import java.net.InetSocketAddress
-import redis.api.connection.Auth
 
 abstract class RedisSubscriberActor(
   address: InetSocketAddress,

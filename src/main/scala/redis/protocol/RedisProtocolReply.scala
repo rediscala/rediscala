@@ -1,10 +1,10 @@
 package redis.protocol
 
+import redis.MultiBulkConverter
 import redis.RediscalaCompat.util.ByteString
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.util.Try
-import redis.MultiBulkConverter
 
 sealed trait RedisReply extends Product with Serializable {
   def toByteString: ByteString

@@ -1,9 +1,9 @@
 package redis.api.clusters
 
-import redis.RediscalaCompat.util.ByteString
 import redis.RedisCommand
-import redis.protocol.DecodeResult
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
+import redis.protocol.DecodeResult
 import redis.protocol.RedisProtocolReply
 
 case class ClusterNodes() extends RedisCommand[Bulk, Array[ClusterNodeInfo]] {

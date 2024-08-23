@@ -2,10 +2,10 @@ package redis
 
 import redis.RediscalaCompat.actor.ActorRef
 import redis.RediscalaCompat.actor.ActorSystem
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
-import redis.protocol.RedisReply
 import redis.commands.Transactions
+import redis.protocol.RedisReply
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer])(implicit
   _system: ActorSystem,

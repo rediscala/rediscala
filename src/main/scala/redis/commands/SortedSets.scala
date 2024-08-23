@@ -1,11 +1,11 @@
 package redis.commands
 
-import redis.api.*
-import redis.api.sortedsets.*
 import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.Cursor
 import redis.Request
+import redis.api.*
+import redis.api.sortedsets.*
 import scala.concurrent.Future
 
 trait SortedSets extends Request {

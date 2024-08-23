@@ -2,8 +2,8 @@ package redis.api.keys
 
 import redis.*
 import redis.RediscalaCompat.util.ByteString
-import redis.api.Order
 import redis.api.LimitOffsetCount
+import redis.api.Order
 
 case class SortStore[K: ByteStringSerializer, KS: ByteStringSerializer](
   key: K,

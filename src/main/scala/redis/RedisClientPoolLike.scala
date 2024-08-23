@@ -1,14 +1,14 @@
 package redis
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import redis.RediscalaCompat.actor.ActorRef
+import redis.RediscalaCompat.actor.ActorSystem
 import redis.actors.RedisClientActor
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
 import redis.protocol.RedisReply
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDispatcher) {
 

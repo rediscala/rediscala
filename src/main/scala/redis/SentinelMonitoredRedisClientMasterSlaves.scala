@@ -2,9 +2,9 @@ package redis
 
 import redis.RediscalaCompat.actor.ActorRef
 import redis.RediscalaCompat.actor.ActorSystem
-import scala.concurrent.Future
-import redis.protocol.RedisReply
 import redis.commands.Transactions
+import redis.protocol.RedisReply
+import scala.concurrent.Future
 
 case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)] = Seq(("localhost", 26379)), master: String)(implicit
   _system: ActorSystem,

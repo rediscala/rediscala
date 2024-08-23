@@ -1,10 +1,10 @@
 package redis.commands
 
 import redis.*
-import scala.concurrent.Future
-import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
 import redis.api.*
+import scala.concurrent.Await
+import scala.concurrent.Future
 
 class KeysSpec extends RedisStandaloneServer {
 

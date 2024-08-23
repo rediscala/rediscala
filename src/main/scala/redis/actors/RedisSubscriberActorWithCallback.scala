@@ -1,7 +1,7 @@
 package redis.actors
 
-import redis.api.pubsub.*
 import java.net.InetSocketAddress
+import redis.api.pubsub.*
 
 class RedisSubscriberActorWithCallback(
   address: InetSocketAddress,

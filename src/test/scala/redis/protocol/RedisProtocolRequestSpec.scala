@@ -1,7 +1,7 @@
 package redis.protocol
 
-import redis.RediscalaCompat.util.ByteString
 import org.scalatest.wordspec.AnyWordSpec
+import redis.RediscalaCompat.util.ByteString
 
 class RedisProtocolRequestSpec extends AnyWordSpec {
 

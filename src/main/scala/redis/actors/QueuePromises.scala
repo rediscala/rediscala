@@ -1,6 +1,6 @@
 package redis.actors
 
-import scala.collection.mutable
 import redis.Operation
+import scala.collection.mutable
 
 case class QueuePromises(queue: mutable.Queue[Operation[?, ?]])

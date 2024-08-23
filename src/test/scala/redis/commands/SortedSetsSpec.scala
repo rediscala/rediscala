@@ -1,13 +1,13 @@
 package redis.commands
 
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 import redis.api.*
 import redis.api.ZaddOption.CH
 import redis.api.ZaddOption.NX
 import redis.api.ZaddOption.XX
 import scala.concurrent.Await
 import scala.concurrent.Future
-import redis.RediscalaCompat.util.ByteString
 
 class SortedSetsSpec extends RedisDockerServer {
 

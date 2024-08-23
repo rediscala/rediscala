@@ -1,7 +1,7 @@
 package redis
 
-import redis.RediscalaCompat.util.Helpers
 import java.util.concurrent.atomic.AtomicLong
+import redis.RediscalaCompat.util.Helpers
 
 private[redis] object Redis {
   val dispatcher = RedisDispatcher("rediscala.rediscala-client-worker-dispatcher")

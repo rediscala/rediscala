@@ -1,9 +1,9 @@
 package redis.api.blists
 
-import scala.concurrent.duration.FiniteDuration
 import redis.*
 import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
+import scala.concurrent.duration.FiniteDuration
 
 private[redis] abstract class BXpop[KK, R](command: String)(implicit redisKeys: ByteStringSerializer[KK], deserializerR: ByteStringDeserializer[R])
     extends RedisCommandMultiBulk[Option[(String, R)]] {

@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 
 case class ZrangeWithscores[K, R](key: K, start: Long, stop: Long)(implicit
   keySeria: ByteStringSerializer[K],

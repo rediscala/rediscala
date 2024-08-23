@@ -1,8 +1,8 @@
 package redis.api.scripting
 
-import redis.protocol.Bulk
 import redis.*
 import redis.RediscalaCompat.util.ByteString
+import redis.protocol.Bulk
 
 case class ScriptLoad(script: String) extends RedisCommandBulk[String] {
   def isMasterOnly = true

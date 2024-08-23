@@ -1,7 +1,7 @@
 package redis.api.geo
 
-import redis.RediscalaCompat.util.ByteString
 import redis.*
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.*
 
 case class GeoPos[K](key: K, member: Seq[String])(implicit redisKey: ByteStringSerializer[K])

@@ -1,7 +1,7 @@
 package redis
 
-import redis.RediscalaCompat.util.ByteString
 import java.util.Base64
+import redis.RediscalaCompat.util.ByteString
 import redis.api.clusters.ClusterSlots
 import redis.protocol.*
 import scala.concurrent.Await
