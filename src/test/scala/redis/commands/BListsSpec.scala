@@ -7,10 +7,18 @@ import scala.concurrent.duration.*
 
 class BListsSpec extends RedisDockerServer {
 
+  private def withBlockingClient[A](f: RedisBlockingClient => A): A = {
+    val redisB = RedisBlockingClient(port = port)
+    try {
+      f(redisB)
+    } finally {
+      redisB.stop()
+    }
+  }
+
   "Blocking Lists commands" should {
     "BLPOP" should {
-      "already containing elements" in {
-        val redisB = RedisBlockingClient(port = port)
+      "already containing elements" in withBlockingClient { redisB =>
         val r = for {
           _ <- redis.del("blpop1", "blpop2")
           p <- redis.rpush("blpop1", "a", "b", "c")
@@ -18,14 +26,11 @@ class BListsSpec extends RedisDockerServer {
         } yield {
           assert(b == Some("blpop1" -> ByteString("a")))
         }
-        val rr = Await.result(r, timeOut)
-        redisB.stop()
-        rr
+        Await.result(r, timeOut)
       }
 
-      "blocking" in {
-        val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+      "blocking" in withBlockingClient { redisB =>
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("blpopBlock")
             .flatMap(_ => {
@@ -36,13 +41,11 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut) == Some("blpopBlock" -> ByteString("a")))
         }
-        redisB.stop()
-        rr
       }
 
-      "blocking timeout" in {
+      "blocking timeout" in withBlockingClient { redisB =>
         val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("blpopBlockTimeout")
             .flatMap(_ => {
@@ -50,14 +53,11 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut).isEmpty)
         }
-        redisB.stop()
-        rr
       }
     }
 
     "BRPOP" should {
-      "already containing elements" in {
-        val redisB = RedisBlockingClient(port = port)
+      "already containing elements" in withBlockingClient { redisB =>
         val r = for {
           _ <- redis.del("brpop1", "brpop2")
           p <- redis.rpush("brpop1", "a", "b", "c")
@@ -69,9 +69,8 @@ class BListsSpec extends RedisDockerServer {
         Await.result(r, timeOut)
       }
 
-      "blocking" in {
-        val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+      "blocking" in withBlockingClient { redisB =>
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("brpopBlock")
             .flatMap(_ => {
@@ -82,13 +81,10 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut) == Some("brpopBlock" -> ByteString("c")))
         }
-        redisB.stop()
-        rr
       }
 
-      "blocking timeout" in {
-        val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+      "blocking timeout" in withBlockingClient { redisB =>
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("brpopBlockTimeout")
             .flatMap(_ => {
@@ -96,14 +92,11 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut).isEmpty)
         }
-        redisB.stop()
-        rr
       }
     }
 
     "BRPOPLPUSH" should {
-      "already containing elements" in {
-        val redisB = RedisBlockingClient(port = port)
+      "already containing elements" in withBlockingClient { redisB =>
         val r = for {
           _ <- redis.del("brpopplush1", "brpopplush2")
           p <- redis.rpush("brpopplush1", "a", "b", "c")
@@ -111,14 +104,11 @@ class BListsSpec extends RedisDockerServer {
         } yield {
           assert(b == Some(ByteString("c")))
         }
-        val rr = Await.result(r, timeOut)
-        redisB.stop()
-        rr
+        Await.result(r, timeOut)
       }
 
-      "blocking" in {
-        val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+      "blocking" in withBlockingClient { redisB =>
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("brpopplushBlock1", "brpopplushBlock2")
             .flatMap(_ => {
@@ -129,13 +119,10 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut) == Some(ByteString("c")))
         }
-        redisB.stop()
-        rr
       }
 
-      "blocking timeout" in {
-        val redisB = RedisBlockingClient(port = port)
-        val rr = within(1.seconds, 10.seconds) {
+      "blocking timeout" in withBlockingClient { redisB =>
+        within(1.seconds, 10.seconds) {
           val r = redis
             .del("brpopplushBlockTimeout1", "brpopplushBlockTimeout2")
             .flatMap(_ => {
@@ -143,8 +130,6 @@ class BListsSpec extends RedisDockerServer {
             })
           assert(Await.result(r, timeOut).isEmpty)
         }
-        redisB.stop()
-        rr
       }
     }
   }
