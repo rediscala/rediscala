@@ -2,6 +2,7 @@ package redis.commands
 
 import redis.ByteStringDeserializer
 import redis.Request
+import redis.api.ListDirection
 import scala.concurrent.Future
 import scala.concurrent.duration.*
 import redis.api.blists.*
@@ -20,4 +21,13 @@ trait BLists extends Request {
 
   def brpoplpush[R: ByteStringDeserializer](source: String, destination: String, timeout: FiniteDuration = Duration.Zero): Future[Option[R]] =
     send(Brpoplpush(source, destination, timeout))
+
+  def blmove[R: ByteStringDeserializer](
+    source: String,
+    destination: String,
+    from: ListDirection,
+    to: ListDirection,
+    timeout: FiniteDuration = Duration.Zero
+  ): Future[Option[R]] =
+    send(Blmove(source, destination, from, to, timeout))
 }

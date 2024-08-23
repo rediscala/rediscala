@@ -3,6 +3,7 @@ package redis.commands
 import redis.*
 import scala.concurrent.Await
 import redis.RediscalaCompat.util.ByteString
+import redis.api.ListDirection
 import scala.concurrent.duration.*
 
 class BListsSpec extends RedisDockerServer {
@@ -131,6 +132,24 @@ class BListsSpec extends RedisDockerServer {
           assert(Await.result(r, timeOut).isEmpty)
         }
       }
+    }
+
+    "BLMOVE" in withBlockingClient { redisB =>
+      val r = for {
+        _ <- redis.del("lmove_key_1")
+        _ <- redis.del("lmove_key_2")
+        _ <- redis.rpush("lmove_key_1", "one", "two", "three")
+        res1 <- redisB.blmove("lmove_key_1", "lmove_key_2", ListDirection.Right, ListDirection.Left)
+        res2 <- redisB.blmove("lmove_key_1", "lmove_key_2", ListDirection.Left, ListDirection.Right)
+        res3 <- redis.lrange("lmove_key_1", 0, -1)
+        res4 <- redis.lrange("lmove_key_2", 0, -1)
+      } yield {
+        assert(res1 == Option(ByteString("three")))
+        assert(res2 == Option(ByteString("one")))
+        assert(res3 == Seq(ByteString("two")))
+        assert(res4 == Seq("three", "one").map(ByteString.apply))
+      }
+      Await.result(r, timeOut)
     }
   }
 }
