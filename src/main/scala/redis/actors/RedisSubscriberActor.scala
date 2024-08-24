@@ -32,8 +32,8 @@ abstract class RedisSubscriberActor(
   /**
    * Keep states of channels and actor in case of connection reset
    */
-  var channelsSubscribed = channels.toSet
-  var patternsSubscribed = patterns.toSet
+  private[redis] var channelsSubscribed = channels.toSet
+  private var patternsSubscribed = patterns.toSet
 
   override def preStart(): Unit = {
     super.preStart()

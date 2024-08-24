@@ -28,7 +28,7 @@ class RedisReplyDecoder() extends Actor {
     case byteStringInput: ByteString => decodeReplies(byteStringInput)
   }
 
-  var partiallyDecoded: DecodeResult[Unit] = DecodeResult.unit
+  private[redis] var partiallyDecoded: DecodeResult[Unit] = DecodeResult.unit
 
   def decodeReplies(dataByteString: ByteString): Unit = {
     partiallyDecoded = if (partiallyDecoded.isFullyDecoded) {

@@ -1,3 +1,6 @@
+import com.typesafe.tools.mima.core.DirectMissingMethodProblem
+import com.typesafe.tools.mima.core.ProblemFilters
+import com.typesafe.tools.mima.core.ReversedMissingMethodProblem
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
@@ -30,6 +33,24 @@ lazy val commonSettings = Def.settings(
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
   mimaPreviousArtifacts := Set(organization.value %% name.value % "1.16.0"),
+  mimaBinaryIssueFilters ++= Seq(
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.DecodeReplies.partiallyDecoded"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.DecodeReplies.partiallyDecoded_="),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("redis.actors.DecodeReplies.redis$actors$DecodeReplies$$partiallyDecoded"),
+    ProblemFilters.exclude[ReversedMissingMethodProblem]("redis.actors.DecodeReplies.redis$actors$DecodeReplies$$partiallyDecoded_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisClientActor.repliesDecoder"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisClientActor.repliesDecoder_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisClientActor.oldRepliesDecoder"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisClientActor.oldRepliesDecoder_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisSubscriberActor.partiallyDecoded"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisSubscriberActor.partiallyDecoded_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisSubscriberActor.patternsSubscribed"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisSubscriberActor.patternsSubscribed_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisWorkerIO.tcpWorker"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisWorkerIO.tcpWorker_="),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisWorkerIO.readyToWrite"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.actors.RedisWorkerIO.readyToWrite_="),
+  ),
   pomExtra := (
     <developers>
       <developer>

@@ -32,10 +32,10 @@ class RedisClientActor(
 
   import context.*
 
-  var repliesDecoder = initRepliesDecoder()
+  private var repliesDecoder = initRepliesDecoder()
 
   // connection closed on the sending direction
-  var oldRepliesDecoder: Option[ActorRef] = None
+  private var oldRepliesDecoder: Option[ActorRef] = None
 
   def initRepliesDecoder() =
     context.actorOf(Props(classOf[RedisReplyDecoder]).withDispatcher(dispatcherName))
