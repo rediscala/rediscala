@@ -27,11 +27,11 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   val tcp: ActorRef = IO(Tcp)(context.system)
 
   // todo watch tcpWorker
-  var tcpWorker: ActorRef = null
+  private var tcpWorker: ActorRef = null
 
   val bufferWrite: ByteStringBuilder = new ByteStringBuilder
 
-  var readyToWrite = false
+  private var readyToWrite = false
 
   override def preStart(): Unit = {
     if (tcpWorker != null) {

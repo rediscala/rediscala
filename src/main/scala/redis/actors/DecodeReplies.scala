@@ -7,7 +7,7 @@ import redis.protocol.RedisReply
 import scala.annotation.tailrec
 
 trait DecodeReplies {
-  var partiallyDecoded: DecodeResult[Unit] = DecodeResult.unit
+  private var partiallyDecoded: DecodeResult[Unit] = DecodeResult.unit
 
   def decodeReplies(dataByteString: ByteString): Unit = {
     partiallyDecoded = if (partiallyDecoded.isFullyDecoded) {
