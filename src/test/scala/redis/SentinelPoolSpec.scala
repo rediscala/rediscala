@@ -49,7 +49,7 @@ class SentinelMutablePoolSpec extends RedisSentinelClients("SentinelMutablePoolS
 class SentinelMonitoredRedisClientMasterSlavesSpec extends RedisSentinelClients("SentinelMonitoredRedisClientMasterSlavesSpec") {
 
   lazy val redisMasterSlavesPool =
-    SentinelMonitoredRedisClientMasterSlaves(master = masterName, sentinels = sentinelPorts.map((redisHost, _)))
+    SentinelMonitoredRedisClientMasterSlaves(sentinels = sentinelPorts.map((redisHost, _)), master = masterName)
   "sentinel slave pool" should {
     "add and remove" in {
       Thread.sleep(10000)
