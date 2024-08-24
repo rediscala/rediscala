@@ -25,7 +25,7 @@ jobs:
         distribution: adopt
     - uses: coursier/cache-action@v6
     - run: ./install-redis.sh
-    - run: sbt
+    - run: sbt -v
            scalafmtSbtCheck
            "project rediscala${{ matrix.project }}"
            scalafmtCheckAll
@@ -35,7 +35,10 @@ jobs:
       with:
         timeout_minutes: 20
         max_attempts: 3
-        command: sbt "project rediscala${{ matrix.project }}" "onFailure testQuick" test
+        command: sbt -v
+                 "project rediscala${{ matrix.project }}"
+                 "onFailure testQuick"
+                 test
   latest:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -50,13 +53,13 @@ jobs:
         java-version: 21
         distribution: adopt
     - uses: coursier/cache-action@v6
-    - run: sbt
+    - run: sbt -v
            "++ ${{env.scala_version}}!"
            rediscala3/Test/compile
     - uses: nick-invision/retry@v3
       with:
         timeout_minutes: 10
         max_attempts: 3
-        command: sbt
+        command: sbt -v
                  "++ ${{env.scala_version}}!"
                  rediscala3/runDockerTests
