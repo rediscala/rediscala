@@ -2,12 +2,14 @@ package redis.protocol
 
 import java.lang.System.arraycopy
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import redis.RediscalaCompat.util.ByteString
 
 object RedisProtocolRequest {
-  val UTF8_CHARSET: Charset = Charset.forName("UTF-8")
+  @deprecated("will be removed", "1.16.1")
+  val UTF8_CHARSET: Charset = StandardCharsets.UTF_8
   val LS_STRING = "\r\n"
-  val LS: Array[Byte] = LS_STRING.getBytes(UTF8_CHARSET)
+  val LS: Array[Byte] = LS_STRING.getBytes(StandardCharsets.UTF_8)
 
   def multiBulk(command: String, args: Seq[ByteString]): ByteString = {
     val argsSizeString = (args.size + 1).toString
@@ -26,18 +28,18 @@ object RedisProtocolRequest {
     var i: Int = 0
     bytes.update(i, '*')
     i += 1
-    arraycopy(argsSizeString.getBytes(UTF8_CHARSET), 0, bytes, i, argsSizeString.length)
+    arraycopy(argsSizeString.getBytes(StandardCharsets.UTF_8), 0, bytes, i, argsSizeString.length)
     i += argsSizeString.length
     arraycopy(LS, 0, bytes, i, LS.length)
     i += LS.length
 
     bytes.update(i, '$')
     i += 1
-    arraycopy(cmdLengthString.getBytes(UTF8_CHARSET), 0, bytes, i, cmdLengthString.length)
+    arraycopy(cmdLengthString.getBytes(StandardCharsets.UTF_8), 0, bytes, i, cmdLengthString.length)
     i += cmdLengthString.length
     arraycopy(LS, 0, bytes, i, LS.length)
     i += LS.length
-    arraycopy(command.getBytes(UTF8_CHARSET), 0, bytes, i, command.length)
+    arraycopy(command.getBytes(StandardCharsets.UTF_8), 0, bytes, i, command.length)
     i += command.length
     arraycopy(LS, 0, bytes, i, LS.length)
     i += LS.length
@@ -47,7 +49,7 @@ object RedisProtocolRequest {
       i += 1
 
       val argLengthString = arg.length.toString
-      arraycopy(argLengthString.getBytes(UTF8_CHARSET), 0, bytes, i, argLengthString.length)
+      arraycopy(argLengthString.getBytes(StandardCharsets.UTF_8), 0, bytes, i, argLengthString.length)
       i += argLengthString.length
       arraycopy(LS, 0, bytes, i, LS.length)
       i += LS.length
