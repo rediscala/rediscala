@@ -1,5 +1,7 @@
 package redis.util;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Created by npeters on 23/05/16.
  */
@@ -42,13 +44,14 @@ public class CRC16 {
     };
 
    public static int crc16(String buf) {
+        byte[] bytes = buf.getBytes(StandardCharsets.UTF_8);
         int counter;
         int crc = 0;
-        for (counter = 0; counter < buf.length(); counter++) {
+        for (counter = 0; counter < bytes.length; counter++) {
             int crcUnsign = (crc << 8) & 0xFFFF;
-            crc = crcUnsign ^ crc16tab[((crc >> 8) ^ (int) buf.charAt(counter)) & 0x00FF];
+            crc = crcUnsign ^ crc16tab[((crc >>> 8) ^ bytes[counter]) & 0x00FF];
         }
-        return crc;
+        return crc & 0xFFFF;
     }
 
 }
