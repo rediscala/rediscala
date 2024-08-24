@@ -1,7 +1,7 @@
 rediscala
 =========
 
-[![scaladex](https://index.scala-lang.org/rediscala/rediscala/rediscala/latest-by-scala-version.svg)](https://index.scala-lang.org/rediscala/rediscala/rediscala)
+[![scaladex](https://index.scala-lang.org/rediscala/rediscala/rediscala/latest-by-scala-version.svg?platform=jvm)](https://index.scala-lang.org/rediscala/rediscala/rediscala)
 
 [![maven](https://img.shields.io/maven-central/v/io.github.rediscala/rediscala_3)](https://search.maven.org/artifact/io.github.rediscala/rediscala_3)
 
