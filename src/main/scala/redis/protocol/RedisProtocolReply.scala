@@ -23,7 +23,7 @@ case class Status(status: ByteString) extends RedisReply {
 }
 
 object Status {
-  val okByteString = ByteString("OK")
+  val okByteString: ByteString = ByteString("OK")
 }
 
 case class Error(error: ByteString) extends RedisReply {
@@ -39,7 +39,7 @@ case class Integer(i: ByteString) extends RedisReply {
 
   def toInt: Int = ParseNumber.parseInt(i)
 
-  def toBoolean = i == Integer.trueByteString
+  def toBoolean: Boolean = i == Integer.trueByteString
 
   override def toString = i.utf8String
 
@@ -49,12 +49,12 @@ case class Integer(i: ByteString) extends RedisReply {
 }
 
 object Integer {
-  val trueByteString = ByteString("1")
+  val trueByteString: ByteString = ByteString("1")
 }
 
 case class Bulk(response: Option[ByteString]) extends RedisReply {
   // looks wrong
-  override def toString = response.map(_.utf8String).get
+  override def toString: String = response.map(_.utf8String).get
 
   def toByteString: ByteString = response.get
 
@@ -86,7 +86,7 @@ object RedisProtocolReply {
   val BULK = '$'
   val MULTIBULK = '*'
 
-  val LS = "\r\n".getBytes("UTF-8")
+  val LS: Array[Byte] = "\r\n".getBytes("UTF-8")
 
   def decodeReply(bs: ByteString): DecodeResult[RedisReply] = {
     if (bs.isEmpty) {

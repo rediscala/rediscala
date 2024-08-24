@@ -8,5 +8,5 @@ case class SenSlaves(master: String) extends RedisCommandMultiBulk[Seq[Map[Strin
   def isMasterOnly = true
   val encodedRequest: ByteString = encode(s"SENTINEL SLAVES $master")
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqMapString(mb)
+  def decodeReply(mb: MultiBulk): Seq[Map[String, String]] = MultiBulkConverter.toSeqMapString(mb)
 }

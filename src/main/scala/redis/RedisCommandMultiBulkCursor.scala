@@ -4,7 +4,7 @@ import redis.RediscalaCompat.util.ByteString
 import redis.protocol.*
 
 trait RedisCommandMultiBulkCursor[R] extends RedisCommandMultiBulk[Cursor[R]] {
-  def decodeReply(mb: MultiBulk) = {
+  def decodeReply(mb: MultiBulk): Cursor[R] = {
     mb.responses.map { responses =>
       val cursor = ParseNumber.parseInt(responses.head.toByteString)
       val remainder = responses(1).asInstanceOf[MultiBulk]

@@ -5,9 +5,9 @@ import java.nio.charset.Charset
 import redis.RediscalaCompat.util.ByteString
 
 object RedisProtocolRequest {
-  val UTF8_CHARSET = Charset.forName("UTF-8")
+  val UTF8_CHARSET: Charset = Charset.forName("UTF-8")
   val LS_STRING = "\r\n"
-  val LS = LS_STRING.getBytes(UTF8_CHARSET)
+  val LS: Array[Byte] = LS_STRING.getBytes(UTF8_CHARSET)
 
   def multiBulk(command: String, args: Seq[ByteString]): ByteString = {
     val argsSizeString = (args.size + 1).toString

@@ -13,5 +13,5 @@ case class Hmget[K, KK, R](key: K, fields: Seq[KK])(implicit
   def isMasterOnly = false
   val encodedRequest: ByteString = encode("HMGET", keyAsString +: fields.map(redisFields.serialize))
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqOptionByteString(mb)
+  def decodeReply(mb: MultiBulk): Seq[Option[R]] = MultiBulkConverter.toSeqOptionByteString(mb)
 }

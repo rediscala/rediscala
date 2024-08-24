@@ -12,7 +12,7 @@ case class Scan[C](cursor: C, count: Option[Int], matchGlob: Option[String])(imp
 
   def isMasterOnly = false
 
-  def decodeResponses(responses: Seq[RedisReply]) =
+  def decodeResponses(responses: Seq[RedisReply]): Seq[String] =
     responses.map(response => deserializer.deserialize(response.toByteString))
 
   val empty: Seq[String] = Seq.empty

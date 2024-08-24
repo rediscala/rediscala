@@ -14,7 +14,7 @@ case class HScan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Opti
 
   val encodedRequest: ByteString = encode("HSCAN", withOptionalParams(Seq(keyAsString, cursorConverter.serialize(cursor))))
 
-  def decodeResponses(responses: Seq[RedisReply]) =
+  def decodeResponses(responses: Seq[RedisReply]): Map[String, R] =
     responses
       .grouped(2)
       .map { xs =>

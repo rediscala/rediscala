@@ -5,5 +5,5 @@ import redis.protocol.*
 trait RedisCommandMultiBulkSeqByteString[R] extends RedisCommandMultiBulk[Seq[R]] {
   val deserializer: ByteStringDeserializer[R]
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqByteString(mb)(deserializer)
+  def decodeReply(mb: MultiBulk): Seq[R] = MultiBulkConverter.toSeqByteString(mb)(deserializer)
 }

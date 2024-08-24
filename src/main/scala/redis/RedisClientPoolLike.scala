@@ -58,7 +58,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     }
   }
 
-  def refreshConnections() = {
+  def refreshConnections(): Unit = {
     val actives = getConnectionsActive
     redisConnectionRef.set(actives)
   }
@@ -81,7 +81,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
     }
   }
 
-  def makeRedisConnection(server: RedisServer, defaultActive: Boolean = false) = {
+  def makeRedisConnection(server: RedisServer, defaultActive: Boolean = false): (RedisServer, RedisConnection) = {
     val active = new AtomicBoolean(defaultActive)
     (server, RedisConnection(makeRedisClientActor(server, active), active))
   }

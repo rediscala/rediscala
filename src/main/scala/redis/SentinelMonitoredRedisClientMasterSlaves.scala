@@ -25,17 +25,17 @@ case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)
     RedisClientMutablePool(slaves, name = "SMRedisClient")
   })
 
-  val onNewSlave = (ip: String, port: Int) => {
+  val onNewSlave: (String, Int) => Unit = (ip: String, port: Int) => {
     log.info(s"onNewSlave $ip:$port")
     slavesClients.addServer(RedisServer(ip, port))
   }
 
-  val onSlaveDown = (ip: String, port: Int) => {
+  val onSlaveDown: (String, Int) => Unit = (ip: String, port: Int) => {
     log.info(s"onSlaveDown $ip:$port")
     slavesClients.removeServer(RedisServer(ip, port))
   }
 
-  val onMasterChange = (ip: String, port: Int) => {
+  val onMasterChange: (String, Int) => Unit = (ip: String, port: Int) => {
     log.info(s"onMasterChange $ip:$port")
     masterClient.reconnect(ip, port)
   }
@@ -43,7 +43,7 @@ case class SentinelMonitoredRedisClientMasterSlaves(sentinels: Seq[(String, Int)
   /**
    * Disconnect from the server (stop the actors)
    */
-  def stop() = {
+  def stop(): Unit = {
     masterClient.stop()
     slavesClients.stop()
     sentinelClients.values.foreach(_.stop())

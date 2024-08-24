@@ -13,7 +13,7 @@ case class Hgetall[K, R](key: K)(implicit redisKey: ByteStringSerializer[K], des
   def isMasterOnly = false
   val encodedRequest: ByteString = encode("HGETALL", Seq(keyAsString))
 
-  def decodeReply(mb: MultiBulk) = mb.responses
+  def decodeReply(mb: MultiBulk): Map[String, R] = mb.responses
     .map(r => {
       val builder = Map.newBuilder[String, R]
       builder.sizeHint(r.length / 2)

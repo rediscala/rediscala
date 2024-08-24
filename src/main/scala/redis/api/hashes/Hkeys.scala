@@ -8,5 +8,5 @@ case class Hkeys[K](key: K)(implicit redisKey: ByteStringSerializer[K]) extends 
   def isMasterOnly = false
   val encodedRequest: ByteString = encode("HKEYS", Seq(keyAsString))
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqString(mb)
+  def decodeReply(mb: MultiBulk): Seq[String] = MultiBulkConverter.toSeqString(mb)
 }

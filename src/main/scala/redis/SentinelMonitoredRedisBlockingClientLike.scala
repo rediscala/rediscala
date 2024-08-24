@@ -7,7 +7,7 @@ abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, red
     with ActorRequest {
   val redisClient: RedisClientActorLike
 
-  val onMasterChange = (ip: String, port: Int) => {
+  val onMasterChange: (String, Int) => Unit = (ip: String, port: Int) => {
     log.info(s"onMasterChange: $ip:$port")
     redisClient.reconnect(ip, port)
   }
@@ -15,7 +15,7 @@ abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, red
   /**
     * Disconnect from the server (stop the actors)
     */
-  def stop() = {
+  def stop(): Unit = {
     redisClient.stop()
     sentinelClients.values.foreach(_.stop())
   }

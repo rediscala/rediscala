@@ -24,7 +24,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
 
   import context.*
 
-  val tcp = IO(Tcp)(context.system)
+  val tcp: ActorRef = IO(Tcp)(context.system)
 
   // todo watch tcpWorker
   var tcpWorker: ActorRef = null
@@ -43,7 +43,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     tcp ! Connect(remoteAddress = currAddress, options = SO.KeepAlive(on = true) :: Nil, timeout = connectTimeout)
   }
 
-  def reconnect() = {
+  def reconnect(): Unit = {
     become(receive)
     preStart()
   }
@@ -56,7 +56,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     readyToWrite = true
   }
 
-  def receive = connecting orElse writing
+  def receive: Receive = connecting orElse writing
 
   def connecting: Receive = {
     case a: InetSocketAddress => onAddressChanged(a)
@@ -66,7 +66,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     case c: ConnectionClosed => onClosingConnectionClosed() // not the current opening connection
   }
 
-  def onConnected(cmd: Connected) = {
+  def onConnected(cmd: Connected): Unit = {
     sender() ! Register(self)
     tcpWorker = sender()
     initConnectedBuffer()
@@ -76,7 +76,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     onConnectStatus(true)
   }
 
-  def onConnectingCommandFailed(cmdFailed: CommandFailed) = {
+  def onConnectingCommandFailed(cmdFailed: CommandFailed): Unit = {
     log.error(cmdFailed.toString)
     scheduleReconnect()
   }
@@ -108,7 +108,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
     scheduleReconnect()
   }
 
-  def onConnectionClosed(c: ConnectionClosed) = {
+  def onConnectionClosed(c: ConnectionClosed): Unit = {
     log.warning(s"ConnectionClosed $c")
     scheduleReconnect()
   }
@@ -116,7 +116,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
   /** O/S buffer was full
     * Maybe to much data in the Command ?
     */
-  def onConnectedCommandFailed(commandFailed: CommandFailed) = {
+  def onConnectedCommandFailed(commandFailed: CommandFailed): Unit = {
     log.error(commandFailed.toString) // O/S buffer was full
     tcpWorker ! commandFailed.cmd
   }
@@ -147,7 +147,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
 
   def onWriteSent(): Unit
 
-  def restartConnection() = reconnect()
+  def restartConnection(): Unit = reconnect()
 
   def onConnectWrite(): ByteString
 

@@ -8,5 +8,5 @@ case class SenMasterInfo(master: String) extends RedisCommandMultiBulk[Map[Strin
   def isMasterOnly = true
   val encodedRequest: ByteString = encode(s"SENTINEL master $master")
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toMapString(mb)
+  def decodeReply(mb: MultiBulk): Map[String, String] = MultiBulkConverter.toMapString(mb)
 }

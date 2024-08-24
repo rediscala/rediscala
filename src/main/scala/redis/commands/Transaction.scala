@@ -34,7 +34,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
     redisConnection ! redis.Transaction(commands.result())
   }
 
-  def operationToQueuedOperation(op: Operation[?, ?]) = {
+  def operationToQueuedOperation(op: Operation[?, ?]): Operation[Status, String] = {
     val cmd = new RedisCommandStatusString {
       def isMasterOnly = true
       val encodedRequest: ByteString = op.redisCommand.encodedRequest
@@ -42,7 +42,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
     Operation(cmd, Promise[String]())
   }
 
-  def ignoredPromise() = Promise[Any]()
+  def ignoredPromise(): Promise[Any] = Promise[Any]()
 
   def execPromise(promise: Promise[MultiBulk]): Promise[MultiBulk] = {
     val p = Promise[MultiBulk]()
@@ -57,7 +57,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
     p
   }
 
-  def dispatchExecReply(multiBulk: MultiBulk) = {
+  def dispatchExecReply(multiBulk: MultiBulk): Any = {
     multiBulk.responses
       .map(replies => {
         replies

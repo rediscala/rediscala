@@ -13,7 +13,7 @@ class RedisSubscriberActorWithCallback(
   authPassword: Option[String] = None,
   onConnectStatus: Boolean => Unit
 ) extends RedisSubscriberActor(address, channels, patterns, authUsername, authPassword, onConnectStatus) {
-  def onMessage(m: Message) = messageCallback(m)
+  def onMessage(m: Message): Unit = messageCallback(m)
 
-  def onPMessage(pm: PMessage) = pmessageCallback(pm)
+  def onPMessage(pm: PMessage): Unit = pmessageCallback(pm)
 }
