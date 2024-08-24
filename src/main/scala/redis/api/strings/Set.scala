@@ -35,7 +35,7 @@ case class Set[K, V](key: K, value: V, exSeconds: Option[Long] = None, pxMillise
     RedisProtocolRequest.multiBulk("SET", builder.result())
   }
 
-  def decodeReply(redisReply: RedisReply) = redisReply match {
+  def decodeReply(redisReply: RedisReply): Boolean = redisReply match {
     case s: Status => s.toBoolean
     case _ => false
   }

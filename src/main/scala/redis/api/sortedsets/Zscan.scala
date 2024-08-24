@@ -17,7 +17,7 @@ case class Zscan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Opti
 
   val empty: Seq[(Double, R)] = Seq.empty
 
-  def decodeResponses(responses: Seq[RedisReply]) =
+  def decodeResponses(responses: Seq[RedisReply]): Seq[(Double, R)] =
     responses
       .grouped(2)
       .map { xs =>

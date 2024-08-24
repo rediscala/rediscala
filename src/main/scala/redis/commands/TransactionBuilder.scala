@@ -3,6 +3,7 @@ package redis.commands
 import redis.*
 import redis.RediscalaCompat.actor.*
 import redis.protocol.MultiBulk
+import scala.collection.mutable
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.Promise
@@ -10,7 +11,7 @@ import scala.concurrent.Promise
 case class TransactionBuilder(redisConnection: ActorRef)(implicit val executionContext: ExecutionContext) extends BufferedRequest with RedisCommands {
 
   // val operations = Queue.newBuilder[Operation[_, _]]
-  val watcher = Set.newBuilder[String]
+  val watcher: mutable.Builder[String, Set[String]] = Set.newBuilder[String]
 
   def unwatch(): Unit = {
     watcher.clear()

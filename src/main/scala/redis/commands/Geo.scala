@@ -27,7 +27,7 @@ trait Geo extends Request {
     dim: Measurement = Meter,
     opt: WithOption = WithDist,
     count: Int = Int.MaxValue
-  ) =
+  ): Future[Seq[String]] =
     send(GeoRadiusByMemberWithOpt(key, member, dist, dim, opt, count))
 
   def geoDist(key: String, member1: String, member2: String, unit: Measurement = Meter): Future[Double] =

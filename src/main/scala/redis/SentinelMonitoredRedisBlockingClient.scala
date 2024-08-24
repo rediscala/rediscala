@@ -16,6 +16,6 @@ case class SentinelMonitoredRedisBlockingClient(
   val redisClient: RedisBlockingClient = withMasterAddr((ip, port) => {
     RedisBlockingClient(ip, port, username, password, db, name)
   })
-  override val onNewSlave = (ip: String, port: Int) => {}
-  override val onSlaveDown = (ip: String, port: Int) => {}
+  override val onNewSlave: (String, Int) => Unit = (ip: String, port: Int) => {}
+  override val onSlaveDown: (String, Int) => Unit = (ip: String, port: Int) => {}
 }

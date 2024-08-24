@@ -2,6 +2,7 @@ package redis
 
 import redis.RediscalaCompat.actor.ActorSystem
 import redis.RediscalaCompat.event.Logging
+import scala.collection.mutable
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -17,12 +18,12 @@ abstract class SentinelMonitored(system: ActorSystem, redisDispatcher: RedisDisp
 
   val log = Logging.getLogger(system, this)
 
-  val sentinelClients =
+  val sentinelClients: mutable.Map[String, SentinelClient] =
     collection.mutable.Map(
       sentinels.map(hp => (makeSentinelClientKey(hp._1, hp._2), makeSentinelClient(hp._1, hp._2)))*
     )
 
-  def makeSentinelClientKey(host: String, port: Int) = s"$host:$port"
+  def makeSentinelClientKey(host: String, port: Int): String = s"$host:$port"
 
   def internalOnNewSlave(masterName: String, ip: String, port: Int): Unit = {
     if (master == masterName)

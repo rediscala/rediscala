@@ -8,5 +8,5 @@ case class ScriptExists(sha1: Seq[String]) extends RedisCommandMultiBulk[Seq[Boo
   def isMasterOnly = true
   val encodedRequest: ByteString = encode("SCRIPT", ByteString("EXISTS") +: sha1.map(ByteString(_)))
 
-  def decodeReply(mb: MultiBulk) = MultiBulkConverter.toSeqBoolean(mb)
+  def decodeReply(mb: MultiBulk): Seq[Boolean] = MultiBulkConverter.toSeqBoolean(mb)
 }

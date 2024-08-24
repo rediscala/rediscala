@@ -1,5 +1,6 @@
 package redis
 
+import redis.RediscalaCompat.util.ByteString
 import redis.protocol.*
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -44,7 +45,7 @@ object MultiBulkConverter {
     }.getOrElse(Seq.empty)
   }
 
-  def toClusterSlots(reply: MultiBulk) = {
+  def toClusterSlots(reply: MultiBulk): Option[(ByteString, ByteString)] = {
     reply.responses.map { slot =>
       {
         val elementSeq = slot

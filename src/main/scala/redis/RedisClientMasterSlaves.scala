@@ -14,9 +14,9 @@ case class RedisClientMasterSlaves(master: RedisServer, slaves: Seq[RedisServer]
     with Transactions {
   implicit val executionContext: ExecutionContext = _system.dispatchers.lookup(redisDispatcher.name)
 
-  val masterClient = RedisClient(master.host, master.port, master.username, master.password, master.db)
+  val masterClient: RedisClient = RedisClient(master.host, master.port, master.username, master.password, master.db)
 
-  val slavesClients = RedisClientPool(slaves)
+  val slavesClients: RedisClientPool = RedisClientPool(slaves)
 
   override def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T] = {
     if (redisCommand.isMasterOnly || slaves.isEmpty) {

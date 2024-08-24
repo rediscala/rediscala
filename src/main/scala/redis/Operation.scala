@@ -18,12 +18,12 @@ case class Operation[RedisReplyT <: RedisReply, T](redisCommand: RedisCommand[Re
     promise.success(v)
   }
 
-  def tryCompleteSuccess(redisReply: RedisReply) = {
+  def tryCompleteSuccess(redisReply: RedisReply): Boolean = {
     val v = redisCommand.decodeReply(redisReply.asInstanceOf[RedisReplyT])
     promise.trySuccess(v)
   }
 
-  def completeSuccessValue(value: T) = promise.success(value)
+  def completeSuccessValue(value: T): Promise[T] = promise.success(value)
 
-  def completeFailed(t: Throwable) = promise.failure(t)
+  def completeFailed(t: Throwable): Promise[T] = promise.failure(t)
 }

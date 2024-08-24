@@ -11,7 +11,7 @@ trait RedisCommand[RedisReplyT <: RedisReply, +T] {
 
   val decodeRedisReply: PartialFunction[ByteString, DecodeResult[RedisReplyT]]
 
-  def encode(command: String) = RedisProtocolRequest.inline(command)
+  def encode(command: String): ByteString = RedisProtocolRequest.inline(command)
 
-  def encode(command: String, args: Seq[ByteString]) = RedisProtocolRequest.multiBulk(command, args)
+  def encode(command: String, args: Seq[ByteString]): ByteString = RedisProtocolRequest.multiBulk(command, args)
 }
