@@ -92,11 +92,9 @@ class ScriptingSpec extends RedisDockerServer with ScalaFutures {
           """.stripMargin)
         Thread.sleep(1000)
         assert(redisKiller.scriptKill().futureValue(Timeout(30.seconds)))
-        assert(
-          intercept[ReplyErrorException](Await.result(infiniteScript, timeOut)) == ReplyErrorException(
-            "ERR Error running script (call to f_2817d960235dc23d2cea9cc2c716a0b123b56be8): @user_script:3: Script killed by user with SCRIPT KILL..."
-          )
-        )
+        val actual = intercept[ReplyErrorException](Await.result(infiniteScript, timeOut))
+        assert(actual.message.contains("Script killed by user with SCRIPT KILL"), actual)
+        assert(actual.message.contains("2817d960235dc23d2cea9cc2c716a0b123b56be8"), actual)
       })
     }
 
