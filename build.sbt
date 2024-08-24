@@ -29,6 +29,7 @@ lazy val commonSettings = Def.settings(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
+  mimaPreviousArtifacts := Set(organization.value %% name.value % "1.16.0"),
   pomExtra := (
     <developers>
       <developer>
@@ -137,3 +138,4 @@ scalaVersion := Scala213
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 scalafixAll := {}
+mimaPreviousArtifacts := Set.empty

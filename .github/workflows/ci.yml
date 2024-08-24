@@ -30,6 +30,7 @@ jobs:
            "project rediscala${{ matrix.project }}"
            scalafmtCheckAll
            Test/compile
+           mimaReportBinaryIssues
            "$(if [[ "${{ matrix.java }}" != '8' ]]; then echo "scalafixAll --check"; fi)"
     - uses: nick-invision/retry@v3
       with:
