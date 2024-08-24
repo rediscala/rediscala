@@ -108,7 +108,7 @@ object MultiBulkConverter {
   }
 
   def toStringsSeq(rd: RedisReply): Seq[String] = rd match {
-    case MultiBulk(Some(v)) => v.flatMap(r => toStringsSeq(r))
+    case MultiBulk(Some(v)) => v.flatMap(toStringsSeq)
     case Bulk(b) => b.map(_.decodeString("US-ASCII")).toSeq
     case Integer(i) => Seq(i.decodeString("US-ASCII"))
     case _ => Nil

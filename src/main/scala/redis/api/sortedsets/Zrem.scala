@@ -7,5 +7,5 @@ case class Zrem[K, V](key: K, members: Seq[V])(implicit keySeria: ByteStringSeri
     extends SimpleClusterKey[K]
     with RedisCommandIntegerLong {
   def isMasterOnly = true
-  val encodedRequest: ByteString = encode("ZREM", keyAsString +: members.map(v => convert.serialize(v)))
+  val encodedRequest: ByteString = encode("ZREM", keyAsString +: members.map(convert.serialize))
 }

@@ -28,7 +28,7 @@ case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]],
     val watchOp = watchOperation(watcher)
     watchOp.map(commands.+=(_))
     commands += multiOp
-    commands ++= operations.map(op => operationToQueuedOperation(op))
+    commands ++= operations.map(operationToQueuedOperation)
     commands += execOp
 
     redisConnection ! redis.Transaction(commands.result())

@@ -30,10 +30,10 @@ class AuthUsernameAndPasswordSpec extends RedisStandaloneServer {
               writeInput.flush
             },
             (processOutput: InputStream) => {
-              Source.fromInputStream(processOutput).getLines().foreach { l => println(l) }
+              Source.fromInputStream(processOutput).getLines().foreach { println }
             },
             (processError: InputStream) => {
-              Source.fromInputStream(processError).getLines().foreach { l => println(l) }
+              Source.fromInputStream(processError).getLines().foreach { println }
             },
             daemonizeThreads = false
           )

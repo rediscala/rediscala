@@ -8,9 +8,7 @@ import scala.concurrent.Promise
 case class Operation[RedisReplyT <: RedisReply, T](redisCommand: RedisCommand[RedisReplyT, T], promise: Promise[T]) {
   def decodeRedisReplyThenComplete(bs: ByteString): DecodeResult[Unit] = {
     val r = redisCommand.decodeRedisReply.apply(bs)
-    r.foreach { reply =>
-      completeSuccess(reply)
-    }
+    r.foreach { completeSuccess }
   }
 
   def completeSuccess(redisReply: RedisReplyT): Promise[T] = {
