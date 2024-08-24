@@ -22,7 +22,7 @@ object RedisServerHelper {
   val redisHost = "127.0.0.1"
 
   // remove stacktrace when we stop the process
-  val processLogger = ProcessLogger(line => println(line), line => Console.err.println(line))
+  val processLogger = ProcessLogger(println, Console.err.println)
   val redisServerPath = {
     val tmp =
       if (Option(System.getenv("REDIS_HOME")).isEmpty || System.getenv("REDIS_HOME") == "")
@@ -213,10 +213,10 @@ abstract class RedisClusterClients() extends RedisHelper {
             writeInput.flush
           },
           (processOutput: InputStream) => {
-            Source.fromInputStream(processOutput).getLines().foreach { l => println(l) }
+            Source.fromInputStream(processOutput).getLines().foreach { println }
           },
           (processError: InputStream) => {
-            Source.fromInputStream(processError).getLines().foreach { l => println(l) }
+            Source.fromInputStream(processError).getLines().foreach { println }
           },
           daemonizeThreads = false
         )

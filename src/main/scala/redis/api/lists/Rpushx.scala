@@ -7,5 +7,5 @@ case class Rpushx[K, V](key: K, values: Seq[V])(implicit redisKey: ByteStringSer
     extends SimpleClusterKey[K]
     with RedisCommandIntegerLong {
   def isMasterOnly = true
-  val encodedRequest: ByteString = encode("RPUSHX", keyAsString +: values.map(v => convert.serialize(v)))
+  val encodedRequest: ByteString = encode("RPUSHX", keyAsString +: values.map(convert.serialize))
 }
