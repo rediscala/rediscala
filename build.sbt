@@ -23,7 +23,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-def Scala213 = "2.13.14"
+def Scala213 = "2.13.15"
 
 def scalaVersions = Seq(Scala213, "3.3.3")
 
