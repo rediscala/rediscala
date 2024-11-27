@@ -72,6 +72,7 @@ lazy val standardSettings = Def.settings(
   Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= Seq(
+    "-release:8",
     "-Wunused:imports",
     "-encoding",
     "UTF-8",
