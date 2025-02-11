@@ -70,7 +70,7 @@ case class MultiBulk(responses: Option[Vector[RedisReply]]) extends RedisReply {
 
   def asTry[A](implicit convert: MultiBulkConverter[A]): Try[A] = convert.to(this)
 
-  def asOpt[A](implicit convert: MultiBulkConverter[A]): Option[A] = asTry(convert).toOption
+  def asOpt[A](implicit convert: MultiBulkConverter[A]): Option[A] = asTry(using convert).toOption
 }
 
 case class PartialMultiBulk(i: Int, acc: mutable.Buffer[RedisReply]) extends RedisReply {
