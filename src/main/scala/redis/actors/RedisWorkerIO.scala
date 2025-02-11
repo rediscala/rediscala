@@ -24,7 +24,7 @@ abstract class RedisWorkerIO(val address: InetSocketAddress, onConnectStatus: Bo
 
   import context.*
 
-  val tcp: ActorRef = IO(Tcp)(context.system)
+  val tcp: ActorRef = IO(Tcp)(using context.system)
 
   // todo watch tcpWorker
   private var tcpWorker: ActorRef = null
