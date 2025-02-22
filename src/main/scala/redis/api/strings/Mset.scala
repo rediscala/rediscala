@@ -9,7 +9,7 @@ case class Mset[K, V](keysValues: Map[K, V])(implicit redisKey: ByteStringSerial
   def isMasterOnly = true
   val encodedRequest: ByteString = encode(
     "MSET",
-    keysValues.foldLeft(Seq[ByteString]()) { case (acc, e) =>
+    keysValues.foldLeft(Seq[ByteString]()) { (acc, e) =>
       redisKey.serialize(e._1) +: convert.serialize(e._2) +: acc
     }
   )
