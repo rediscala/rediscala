@@ -12,7 +12,7 @@ case class Hmset[K, KK, V](key: K, keysValues: Map[KK, V])(implicit
   def isMasterOnly = true
   val encodedRequest: ByteString = encode(
     "HMSET",
-    keyAsString +: keysValues.foldLeft(Seq.empty[ByteString]) { case (acc, e) =>
+    keyAsString +: keysValues.foldLeft(Seq.empty[ByteString]) { (acc, e) =>
       redisFields.serialize(e._1) +: convert.serialize(e._2) +: acc
     }
   )
