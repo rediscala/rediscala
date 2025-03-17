@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
     env:
-      scala_version: "3.6.1"
+      scala_version: "3.6.4"
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-java@v4
