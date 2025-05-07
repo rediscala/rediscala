@@ -25,7 +25,7 @@ val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 def Scala213 = "2.13.16"
 
-def scalaVersions = Seq(Scala213, "3.3.5")
+def scalaVersions = Seq(Scala213, "3.3.6")
 
 lazy val commonSettings = Def.settings(
   organization := "io.github.rediscala",
