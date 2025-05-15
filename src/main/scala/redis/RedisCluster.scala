@@ -16,7 +16,7 @@ import scala.concurrent.Promise
 import scala.concurrent.duration.Duration
 import scala.util.control.NonFatal
 
-case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(implicit
+case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(using
   _system: ActorSystem,
   redisDispatcher: RedisDispatcher = Redis.dispatcher
 ) extends RedisClientPoolLike(_system, redisDispatcher)
@@ -171,10 +171,6 @@ case class RedisCluster(redisServers: Seq[RedisServer], name: String = "RedisCli
         }
     }
   }
-
-  @deprecated(message = "use groupByClusterServer", since = "1.14.0")
-  def groupByCluserServer(keys: Seq[String]): Seq[Seq[String]] =
-    groupByClusterServer(keys)
 
   def groupByClusterServer(keys: Seq[String]): Seq[Seq[String]] = {
     keys.groupBy { key =>

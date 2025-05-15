@@ -3,7 +3,7 @@ package redis.api.sortedsets
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Zrangebylex[K, R](key: K, min: String, max: String, limit: Option[(Long, Long)] = None)(implicit
+case class Zrangebylex[K, R](key: K, min: String, max: String, limit: Option[(Long, Long)] = None)(using
   keySeria: ByteStringSerializer[K],
   deserializerR: ByteStringDeserializer[R]
 ) extends SimpleClusterKey[K]

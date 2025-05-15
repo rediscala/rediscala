@@ -1,13 +1,10 @@
 package redis.protocol
 
 import java.lang.System.arraycopy
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import org.apache.pekko.util.ByteString
 
 object RedisProtocolRequest {
-  @deprecated("will be removed", "1.16.1")
-  val UTF8_CHARSET: Charset = StandardCharsets.UTF_8
   val LS_STRING = "\r\n"
   val LS: Array[Byte] = LS_STRING.getBytes(StandardCharsets.UTF_8)
 

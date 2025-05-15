@@ -3,7 +3,7 @@ package redis.api.lists
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Lrem[K, V](key: K, count: Long, value: V)(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
+case class Lrem[K, V](key: K, count: Long, value: V)(using redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
     extends SimpleClusterKey[K]
     with RedisCommandIntegerLong {
   def isMasterOnly = true

@@ -16,7 +16,7 @@ object MultiBulkConverter {
       .getOrElse(Seq.empty)
   }
 
-  def toSeqByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[R] = {
+  def toSeqByteString[R](reply: MultiBulk)(using deserializer: ByteStringDeserializer[R]): Seq[R] = {
     reply.responses
       .map(r => {
         r.map(reply => deserializer.deserialize(reply.toByteString))
@@ -24,7 +24,7 @@ object MultiBulkConverter {
       .getOrElse(Seq.empty)
   }
 
-  def toSeqOptionByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[Option[R]] = {
+  def toSeqOptionByteString[R](reply: MultiBulk)(using deserializer: ByteStringDeserializer[R]): Seq[Option[R]] = {
     reply.responses
       .map(r => {
         r.map(_.asOptByteString.map(deserializer.deserialize))
@@ -32,7 +32,7 @@ object MultiBulkConverter {
       .getOrElse(Seq.empty)
   }
 
-  def toSeqTuple2ByteStringDouble[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Seq[(R, Double)] = {
+  def toSeqTuple2ByteStringDouble[R](reply: MultiBulk)(using deserializer: ByteStringDeserializer[R]): Seq[(R, Double)] = {
     reply.responses.map { r =>
       {
         val s = r.map(_.toByteString)
@@ -93,7 +93,7 @@ object MultiBulkConverter {
     }.getOrElse(Seq.empty)
   }
 
-  def toOptionStringByteString[R](reply: MultiBulk)(implicit deserializer: ByteStringDeserializer[R]): Option[(String, R)] = {
+  def toOptionStringByteString[R](reply: MultiBulk)(using deserializer: ByteStringDeserializer[R]): Option[(String, R)] = {
     reply.responses.map { r =>
       r.head.toString -> deserializer.deserialize(r.tail.head.toByteString)
     }

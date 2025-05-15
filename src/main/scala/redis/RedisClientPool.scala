@@ -2,7 +2,7 @@ package redis
 
 import org.apache.pekko.actor.ActorSystem
 
-case class RedisClientPool(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(implicit
+case class RedisClientPool(redisServers: Seq[RedisServer], name: String = "RedisClientPool")(using
   _system: ActorSystem,
   redisDispatcher: RedisDispatcher = Redis.dispatcher
 ) extends RedisClientPoolLike(_system, redisDispatcher)

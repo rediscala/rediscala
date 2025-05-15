@@ -6,7 +6,7 @@ import redis.api.Aggregate
 import redis.api.SUM
 
 private[redis] object Zstore {
-  def buildArgs[KD, K, KK](destination: KD, key: K, keys: Seq[KK], aggregate: Aggregate = SUM)(implicit
+  def buildArgs[KD, K, KK](destination: KD, key: K, keys: Seq[KK], aggregate: Aggregate = SUM)(using
     keyDestSeria: ByteStringSerializer[KD],
     keySeria: ByteStringSerializer[K],
     keysSeria: ByteStringSerializer[KK]

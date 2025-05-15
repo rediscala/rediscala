@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.protocol.*
 
-case class GeoHash[K](key: K, member: Seq[String])(implicit redisKey: ByteStringSerializer[K])
+case class GeoHash[K](key: K, member: Seq[String])(using redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]
     with RedisCommandMultiBulk[Seq[String]] {
   def isMasterOnly = false

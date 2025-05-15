@@ -15,7 +15,7 @@ case class RedisPubSub(
   authUsername: Option[String] = None,
   authPassword: Option[String] = None,
   name: String = "RedisPubSub"
-)(implicit system: ActorRefFactory, redisDispatcher: RedisDispatcher = Redis.dispatcher) {
+)(using system: ActorRefFactory, redisDispatcher: RedisDispatcher = Redis.dispatcher) {
 
   val redisConnection: ActorRef = system.actorOf(
     Props(

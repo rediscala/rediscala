@@ -41,7 +41,7 @@ class RedisTest extends RedisDockerServer {
     }
     "use custom dispatcher" in {
       def test() = withRedisServer(port => {
-        implicit val redisDispatcher = RedisDispatcher("no-this-dispatcher")
+        given RedisDispatcher = RedisDispatcher("no-this-dispatcher")
         RedisClient(port = port)
       })
       assertThrows[ConfigurationException] { test() }

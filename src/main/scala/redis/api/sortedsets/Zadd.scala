@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.api.ZaddOption
 
-case class Zadd[K, V](key: K, options: Seq[ZaddOption], scoreMembers: Seq[(Double, V)])(implicit
+case class Zadd[K, V](key: K, options: Seq[ZaddOption], scoreMembers: Seq[(Double, V)])(using
   keySeria: ByteStringSerializer[K],
   convert: ByteStringSerializer[V]
 ) extends SimpleClusterKey[K]

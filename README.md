@@ -61,7 +61,7 @@ import org.apache.pekko.actor.ActorSystem
 
 object Main {
   def main(args: Array[String]): Unit = {
-    implicit val system: ActorSystem = ActorSystem()
+    given ActorSystem = ActorSystem()
 
     val redis = RedisClient()
 
@@ -151,7 +151,7 @@ or extend the actor [RedisSubscriberActor](https://javadoc.io/doc/io.github.redi
 ```scala
 object ExamplePubSub {
   def main(args: Array[String]): Unit = {
-    implicit val system: ActorSystem = org.apache.pekko.actor.ActorSystem()
+    given ActorSystem = org.apache.pekko.actor.ActorSystem()
 
     val redis = RedisClient()
 
@@ -224,10 +224,10 @@ The `write` commands are sent to the master, while the read commands are sent to
 
 ### Config Which Dispatcher to Use
 
-By default, the actors in this project will use the dispatcher `rediscala.rediscala-client-worker-dispatcher`. If you want to use another dispatcher, just config the implicit value of `redisDispatcher`:
+By default, the actors in this project will use the dispatcher `rediscala.rediscala-client-worker-dispatcher`. If you want to use another dispatcher, just config the given value of `redisDispatcher`:
 
 ```scala
-implicit val redisDispatcher = RedisDispatcher("pekko.actor.default-dispatcher")
+given RedisDispatcher = RedisDispatcher("pekko.actor.default-dispatcher")
 ```
 
 ### ByteStringSerializer ByteStringDeserializer ByteStringFormatter
@@ -242,7 +242,7 @@ implicit val redisDispatcher = RedisDispatcher("pekko.actor.default-dispatcher")
 case class DumbClass(s1: String, s2: String)
 
 object DumbClass {
-  implicit val byteStringFormatter: ByteStringFormatter[DumbClass] =
+  given ByteStringFormatter[DumbClass] =
     new ByteStringFormatter[DumbClass] {
       def serialize(data: DumbClass): ByteString = {
         //...

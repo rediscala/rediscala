@@ -6,7 +6,7 @@ import redis.ByteStringSerializer
 import redis.RedisCommandBulkOptionByteString
 import redis.api.ListDirection
 
-case class Lmove[KS, KD, R](source: KS, destination: KD, from: ListDirection, to: ListDirection)(implicit
+case class Lmove[KS, KD, R](source: KS, destination: KD, from: ListDirection, to: ListDirection)(using
   sourceSer: ByteStringSerializer[KS],
   destSer: ByteStringSerializer[KD],
   deserializerR: ByteStringDeserializer[R]

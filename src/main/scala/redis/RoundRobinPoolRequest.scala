@@ -8,7 +8,7 @@ import scala.concurrent.Future
 import scala.concurrent.Promise
 
 trait RoundRobinPoolRequest {
-  implicit val executionContext: ExecutionContext
+  given executionContext: ExecutionContext
 
   def redisConnectionPool: Seq[ActorRef]
 

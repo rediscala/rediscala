@@ -3,7 +3,7 @@ package redis.api.lists
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Rpoplpush[KS, KD, R](source: KS, destination: KD)(implicit
+case class Rpoplpush[KS, KD, R](source: KS, destination: KD)(using
   sourceSer: ByteStringSerializer[KS],
   destSer: ByteStringSerializer[KD],
   deserializerR: ByteStringDeserializer[R]

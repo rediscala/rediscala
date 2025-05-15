@@ -10,7 +10,7 @@ case class SentinelMonitoredRedisClient(
   password: Option[String] = None,
   db: Option[Int] = None,
   name: String = "SMRedisClient"
-)(implicit system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
+)(using system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
     extends SentinelMonitoredRedisClientLike(system, redisDispatcher)
     with RedisCommands
     with Transactions {

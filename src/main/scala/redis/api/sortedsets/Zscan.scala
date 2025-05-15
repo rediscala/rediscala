@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.protocol.RedisReply
 
-case class Zscan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Option[String])(implicit
+case class Zscan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Option[String])(using
   redisKey: ByteStringSerializer[K],
   redisCursor: ByteStringSerializer[C],
   deserializerR: ByteStringDeserializer[R],

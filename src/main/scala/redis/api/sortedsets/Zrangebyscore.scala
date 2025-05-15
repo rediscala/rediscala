@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.api.Limit
 
-case class Zrangebyscore[K: ByteStringSerializer, R](key: K, min: Limit, max: Limit, limit: Option[(Long, Long)] = None)(implicit
+case class Zrangebyscore[K: ByteStringSerializer, R](key: K, min: Limit, max: Limit, limit: Option[(Long, Long)] = None)(using
   deserializerR: ByteStringDeserializer[R]
 ) extends SimpleClusterKey[K]
     with RedisCommandMultiBulkSeqByteString[R] {
@@ -14,7 +14,7 @@ case class Zrangebyscore[K: ByteStringSerializer, R](key: K, min: Limit, max: Li
 }
 
 private[redis] object Zrangebyscore {
-  def buildArgs[K](key: K, min: Limit, max: Limit, withscores: Boolean, limit: Option[(Long, Long)])(implicit
+  def buildArgs[K](key: K, min: Limit, max: Limit, withscores: Boolean, limit: Option[(Long, Long)])(using
     keySeria: ByteStringSerializer[K]
   ): Seq[ByteString] = {
     val builder = Seq.newBuilder[ByteString]

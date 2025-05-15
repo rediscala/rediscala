@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.api.ListPivot
 
-case class Linsert[K, KP, V](key: K, beforeAfter: ListPivot, pivot: KP, value: V)(implicit
+case class Linsert[K, KP, V](key: K, beforeAfter: ListPivot, pivot: KP, value: V)(using
   redisKey: ByteStringSerializer[K],
   redisPivot: ByteStringSerializer[KP],
   convert: ByteStringSerializer[V]

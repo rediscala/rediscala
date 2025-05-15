@@ -15,7 +15,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
   def redisServerConnections: scala.collection.Map[RedisServer, RedisConnection]
 
   val name: String
-  implicit val executionContext: ExecutionContext = system.dispatchers.lookup(redisDispatcher.name)
+  given executionContext: ExecutionContext = system.dispatchers.lookup(redisDispatcher.name)
 
   private val redisConnectionRef: AtomicReference[Seq[ActorRef]] = new AtomicReference(Seq.empty)
 
@@ -66,7 +66,7 @@ abstract class RedisClientPoolLike(system: ActorSystem, redisDispatcher: RedisDi
   def getConnectOperations(server: RedisServer): () => Seq[Operation[?, ?]] = () => {
     val self = this
     val redis = new BufferedRequest with RedisCommands {
-      implicit val executionContext: ExecutionContext = self.executionContext
+      given executionContext: ExecutionContext = self.executionContext
     }
     onConnect(redis, server)
     redis.operations.result()
