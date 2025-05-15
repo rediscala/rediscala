@@ -32,43 +32,43 @@ class ConverterSpec extends AnyWordSpec {
 
   "ByteStringSerializer" should {
     "String" in {
-      assert(String.serialize("super string !") == ByteString("super string !"))
+      assert(implicitly[ByteStringSerializer[String]].serialize("super string !") == ByteString("super string !"))
     }
 
     "Short" in {
-      assert(ShortConverter.serialize(123) == ByteString("123"))
+      assert(implicitly[ByteStringSerializer[Short]].serialize(123) == ByteString("123"))
     }
 
     "Int" in {
-      assert(IntConverter.serialize(123) == ByteString("123"))
+      assert(implicitly[ByteStringSerializer[Int]].serialize(123) == ByteString("123"))
     }
 
     "Long" in {
-      assert(LongConverter.serialize(123) == ByteString("123"))
+      assert(implicitly[ByteStringSerializer[Long]].serialize(123) == ByteString("123"))
     }
 
     "Float" in {
-      assert(FloatConverter.serialize(123.123f) == ByteString("123.123"))
+      assert(implicitly[ByteStringSerializer[Float]].serialize(123.123f) == ByteString("123.123"))
     }
 
     "Double" in {
-      assert(DoubleConverter.serialize(123.123456) == ByteString("123.123456"))
+      assert(implicitly[ByteStringSerializer[Double]].serialize(123.123456) == ByteString("123.123456"))
     }
 
     "Char" in {
-      assert(CharConverter.serialize('a') == ByteString('a'))
+      assert(implicitly[ByteStringSerializer[Char]].serialize('a') == ByteString('a'))
     }
 
     "Byte" in {
-      assert(ByteConverter.serialize(123) == ByteString(123))
+      assert(implicitly[ByteStringSerializer[Byte]].serialize(123) == ByteString(123))
     }
 
     "ArrayByte" in {
-      assert(ArrayByteConverter.serialize(Array[Byte](1, 2, 3)) == ByteString(Array[Byte](1, 2, 3)))
+      assert(implicitly[ByteStringSerializer[Array[Byte]]].serialize(Array[Byte](1, 2, 3)) == ByteString(Array[Byte](1, 2, 3)))
     }
 
     "ByteString" in {
-      assert(ByteStringConverter.serialize(ByteString("stupid")) == ByteString("stupid"))
+      assert(implicitly[ByteStringSerializer[ByteString]].serialize(ByteString("stupid")) == ByteString("stupid"))
     }
   }
 
