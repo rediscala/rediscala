@@ -1,7 +1,7 @@
 package redis
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.*
+import org.apache.pekko.actor.*
 import redis.actors.RedisSubscriberActorWithCallback
 import redis.api.pubsub.*
 

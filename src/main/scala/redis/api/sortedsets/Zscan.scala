@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisReply
 
 case class Zscan[K, C, R](key: K, cursor: C, count: Option[Int], matchGlob: Option[String])(implicit

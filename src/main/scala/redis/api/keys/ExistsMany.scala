@@ -1,7 +1,7 @@
 package redis.api.keys
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class ExistsMany[K](keys: Seq[K])(implicit redisKey: ByteStringSerializer[K]) extends MultiClusterKey[K] with RedisCommandIntegerLong {
   def isMasterOnly = false

@@ -1,7 +1,7 @@
 package redis
 
+import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpec
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
 import redis.protocol.RedisReply
 

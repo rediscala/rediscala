@@ -1,11 +1,11 @@
 package redis.actors
 
 import java.net.InetSocketAddress
+import org.apache.pekko.actor.*
+import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Operation
 import redis.Redis
-import redis.RediscalaCompat.actor.*
-import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaTestCompat.testkit.*
 import redis.api.connection.Ping
 import redis.api.strings.Get

@@ -1,6 +1,6 @@
 package redis.api
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 
 sealed trait ZaddOption extends Product with Serializable {
   def serialize: ByteString

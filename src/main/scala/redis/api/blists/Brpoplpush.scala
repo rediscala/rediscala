@@ -1,7 +1,7 @@
 package redis.api.blists
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
 import redis.protocol.RedisReply
 import scala.concurrent.duration.Duration

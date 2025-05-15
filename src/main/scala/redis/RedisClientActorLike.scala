@@ -1,7 +1,7 @@
 package redis
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.*
+import org.apache.pekko.actor.*
 import redis.actors.RedisClientActor
 import scala.concurrent.*
 import scala.concurrent.duration.FiniteDuration

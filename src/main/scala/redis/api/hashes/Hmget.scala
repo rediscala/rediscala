@@ -1,7 +1,7 @@
 package redis.api.hashes
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
 
 case class Hmget[K, KK, R](key: K, fields: Seq[KK])(implicit

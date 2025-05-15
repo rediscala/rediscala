@@ -1,10 +1,10 @@
 package redis
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaCompat.actor.Props
-import redis.RediscalaCompat.event.Logging
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.actor.Props
+import org.apache.pekko.event.Logging
 import redis.actors.RedisSubscriberActorWithCallback
 import redis.api.pubsub.Message
 import redis.api.pubsub.PMessage

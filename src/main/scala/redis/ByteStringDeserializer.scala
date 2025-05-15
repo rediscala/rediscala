@@ -1,6 +1,6 @@
 package redis
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import scala.annotation.implicitNotFound
 
 object ByteStringDeserializer extends ByteStringDeserializerLowPriority

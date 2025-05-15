@@ -1,7 +1,7 @@
 package redis.api.sets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Sinterstore[KD, K, KK](destination: KD, key: K, keys: Seq[KK])(implicit
   redisDest: ByteStringSerializer[KD],

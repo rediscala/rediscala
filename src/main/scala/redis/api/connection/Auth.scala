@@ -1,7 +1,7 @@
 package redis.api.connection
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Status
 
 case class Auth[V](value1: V, value2: Option[V] = None)(implicit convert: ByteStringSerializer[V]) extends RedisCommandStatus[Status] {

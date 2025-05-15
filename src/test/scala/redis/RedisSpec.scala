@@ -5,11 +5,11 @@ import java.io.OutputStream
 import java.net.Socket
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.util.Timeout
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.RedisServerHelper.*
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaCompat.util.Timeout
 import redis.RediscalaTestCompat.testkit.TestKit
 import scala.concurrent.ExecutionContext
 import scala.io.Source

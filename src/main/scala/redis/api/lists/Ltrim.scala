@@ -1,7 +1,7 @@
 package redis.api.lists
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Ltrim[K](key: K, start: Long, stop: Long)(implicit redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

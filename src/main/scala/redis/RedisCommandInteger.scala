@@ -1,6 +1,6 @@
 package redis
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import redis.protocol.*
 
 trait RedisCommandInteger[T] extends RedisCommand[Integer, T] {

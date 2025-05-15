@@ -1,7 +1,7 @@
 package redis.commands
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.api.*
 import redis.api.ZaddOption.CH
 import redis.api.ZaddOption.NX

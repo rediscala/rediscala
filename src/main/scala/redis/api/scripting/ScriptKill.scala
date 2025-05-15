@@ -1,7 +1,7 @@
 package redis.api.scripting
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case object ScriptKill extends RedisCommandStatusBoolean {
   def isMasterOnly = true

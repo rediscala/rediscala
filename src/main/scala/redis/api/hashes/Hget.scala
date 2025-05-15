@@ -1,7 +1,7 @@
 package redis.api.hashes
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Hget[K, KK, R](key: K, field: KK)(implicit
   redisKey: ByteStringSerializer[K],

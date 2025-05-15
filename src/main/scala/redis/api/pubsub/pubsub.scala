@@ -1,6 +1,6 @@
 package redis.api.pubsub
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import redis.protocol.RedisProtocolRequest
 
 sealed trait SubscribeMessage extends Product with Serializable {

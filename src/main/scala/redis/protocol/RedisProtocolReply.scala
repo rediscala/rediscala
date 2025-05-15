@@ -1,7 +1,7 @@
 package redis.protocol
 
+import org.apache.pekko.util.ByteString
 import redis.MultiBulkConverter
-import redis.RediscalaCompat.util.ByteString
 import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.util.Try

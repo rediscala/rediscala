@@ -1,7 +1,7 @@
 package redis.api.connection
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Select(index: Int) extends RedisCommandStatusBoolean {
   def isMasterOnly = true

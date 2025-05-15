@@ -1,11 +1,11 @@
 package redis.commands
 
 import java.io.File
+import org.apache.pekko.util.ByteString
 import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.SpanSugar.*
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
 import redis.api.scripting.RedisScript
 import redis.protocol.Bulk

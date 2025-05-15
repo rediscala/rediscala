@@ -1,9 +1,9 @@
 package redis.api.blists
 
+import org.apache.pekko.util.ByteString
 import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.RedisCommandBulkOptionByteString
-import redis.RediscalaCompat.util.ByteString
 import redis.api.ListDirection
 import scala.concurrent.duration.FiniteDuration
 

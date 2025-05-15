@@ -1,5 +1,6 @@
 package redis
 
+@deprecated("will be removed")
 private[redis] object RediscalaCompat {
 
   type ConfigurationException = org.apache.pekko.ConfigurationException

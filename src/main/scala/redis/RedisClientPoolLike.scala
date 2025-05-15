@@ -3,8 +3,8 @@ package redis
 import java.net.InetSocketAddress
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.ActorSystem
 import redis.actors.RedisClientActor
 import redis.protocol.RedisReply
 import scala.concurrent.ExecutionContext

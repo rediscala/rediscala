@@ -1,8 +1,8 @@
 package redis.protocol
 
+import org.apache.pekko.util.ByteString
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Properties
-import redis.RediscalaCompat.util.ByteString
 
 object ParseNumberScalaCheck extends Properties("ParseNumber") {
   property("parse long") = forAll { (a: Long) =>

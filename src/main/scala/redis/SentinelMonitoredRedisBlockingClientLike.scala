@@ -1,6 +1,6 @@
 package redis
 
-import redis.RediscalaCompat.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 
 abstract class SentinelMonitoredRedisBlockingClientLike(system: ActorSystem, redisDispatcher: RedisDispatcher)
     extends SentinelMonitored(system, redisDispatcher)

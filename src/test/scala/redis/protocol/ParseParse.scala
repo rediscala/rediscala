@@ -1,7 +1,7 @@
 package redis.protocol
 
+import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpec
-import redis.RediscalaCompat.util.ByteString
 
 class ParseParse extends AnyWordSpec {
   "parse" should {

@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Setbit[K](key: K, offset: Long, value: Boolean)(implicit redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

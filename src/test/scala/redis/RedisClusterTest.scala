@@ -1,7 +1,7 @@
 package redis
 
 import java.util.Base64
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import redis.api.clusters.ClusterSlots
 import redis.protocol.*
 import scala.concurrent.Await

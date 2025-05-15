@@ -1,7 +1,7 @@
 package redis.api
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
 
 case class SenMasterInfo(master: String) extends RedisCommandMultiBulk[Map[String, String]] {

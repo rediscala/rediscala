@@ -1,7 +1,7 @@
 package redis.api.hashes
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Hincrby[K, KK](key: K, fields: KK, increment: Long)(implicit redisKey: ByteStringSerializer[K], redisFields: ByteStringSerializer[KK])
     extends SimpleClusterKey[K]

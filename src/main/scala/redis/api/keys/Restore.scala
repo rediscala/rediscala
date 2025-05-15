@@ -1,7 +1,7 @@
 package redis.api.keys
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Restore[K, V](key: K, ttl: Long = 0, serializedValue: V)(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
     extends SimpleClusterKey[K]

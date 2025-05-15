@@ -1,7 +1,7 @@
 package redis.api.lists
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Rpoplpush[KS, KD, R](source: KS, destination: KD)(implicit
   sourceSer: ByteStringSerializer[KS],

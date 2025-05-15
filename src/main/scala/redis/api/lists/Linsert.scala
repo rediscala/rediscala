@@ -1,7 +1,7 @@
 package redis.api.lists
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.api.ListPivot
 
 case class Linsert[K, KP, V](key: K, beforeAfter: ListPivot, pivot: KP, value: V)(implicit

@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Setex[K, V](key: K, seconds: Long, value: V)(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
     extends SimpleClusterKey[K]

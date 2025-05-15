@@ -1,7 +1,7 @@
 package redis.api
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class SenMasterFailover(master: String) extends RedisCommandStatusBoolean {
   def isMasterOnly = true
