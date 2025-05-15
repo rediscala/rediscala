@@ -1,6 +1,3 @@
-import com.typesafe.tools.mima.core.DirectMissingMethodProblem
-import com.typesafe.tools.mima.core.ProblemFilters
-import com.typesafe.tools.mima.core.ReversedMissingMethodProblem
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
