@@ -3,9 +3,9 @@ package redis
 import java.net.InetSocketAddress
 import org.apache.pekko.actor.ActorRef
 import org.apache.pekko.actor.Props
+import org.apache.pekko.testkit.TestActorRef
+import org.apache.pekko.testkit.TestProbe
 import org.apache.pekko.util.ByteString
-import redis.RediscalaTestCompat.testkit.TestActorRef
-import redis.RediscalaTestCompat.testkit.TestProbe
 import redis.actors.RedisSubscriberActor
 import redis.api.pubsub.*
 import scala.concurrent.Await
