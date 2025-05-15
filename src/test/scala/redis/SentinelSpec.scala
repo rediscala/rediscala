@@ -1,7 +1,7 @@
 package redis
 
+import org.apache.pekko.testkit.*
 import org.scalatest.concurrent.ScalaFutures
-import redis.RediscalaTestCompat.testkit.*
 import scala.concurrent.*
 import scala.concurrent.duration.*
 

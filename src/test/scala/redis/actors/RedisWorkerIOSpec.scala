@@ -10,10 +10,10 @@ import org.apache.pekko.io.Tcp.Connect
 import org.apache.pekko.io.Tcp.Connected
 import org.apache.pekko.io.Tcp.ErrorClosed
 import org.apache.pekko.io.Tcp.Register
+import org.apache.pekko.testkit.*
 import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Redis
-import redis.RediscalaTestCompat.testkit.*
 
 class RedisWorkerIOSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {
 

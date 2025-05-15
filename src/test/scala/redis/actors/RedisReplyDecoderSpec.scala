@@ -3,12 +3,11 @@ package redis.actors
 import com.typesafe.config.ConfigFactory
 import java.net.InetSocketAddress
 import org.apache.pekko.actor.*
+import org.apache.pekko.testkit.*
 import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Operation
 import redis.Redis
-import redis.RediscalaTestCompat
-import redis.RediscalaTestCompat.testkit.*
 import redis.api.connection.Ping
 import redis.api.hashes.Hgetall
 import redis.protocol.MultiBulk
@@ -18,7 +17,7 @@ import scala.concurrent.Promise
 
 class RedisReplyDecoderSpec
     extends TestKit(
-      ActorSystem("testsystem", ConfigFactory.parseString(s"""${RediscalaTestCompat.loggersKey} = ["${classOf[TestEventListener].getName}"]"""))
+      ActorSystem("testsystem", ConfigFactory.parseString(s"""pekko.loggers = ["${classOf[TestEventListener].getName}"]"""))
     )
     with AnyWordSpecLike
     with ImplicitSender {
