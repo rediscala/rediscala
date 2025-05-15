@@ -3,7 +3,7 @@ package redis.api.scripting
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Eval[R, KK, KA](script: String, keys: Seq[KK] = Seq(), args: Seq[KA] = Seq())(implicit
+case class Eval[R, KK, KA](script: String, keys: Seq[KK] = Seq(), args: Seq[KA] = Seq())(using
   redisKeys: ByteStringSerializer[KK],
   redisArgs: ByteStringSerializer[KA],
   deserializerR: RedisReplyDeserializer[R]

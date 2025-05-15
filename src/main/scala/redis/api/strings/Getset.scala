@@ -3,7 +3,7 @@ package redis.api.strings
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Getset[K, V, R](key: K, value: V)(implicit
+case class Getset[K, V, R](key: K, value: V)(using
   redisKey: ByteStringSerializer[K],
   convert: ByteStringSerializer[V],
   deserializerR: ByteStringDeserializer[R]

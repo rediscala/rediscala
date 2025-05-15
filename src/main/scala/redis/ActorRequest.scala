@@ -7,7 +7,7 @@ import scala.concurrent.Future
 import scala.concurrent.Promise
 
 trait ActorRequest {
-  implicit val executionContext: ExecutionContext
+  given executionContext: ExecutionContext
 
   def redisConnection: ActorRef
 

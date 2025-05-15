@@ -7,7 +7,7 @@ import redis.protocol.RedisReply
 import redis.protocol.Status
 
 case class Set[K, V](key: K, value: V, exSeconds: Option[Long] = None, pxMilliseconds: Option[Long] = None, NX: Boolean = false, XX: Boolean = false)(
-  implicit
+  using
   redisKey: ByteStringSerializer[K],
   convert: ByteStringSerializer[V]
 ) extends SimpleClusterKey[K]

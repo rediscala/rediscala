@@ -3,7 +3,7 @@ package redis.api.hashes
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Hincrby[K, KK](key: K, fields: KK, increment: Long)(implicit redisKey: ByteStringSerializer[K], redisFields: ByteStringSerializer[KK])
+case class Hincrby[K, KK](key: K, fields: KK, increment: Long)(using redisKey: ByteStringSerializer[K], redisFields: ByteStringSerializer[KK])
     extends SimpleClusterKey[K]
     with RedisCommandIntegerLong {
   def isMasterOnly = true

@@ -13,7 +13,7 @@ case class Blmove[KS, KD, R](
   from: ListDirection,
   to: ListDirection,
   timeout: FiniteDuration
-)(implicit
+)(using
   sourceSer: ByteStringSerializer[KS],
   destSer: ByteStringSerializer[KD],
   override val deserializer: ByteStringDeserializer[R],

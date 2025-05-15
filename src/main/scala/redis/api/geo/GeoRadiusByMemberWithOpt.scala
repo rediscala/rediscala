@@ -6,7 +6,7 @@ import redis.api.geo.DistUnits.Measurement
 import redis.api.geo.GeoOptions.WithOption
 import redis.protocol.*
 
-case class GeoRadiusByMemberWithOpt[K](key: K, member: String, dist: Int, unit: Measurement, opt: WithOption, count: Int)(implicit
+case class GeoRadiusByMemberWithOpt[K](key: K, member: String, dist: Int, unit: Measurement, opt: WithOption, count: Int)(using
   redisKey: ByteStringSerializer[K]
 ) extends SimpleClusterKey[K]
     with RedisCommandMultiBulk[Seq[String]] {

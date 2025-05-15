@@ -68,9 +68,9 @@ case class MultiBulk(responses: Option[Vector[RedisReply]]) extends RedisReply {
 
   def asOptByteString: Option[ByteString] = throw new NoSuchElementException()
 
-  def asTry[A](implicit convert: MultiBulkConverter[A]): Try[A] = convert.to(this)
+  def asTry[A](using convert: MultiBulkConverter[A]): Try[A] = convert.to(this)
 
-  def asOpt[A](implicit convert: MultiBulkConverter[A]): Option[A] = asTry(using convert).toOption
+  def asOpt[A](using convert: MultiBulkConverter[A]): Option[A] = asTry(using convert).toOption
 }
 
 case class PartialMultiBulk(i: Int, acc: mutable.Buffer[RedisReply]) extends RedisReply {

@@ -12,6 +12,6 @@ case class RedisBlockingClient(
   override val db: Option[Int] = None,
   name: String = "RedisBlockingClient",
   connectTimeout: Option[FiniteDuration] = None
-)(implicit _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
+)(using _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
     extends RedisClientActorLike(_system, redisDispatcher, connectTimeout)
     with BLists {}

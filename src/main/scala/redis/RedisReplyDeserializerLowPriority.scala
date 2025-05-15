@@ -4,10 +4,11 @@ import redis.protocol.*
 
 trait RedisReplyDeserializerLowPriority extends RedisReplyDeserializerDefault {
 
-  implicit object RedisReply extends RedisReplyDeserializer[RedisReply] {
-    def deserialize: PartialFunction[RedisReply, RedisReply] = { case reply =>
-      reply
+  given RedisReply: RedisReplyDeserializer[RedisReply] =
+    new RedisReplyDeserializer[RedisReply] {
+      def deserialize: PartialFunction[RedisReply, RedisReply] = { case reply =>
+        reply
+      }
     }
-  }
 
 }

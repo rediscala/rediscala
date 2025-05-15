@@ -12,9 +12,6 @@ jobs:
         java:
           - 8
           - 21
-        project:
-          - 2_13
-          - 3
     env:
       REDIS_HOME: "redis-6.2.18/src"
     steps:
@@ -28,7 +25,6 @@ jobs:
     - run: ./install-redis.sh
     - run: sbt -v
            scalafmtSbtCheck
-           "project rediscala${{ matrix.project }}"
            scalafmtCheckAll
            Test/compile
            mimaReportBinaryIssues
@@ -38,7 +34,6 @@ jobs:
         timeout_minutes: 20
         max_attempts: 3
         command: sbt -v
-                 "project rediscala${{ matrix.project }}"
                  "onFailure testQuick"
                  test
   latest:
@@ -58,11 +53,11 @@ jobs:
     - uses: sbt/setup-sbt@v1
     - run: sbt -v
            "++ ${{env.scala_version}}!"
-           rediscala3/Test/compile
+           Test/compile
     - uses: nick-invision/retry@v3
       with:
         timeout_minutes: 10
         max_attempts: 3
         command: sbt -v
                  "++ ${{env.scala_version}}!"
-                 rediscala3/runDockerTests
+                 runDockerTests

@@ -10,7 +10,7 @@ case class SentinelMonitoredRedisBlockingClient(
   password: Option[String] = None,
   db: Option[Int] = None,
   name: String = "SMRedisBlockingClient"
-)(implicit system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
+)(using system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
     extends SentinelMonitoredRedisClientLike(system, redisDispatcher)
     with BLists {
   val redisClient: RedisBlockingClient = withMasterAddr((ip, port) => {

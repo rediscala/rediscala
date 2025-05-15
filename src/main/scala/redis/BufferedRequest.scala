@@ -8,7 +8,7 @@ import scala.concurrent.Future
 import scala.concurrent.Promise
 
 trait BufferedRequest {
-  implicit val executionContext: ExecutionContext
+  given executionContext: ExecutionContext
 
   val operations: mutable.Builder[Operation[?, ?], Queue[Operation[?, ?]]] = Queue.newBuilder[Operation[?, ?]]
 

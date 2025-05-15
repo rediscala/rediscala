@@ -4,8 +4,7 @@ import org.apache.pekko.util.ByteString
 
 trait ByteStringDeserializerLowPriority extends ByteStringDeserializerDefault {
 
-  implicit object ByteString extends ByteStringDeserializer[ByteString] {
-    def deserialize(bs: ByteString): ByteString = bs
-  }
+  given ByteString: ByteStringDeserializer[ByteString] =
+    bs => bs
 
 }

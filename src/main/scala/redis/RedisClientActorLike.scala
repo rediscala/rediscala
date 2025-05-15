@@ -14,7 +14,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
   val username: Option[String] = None
   val password: Option[String] = None
   val db: Option[Int] = None
-  implicit val executionContext: ExecutionContext = system.dispatchers.lookup(redisDispatcher.name)
+  given executionContext: ExecutionContext = system.dispatchers.lookup(redisDispatcher.name)
 
   val redisConnection: ActorRef = system.actorOf(
     RedisClientActor
@@ -45,7 +45,7 @@ abstract class RedisClientActorLike(system: ActorSystem, redisDispatcher: RedisD
   def getConnectOperations: () => Seq[Operation[?, ?]] = () => {
     val self = this
     val redis = new BufferedRequest with RedisCommands {
-      implicit val executionContext: ExecutionContext = self.executionContext
+      override given executionContext: ExecutionContext = self.executionContext
     }
     onConnect(redis)
     redis.operations.result()

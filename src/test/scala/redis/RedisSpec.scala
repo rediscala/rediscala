@@ -44,9 +44,9 @@ abstract class RedisHelper extends TestKit(ActorSystem()) with AnyWordSpecLike w
 
   import scala.concurrent.duration.*
 
-  implicit val executionContext: ExecutionContext = system.dispatchers.lookup(Redis.dispatcher.name)
+  given executionContext: ExecutionContext = system.dispatchers.lookup(Redis.dispatcher.name)
 
-  implicit val timeout: Timeout = Timeout(10.seconds)
+  given timeout: Timeout = Timeout(10.seconds)
   val timeOut = 10.seconds
   val longTimeOut = 100.seconds
 

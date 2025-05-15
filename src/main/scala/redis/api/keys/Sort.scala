@@ -12,7 +12,7 @@ case class Sort[K: ByteStringSerializer, R](
   getPatterns: Seq[String],
   order: Option[Order],
   alpha: Boolean
-)(implicit deserializerR: ByteStringDeserializer[R])
+)(using deserializerR: ByteStringDeserializer[R])
     extends RedisCommandMultiBulkSeqByteString[R] {
   def isMasterOnly = true
   val encodedRequest: ByteString = encode("SORT", Sort.buildArgs(key, byPattern, limit, getPatterns, order, alpha))
@@ -28,7 +28,7 @@ private[redis] object Sort {
     order: Option[Order],
     alpha: Boolean,
     store: Option[KS] = None
-  )(implicit redisKey: ByteStringSerializer[K], bsStore: ByteStringSerializer[KS]): Seq[ByteString] = {
+  )(using redisKey: ByteStringSerializer[K], bsStore: ByteStringSerializer[KS]): Seq[ByteString] = {
     var args = store.map(dest => List(ByteString("STORE"), bsStore.serialize(dest))).getOrElse(List())
     if (alpha) {
       args = ByteString("ALPHA") :: args

@@ -1,6 +1,6 @@
 package redis
 
-abstract class MultiClusterKey[K](implicit redisKey: ByteStringSerializer[K]) extends ClusterKey {
+abstract class MultiClusterKey[K](using redisKey: ByteStringSerializer[K]) extends ClusterKey {
   val keys: Seq[K]
   def getSlot(): Int = MultiClusterKey.getHeadSlot(redisKey, keys)
 }

@@ -2,9 +2,6 @@ package redis.util
 
 import java.nio.charset.StandardCharsets
 
-@deprecated("will be removed", "1.16.1")
-class CRC16
-
 /**
  * Created by npeters on 23/05/16.
  */

@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 trait Request {
-  implicit val executionContext: ExecutionContext
+  given executionContext: ExecutionContext
 
   def send[T](redisCommand: RedisCommand[? <: RedisReply, T]): Future[T]
 }

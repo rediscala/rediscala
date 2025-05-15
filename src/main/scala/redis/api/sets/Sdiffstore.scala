@@ -3,7 +3,7 @@ package redis.api.sets
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Sdiffstore[KD, K, KK](destination: KD, key: K, keys: Seq[KK])(implicit
+case class Sdiffstore[KD, K, KK](destination: KD, key: K, keys: Seq[KK])(using
   redisDest: ByteStringSerializer[KD],
   redisKey: ByteStringSerializer[K],
   redisKeys: ByteStringSerializer[KK]

@@ -4,7 +4,7 @@ import org.apache.pekko.util.ByteString
 import redis.*
 import redis.protocol.MultiBulk
 
-case class Lrange[K, R](key: K, start: Long, stop: Long)(implicit redisKey: ByteStringSerializer[K], deserializerR: ByteStringDeserializer[R])
+case class Lrange[K, R](key: K, start: Long, stop: Long)(using ByteStringSerializer[K], ByteStringDeserializer[R])
     extends SimpleClusterKey[K]
     with RedisCommandMultiBulk[Seq[R]] {
   def isMasterOnly = false

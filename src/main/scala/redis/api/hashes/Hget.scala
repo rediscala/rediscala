@@ -3,7 +3,7 @@ package redis.api.hashes
 import org.apache.pekko.util.ByteString
 import redis.*
 
-case class Hget[K, KK, R](key: K, field: KK)(implicit
+case class Hget[K, KK, R](key: K, field: KK)(using
   redisKey: ByteStringSerializer[K],
   redisFields: ByteStringSerializer[KK],
   deserializerR: ByteStringDeserializer[R]

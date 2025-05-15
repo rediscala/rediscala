@@ -4,44 +4,44 @@ import org.apache.pekko.util.ByteString
 
 trait ByteStringSerializerLowPriority {
 
-  implicit object String extends ByteStringSerializer[String] {
-    def serialize(key: String): ByteString = ByteString(key)
+  given String: ByteStringSerializer[String] = { key =>
+    ByteString(key)
   }
 
-  implicit object ShortConverter extends ByteStringSerializer[Short] {
-    def serialize(i: Short): ByteString = ByteString(i.toString)
+  given ShortConverter: ByteStringSerializer[Short] = { i =>
+    ByteString(i.toString)
   }
 
-  implicit object IntConverter extends ByteStringSerializer[Int] {
-    def serialize(i: Int): ByteString = ByteString(i.toString)
+  given IntConverter: ByteStringSerializer[Int] = { i =>
+    ByteString(i.toString)
   }
 
-  implicit object LongConverter extends ByteStringSerializer[Long] {
-    def serialize(i: Long): ByteString = ByteString(i.toString)
+  given LongConverter: ByteStringSerializer[Long] = { i =>
+    ByteString(i.toString)
   }
 
-  implicit object FloatConverter extends ByteStringSerializer[Float] {
-    def serialize(f: Float): ByteString = ByteString(f.toString)
+  given FloatConverter: ByteStringSerializer[Float] = { f =>
+    ByteString(f.toString)
   }
 
-  implicit object DoubleConverter extends ByteStringSerializer[Double] {
-    def serialize(d: Double): ByteString = ByteString(d.toString)
+  given DoubleConverter: ByteStringSerializer[Double] = { d =>
+    ByteString(d.toString)
   }
 
-  implicit object CharConverter extends ByteStringSerializer[Char] {
-    def serialize(c: Char): ByteString = ByteString(c)
+  given CharConverter: ByteStringSerializer[Char] = { c =>
+    ByteString(c)
   }
 
-  implicit object ByteConverter extends ByteStringSerializer[Byte] {
-    def serialize(b: Byte): ByteString = ByteString(b)
+  given ByteConverter: ByteStringSerializer[Byte] = { b =>
+    ByteString(b)
   }
 
-  implicit object ArrayByteConverter extends ByteStringSerializer[Array[Byte]] {
-    def serialize(b: Array[Byte]): ByteString = ByteString(b)
+  given ArrayByteConverter: ByteStringSerializer[Array[Byte]] = { b =>
+    ByteString(b)
   }
 
-  implicit object ByteStringConverter extends ByteStringSerializer[ByteString] {
-    def serialize(bs: ByteString): ByteString = bs
+  given ByteStringConverter: ByteStringSerializer[ByteString] = { bs =>
+    bs
   }
 
 }

@@ -18,7 +18,7 @@ case class SentinelClient(
   onNewSlave: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
   onSlaveDown: (String, String, Int) => Unit = (masterName: String, sentinelip: String, sentinelport: Int) => {},
   name: String = "SentinelClient"
-)(implicit _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
+)(using _system: ActorSystem, redisDispatcher: RedisDispatcher = Redis.dispatcher)
     extends RedisClientActorLike(_system, redisDispatcher)
     with SentinelCommands {
   val system: ActorSystem = _system

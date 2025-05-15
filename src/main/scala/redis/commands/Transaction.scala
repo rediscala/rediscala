@@ -15,7 +15,7 @@ import scala.concurrent.Promise
 import scala.util.Failure
 import scala.util.Success
 
-case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]], redisConnection: ActorRef)(implicit
+case class Transaction(watcher: Set[String], operations: Queue[Operation[?, ?]], redisConnection: ActorRef)(using
   val executionContext: ExecutionContext
 ) {
 

@@ -14,7 +14,7 @@ case class Migrate[K](
   copy: Boolean = false,
   replace: Boolean = false,
   password: Option[String]
-)(implicit redisKey: ByteStringSerializer[K])
+)(using redisKey: ByteStringSerializer[K])
     extends RedisCommandStatusBoolean {
   def isMasterOnly = true
   val encodedRequest: ByteString = {
