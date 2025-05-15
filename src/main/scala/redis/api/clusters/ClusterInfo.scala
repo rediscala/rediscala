@@ -1,7 +1,7 @@
 package redis.api.clusters
 
+import org.apache.pekko.util.ByteString
 import redis.RedisCommand
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
 import redis.protocol.DecodeResult
 import redis.protocol.RedisProtocolReply

@@ -1,7 +1,7 @@
 package redis.commands
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.api.ListDirection
 import scala.concurrent.Await
 import scala.concurrent.duration.*

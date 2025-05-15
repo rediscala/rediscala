@@ -1,7 +1,7 @@
 package redis.actors
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import redis.api.connection.Auth
 import redis.api.pubsub.*
 import redis.protocol.Error

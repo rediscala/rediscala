@@ -1,7 +1,7 @@
 package redis.api.scripting
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 trait EvaledScript {
   def isMasterOnly = true

@@ -1,5 +1,5 @@
 package redis.api.pubsub
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 
 case class Message(channel: String, data: ByteString)

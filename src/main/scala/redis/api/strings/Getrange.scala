@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Getrange[K, R](key: K, start: Long, end: Long)(implicit redisKey: ByteStringSerializer[K], deserializerR: ByteStringDeserializer[R])
     extends SimpleClusterKey[K]

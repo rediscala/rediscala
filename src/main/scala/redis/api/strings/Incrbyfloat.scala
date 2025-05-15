@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Incrbyfloat[K](key: K, increment: Double)(implicit redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

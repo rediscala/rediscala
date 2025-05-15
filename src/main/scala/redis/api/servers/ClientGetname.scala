@@ -1,7 +1,7 @@
 package redis.api.servers
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case object ClientGetname extends RedisCommandBulkOptionByteString[String] {
   def isMasterOnly: Boolean = true

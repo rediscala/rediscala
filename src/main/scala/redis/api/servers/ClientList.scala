@@ -1,7 +1,7 @@
 package redis.api.servers
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.Bulk
 
 case object ClientList extends RedisCommandBulk[Seq[Map[String, String]]] {

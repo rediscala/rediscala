@@ -1,7 +1,7 @@
 package redis
 
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.ActorSystem
 import redis.commands.Transactions
 import redis.protocol.RedisReply
 import scala.concurrent.Future

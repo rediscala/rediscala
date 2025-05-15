@@ -1,11 +1,11 @@
 package redis.actors
 
 import java.net.InetSocketAddress
+import org.apache.pekko.actor.*
+import org.apache.pekko.actor.SupervisorStrategy.Stop
+import org.apache.pekko.util.ByteString
+import org.apache.pekko.util.ByteStringBuilder
 import redis.Operation
-import redis.RediscalaCompat.actor.*
-import redis.RediscalaCompat.actor.SupervisorStrategy.Stop
-import redis.RediscalaCompat.util.ByteString
-import redis.RediscalaCompat.util.ByteStringBuilder
 import redis.Transaction
 import scala.collection.mutable
 import scala.concurrent.duration.FiniteDuration

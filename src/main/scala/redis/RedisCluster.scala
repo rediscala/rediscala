@@ -4,9 +4,9 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaCompat.event.Logging
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.event.Logging
 import redis.api.clusters.ClusterNode
 import redis.api.clusters.ClusterSlot
 import redis.protocol.RedisReply

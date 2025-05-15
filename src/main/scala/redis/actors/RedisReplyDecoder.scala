@@ -1,9 +1,9 @@
 package redis.actors
 
+import org.apache.pekko.actor.Actor
+import org.apache.pekko.event.Logging
+import org.apache.pekko.util.ByteString
 import redis.Operation
-import redis.RediscalaCompat.actor.Actor
-import redis.RediscalaCompat.event.Logging
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.DecodeResult
 import redis.protocol.FullyDecoded
 import redis.protocol.RedisProtocolReply

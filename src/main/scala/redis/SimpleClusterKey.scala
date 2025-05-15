@@ -1,6 +1,6 @@
 package redis
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 
 abstract class SimpleClusterKey[K](implicit redisKey: ByteStringSerializer[K]) extends ClusterKey {
   val key: K

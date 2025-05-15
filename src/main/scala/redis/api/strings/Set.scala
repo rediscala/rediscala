@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.RedisProtocolRequest
 import redis.protocol.RedisReply
 import redis.protocol.Status

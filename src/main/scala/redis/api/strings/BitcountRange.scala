@@ -1,7 +1,7 @@
 package redis.api.strings
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class BitcountRange[K](key: K, start: Long, end: Long)(implicit redisKey: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

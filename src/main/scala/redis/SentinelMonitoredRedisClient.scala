@@ -1,6 +1,6 @@
 package redis
 
-import redis.RediscalaCompat.actor.*
+import org.apache.pekko.actor.*
 import redis.commands.*
 
 case class SentinelMonitoredRedisClient(

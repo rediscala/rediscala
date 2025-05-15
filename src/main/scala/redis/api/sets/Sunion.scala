@@ -1,7 +1,7 @@
 package redis.api.sets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Sunion[K, KK, R](key: K, keys: Seq[KK])(implicit
   redisKey: ByteStringSerializer[K],

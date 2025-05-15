@@ -1,6 +1,6 @@
 package redis.actors
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 import redis.protocol.DecodeResult
 import redis.protocol.RedisProtocolReply
 import redis.protocol.RedisReply

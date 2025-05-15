@@ -1,18 +1,18 @@
 package redis.actors
 
 import java.net.InetSocketAddress
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.actor.Props
+import org.apache.pekko.io.Tcp.*
+import org.apache.pekko.io.Tcp.CommandFailed
+import org.apache.pekko.io.Tcp.Connect
+import org.apache.pekko.io.Tcp.Connected
+import org.apache.pekko.io.Tcp.ErrorClosed
+import org.apache.pekko.io.Tcp.Register
+import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike
 import redis.Redis
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaCompat.actor.Props
-import redis.RediscalaCompat.io.Tcp.*
-import redis.RediscalaCompat.io.Tcp.CommandFailed
-import redis.RediscalaCompat.io.Tcp.Connect
-import redis.RediscalaCompat.io.Tcp.Connected
-import redis.RediscalaCompat.io.Tcp.ErrorClosed
-import redis.RediscalaCompat.io.Tcp.Register
-import redis.RediscalaCompat.util.ByteString
 import redis.RediscalaTestCompat.testkit.*
 
 class RedisWorkerIOSpec extends TestKit(ActorSystem()) with AnyWordSpecLike with ImplicitSender {

@@ -1,7 +1,7 @@
 package redis.api.servers
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class ConfigSet(parameter: String, value: String) extends RedisCommandStatusBoolean {
   def isMasterOnly: Boolean = true

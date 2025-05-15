@@ -1,7 +1,7 @@
 package redis.api.transactions
 
+import org.apache.pekko.util.ByteString
 import redis.RedisCommandMultiBulk
-import redis.RediscalaCompat.util.ByteString
 import redis.protocol.MultiBulk
 
 case object Exec extends RedisCommandMultiBulk[MultiBulk] {

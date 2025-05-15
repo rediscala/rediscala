@@ -1,9 +1,9 @@
 package redis.api.lists
 
+import org.apache.pekko.util.ByteString
 import redis.ByteStringDeserializer
 import redis.ByteStringSerializer
 import redis.RedisCommandBulkOptionByteString
-import redis.RediscalaCompat.util.ByteString
 import redis.api.ListDirection
 
 case class Lmove[KS, KD, R](source: KS, destination: KD, from: ListDirection, to: ListDirection)(implicit

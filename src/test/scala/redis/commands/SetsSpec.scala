@@ -1,7 +1,7 @@
 package redis.commands
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import scala.concurrent.Await
 
 class SetsSpec extends RedisDockerServer {

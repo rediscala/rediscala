@@ -1,7 +1,7 @@
 package redis.api.servers
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case object DebugSegfault extends RedisCommandStatusString {
   def isMasterOnly: Boolean = true

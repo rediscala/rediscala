@@ -1,7 +1,7 @@
 package redis
 
 import java.util.concurrent.atomic.AtomicInteger
-import redis.RediscalaCompat.actor.ActorRef
+import org.apache.pekko.actor.ActorRef
 import redis.protocol.RedisReply
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future

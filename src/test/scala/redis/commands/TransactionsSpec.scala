@@ -1,7 +1,7 @@
 package redis.commands
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.actors.ReplyErrorException
 import redis.protocol.Bulk
 import redis.protocol.MultiBulk

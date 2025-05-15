@@ -1,6 +1,6 @@
 package redis.protocol
 
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.util.ByteString
 
 sealed trait DecodeResult[+A] {
   def rest: ByteString

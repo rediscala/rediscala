@@ -1,7 +1,7 @@
 package redis.api.scripting
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Evalsha[R, KK, KA](sha1: String, keys: Seq[KK] = Seq(), args: Seq[KA] = Seq())(implicit
   redisKeys: ByteStringSerializer[KK],

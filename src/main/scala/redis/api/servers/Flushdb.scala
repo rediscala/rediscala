@@ -1,7 +1,7 @@
 package redis.api.servers
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Flushdb(async: Boolean = false) extends RedisCommandStatusBoolean {
   def isMasterOnly: Boolean = true

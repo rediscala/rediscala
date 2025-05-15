@@ -1,7 +1,7 @@
 package redis.api.sets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Sismember[K, V](key: K, member: V)(implicit redisKey: ByteStringSerializer[K], convert: ByteStringSerializer[V])
     extends SimpleClusterKey[K]

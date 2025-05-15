@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.api.Aggregate
 import redis.api.SUM
 

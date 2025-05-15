@@ -1,7 +1,7 @@
 package redis
 
-import redis.RediscalaCompat.actor.ActorSystem
-import redis.RediscalaCompat.event.Logging
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.event.Logging
 import scala.collection.mutable
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext

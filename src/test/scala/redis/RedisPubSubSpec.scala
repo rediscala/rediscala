@@ -1,9 +1,9 @@
 package redis
 
 import java.net.InetSocketAddress
-import redis.RediscalaCompat.actor.ActorRef
-import redis.RediscalaCompat.actor.Props
-import redis.RediscalaCompat.util.ByteString
+import org.apache.pekko.actor.ActorRef
+import org.apache.pekko.actor.Props
+import org.apache.pekko.util.ByteString
 import redis.RediscalaTestCompat.testkit.TestActorRef
 import redis.RediscalaTestCompat.testkit.TestProbe
 import redis.actors.RedisSubscriberActor

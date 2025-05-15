@@ -1,7 +1,7 @@
 package redis.api.transactions
 
+import org.apache.pekko.util.ByteString
 import redis.RedisCommandStatusBoolean
-import redis.RediscalaCompat.util.ByteString
 
 case class Watch(keys: Set[String]) extends RedisCommandStatusBoolean {
   def isMasterOnly = true

@@ -1,7 +1,7 @@
 package redis.api.sortedsets
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 
 case class Zremrangebyrank[K](key: K, start: Long, stop: Long)(implicit keySeria: ByteStringSerializer[K])
     extends SimpleClusterKey[K]

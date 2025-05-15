@@ -1,5 +1,5 @@
 package redis.actors
 
-import redis.RediscalaCompat.io.Tcp.*
+import org.apache.pekko.io.Tcp.*
 
 object WriteAck extends Event

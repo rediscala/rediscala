@@ -1,7 +1,7 @@
 package redis.api.geo
 
+import org.apache.pekko.util.ByteString
 import redis.*
-import redis.RediscalaCompat.util.ByteString
 import redis.api.geo.DistUnits.Measurement
 import redis.protocol.*
 

@@ -1,7 +1,7 @@
 package redis.commands
 
+import org.apache.pekko.actor.*
 import redis.*
-import redis.RediscalaCompat.actor.*
 import redis.protocol.MultiBulk
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext
