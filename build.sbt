@@ -10,13 +10,11 @@ releaseProcess := Seq[ReleaseStep](
   commitReleaseVersion,
   tagRelease,
   releaseStepCommandAndRemaining("publishSigned"),
-  releaseStepCommandAndRemaining("sonatypeBundleRelease"),
+  releaseStepCommandAndRemaining("sonaRelease"),
   setNextVersion,
   commitNextVersion,
   pushChanges,
 )
-
-ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
@@ -35,7 +33,7 @@ lazy val commonSettings = Def.settings(
       </developer>
     </developers>
   ),
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := (if (isSnapshot.value) None else localStaging.value),
   publishMavenStyle := true,
 )
 
