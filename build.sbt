@@ -76,8 +76,8 @@ lazy val standardSettings = Def.settings(
     "com.dimafeng" %% "testcontainers-scala" % "0.43.0" % Test,
     "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
     "org.scalacheck" %% "scalacheck" % "1.18.1" % Test,
-    "org.apache.pekko" %% "pekko-actor" % "1.1.4",
-    "org.apache.pekko" %% "pekko-testkit" % "1.1.4" % Test,
+    "org.apache.pekko" %% "pekko-actor" % "1.1.5",
+    "org.apache.pekko" %% "pekko-testkit" % "1.1.5" % Test,
   )
 )
 
