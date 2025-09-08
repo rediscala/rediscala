@@ -114,6 +114,17 @@ class SetsSpec extends RedisDockerServer {
       Await.result(r, timeOut)
     }
 
+    "SMISMEMBER" in {
+      val r = for {
+        _ <- redis.del("smismemberKey")
+        _ <- redis.sadd("smismemberKey", "Hello", "World")
+        isMaybe <- redis.smismember("smismemberKey", Seq("Hello", "not member", "World")*)
+      } yield {
+        assert(isMaybe == Seq(true, false, true))
+      }
+      Await.result(r, timeOut)
+    }
+
     "SMOVE" in {
       val r = for {
         _ <- redis.del("smoveKey1")
