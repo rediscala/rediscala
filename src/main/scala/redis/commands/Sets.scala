@@ -33,6 +33,9 @@ trait Sets extends Request {
   def smembers[R: ByteStringDeserializer](key: String): Future[Seq[R]] =
     send(Smembers(key))
 
+  def smismember[V: ByteStringSerializer](key: String, members: V*): Future[Seq[Boolean]] =
+    send(Smismember(key, members))
+
   def smove[V: ByteStringSerializer](source: String, destination: String, member: V): Future[Boolean] =
     send(Smove(source, destination, member))
 
