@@ -37,8 +37,6 @@ lazy val commonSettings = Def.settings(
   publishMavenStyle := true,
 )
 
-commonSettings
-
 lazy val standardSettings = Def.settings(
   commonSettings,
   name := "rediscala",
@@ -80,8 +78,6 @@ lazy val standardSettings = Def.settings(
     "org.apache.pekko" %% "pekko-testkit" % "1.2.0" % Test,
   )
 )
-
-standardSettings
 
 TaskKey[Unit]("runDockerTests") := Def.taskDyn {
   val dockerTests = (Test / compile).value
