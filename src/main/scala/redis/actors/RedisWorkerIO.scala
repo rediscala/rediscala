@@ -7,11 +7,6 @@ import org.apache.pekko.actor.ActorRef
 import org.apache.pekko.io.IO
 import org.apache.pekko.io.Tcp
 import org.apache.pekko.io.Tcp.*
-import org.apache.pekko.io.Tcp.CommandFailed
-import org.apache.pekko.io.Tcp.Connect
-import org.apache.pekko.io.Tcp.Connected
-import org.apache.pekko.io.Tcp.Received
-import org.apache.pekko.io.Tcp.Register
 import org.apache.pekko.util.ByteString
 import org.apache.pekko.util.ByteStringBuilder
 import scala.concurrent.duration.*
