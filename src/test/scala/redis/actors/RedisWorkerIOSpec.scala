@@ -5,11 +5,6 @@ import org.apache.pekko.actor.ActorRef
 import org.apache.pekko.actor.ActorSystem
 import org.apache.pekko.actor.Props
 import org.apache.pekko.io.Tcp.*
-import org.apache.pekko.io.Tcp.CommandFailed
-import org.apache.pekko.io.Tcp.Connect
-import org.apache.pekko.io.Tcp.Connected
-import org.apache.pekko.io.Tcp.ErrorClosed
-import org.apache.pekko.io.Tcp.Register
 import org.apache.pekko.testkit.*
 import org.apache.pekko.util.ByteString
 import org.scalatest.wordspec.AnyWordSpecLike

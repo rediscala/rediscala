@@ -8,7 +8,6 @@ import redis.api.transactions.Exec
 import redis.api.transactions.Multi
 import redis.api.transactions.Watch
 import redis.protocol.*
-import redis.protocol.MultiBulk
 import scala.collection.immutable.Queue
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Promise
