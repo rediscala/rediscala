@@ -20,7 +20,7 @@ ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
-def Scala213 = "2.13.16"
+def Scala213 = "2.13.17"
 
 def scalaVersions = Seq(Scala213, "3.3.6")
 
@@ -92,10 +92,10 @@ lazy val standardSettings = Def.settings(
     )
   },
   libraryDependencies ++= Seq(
-    "redis.clients" % "jedis" % "6.0.0" % Test,
+    "redis.clients" % "jedis" % "6.2.0" % Test,
     "com.dimafeng" %% "testcontainers-scala" % "0.43.0" % Test,
     "org.scalatest" %% "scalatest-wordspec" % "3.2.19" % Test,
-    "org.scalacheck" %% "scalacheck" % "1.18.1" % Test,
+    "org.scalacheck" %% "scalacheck" % "1.19.0" % Test,
     "org.apache.pekko" %% "pekko-actor" % "1.1.3",
     "org.apache.pekko" %% "pekko-testkit" % "1.1.3" % Test,
   )
