@@ -1,20 +1,20 @@
 package redis
 
-import com.dimafeng.testcontainers.GenericContainer
 import org.scalatest.BeforeAndAfterAll
+import org.testcontainers.containers.GenericContainer
+import org.testcontainers.utility.DockerImageName
 import scala.concurrent.Future
 
 abstract class RedisDockerServer extends RedisHelper with BeforeAndAfterAll {
 
   private def exportPort = 6379
-  private val container = GenericContainer(
-    dockerImage = "redis:6.2.18",
-    exposedPorts = Seq(exportPort)
-  )
+  private val container: GenericContainer[?] = new GenericContainer(
+    DockerImageName.parse("redis:6.2.18")
+  ).withExposedPorts(exportPort)
 
   container.start()
 
-  lazy val port: Int = container.mappedPort(exportPort)
+  lazy val port: Int = container.getMappedPort(exportPort)
   lazy val redis = RedisClient(port = port)
 
   def redisVersion(): Future[Option[RedisVersion]] = redis.info("Server").map { info =>
