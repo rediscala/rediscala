@@ -18,7 +18,7 @@ jobs:
     env:
       REDIS_HOME: "redis-6.2.18/src"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/setup-java@v5
       with:
         java-version: ${{matrix.java}}
@@ -49,7 +49,7 @@ jobs:
     env:
       scala_version: "3.7.0"
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/setup-java@v5
       with:
         java-version: 21
