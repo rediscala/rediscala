@@ -41,7 +41,7 @@ class RedisSubscriberActorSpec extends TestKit(ActorSystem()) with AnyWordSpecLi
       subscriberActor.underlyingActor.subscribe("channel2")
       awaitAssert(
         {
-          assert(subscriberActor.underlyingActor.channelsSubscribed.toSet == newChannels.toSet)
+          assert(subscriberActor.underlyingActor.channelsSubscribed == newChannels.toSet)
         },
         5.seconds.dilated
       )
