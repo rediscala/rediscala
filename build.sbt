@@ -19,6 +19,7 @@ releaseProcess := Seq[ReleaseStep](
 val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 
 lazy val commonSettings = Def.settings(
+  exportJars := false,
   organization := "io.github.rediscala",
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
@@ -67,7 +68,7 @@ lazy val standardSettings = Def.settings(
   Test / fork := true,
   Compile / doc / scalacOptions ++= {
     val branch = {
-      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lazyLines_!.head
       else (LocalRootProject / version).value
     }
     Seq[String](
@@ -85,7 +86,10 @@ lazy val standardSettings = Def.settings(
   )
 )
 
-TaskKey[Unit]("runDockerTests") := Def.taskDyn {
+@transient
+val runDockerTests = taskKey[Unit]("")
+
+runDockerTests := Def.taskDyn {
   val dockerTests = (Test / compile).value
     .asInstanceOf[sbt.internal.inc.Analysis]
     .apis
