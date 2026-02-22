@@ -42,8 +42,14 @@ lazy val standardSettings = Def.settings(
   name := "rediscala",
   Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
+  scalacOptions ++= {
+    if (sys.env.isDefinedAt("GITHUB_ACTIONS")) {
+      Nil
+    } else {
+      Seq("-release:8")
+    }
+  },
   scalacOptions ++= Seq(
-    "-release:8",
     "-Wunused:imports",
     "-encoding",
     "UTF-8",
