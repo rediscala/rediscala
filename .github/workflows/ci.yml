@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         java:
-          - 8
+          - 17
           - 25
     env:
       REDIS_HOME: "redis-6.2.18/src"
@@ -23,7 +23,7 @@ jobs:
     - uses: coursier/cache-action@v8
     - uses: sbt/setup-sbt@v1
     - run: ./install-redis.sh
-    - run: sbt -v
+    - run: sbt --server -v
            scalafmtSbtCheck
            scalafmtCheckAll
            Test/compile
@@ -34,7 +34,7 @@ jobs:
       with:
         timeout_minutes: 20
         max_attempts: 3
-        command: sbt -v
+        command: sbt -v --server
                  "onFailure testQuick"
                  test
   latest:
@@ -52,13 +52,13 @@ jobs:
         distribution: zulu
     - uses: coursier/cache-action@v8
     - uses: sbt/setup-sbt@v1
-    - run: sbt -v
+    - run: sbt -v --server
            "++ ${{env.scala_version}}!"
            Test/compile
     - uses: nick-invision/retry@v3
       with:
         timeout_minutes: 10
         max_attempts: 3
-        command: sbt -v
+        command: sbt -v --server
                  "++ ${{env.scala_version}}!"
                  runDockerTests
