@@ -30,7 +30,7 @@ jobs:
            mimaReportBinaryIssues
            scalafixConfigRuleNamesSortCheck
            "$(if [[ "${{ matrix.java }}" != '8' ]]; then echo scalafixCheckAll; fi)"
-    - uses: nick-invision/retry@v3
+    - uses: nick-invision/retry@v4
       with:
         timeout_minutes: 20
         max_attempts: 3
@@ -55,7 +55,7 @@ jobs:
     - run: sbt -v
            "++ ${{env.scala_version}}!"
            Test/compile
-    - uses: nick-invision/retry@v3
+    - uses: nick-invision/retry@v4
       with:
         timeout_minutes: 10
         max_attempts: 3
