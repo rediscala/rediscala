@@ -33,7 +33,7 @@ jobs:
            Test/compile
            mimaReportBinaryIssues
            "$(if [[ "${{ matrix.java }}" != '8' ]]; then echo "scalafixAll --check"; fi)"
-    - uses: nick-invision/retry@v3
+    - uses: nick-invision/retry@v4
       with:
         timeout_minutes: 20
         max_attempts: 3
@@ -59,7 +59,7 @@ jobs:
     - run: sbt -v
            "++ ${{env.scala_version}}!"
            rediscala3/Test/compile
-    - uses: nick-invision/retry@v3
+    - uses: nick-invision/retry@v4
       with:
         timeout_minutes: 10
         max_attempts: 3
