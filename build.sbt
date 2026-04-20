@@ -78,7 +78,7 @@ lazy val standardSettings = Def.settings(
   },
   libraryDependencies ++= Seq(
     "redis.clients" % "jedis" % "7.4.1" % Test,
-    "org.testcontainers" % "testcontainers" % "2.0.4" % Test,
+    "org.testcontainers" % "testcontainers" % "2.0.5" % Test,
     "org.scalatest" %% "scalatest-wordspec" % "3.2.20" % Test,
     "org.scalacheck" %% "scalacheck" % "1.19.0" % Test,
     "org.apache.pekko" %% "pekko-actor" % "1.5.0",
