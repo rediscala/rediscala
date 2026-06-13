@@ -1,3 +1,5 @@
+import com.typesafe.tools.mima.core.*
+import com.typesafe.tools.mima.core.ProblemFilters.*
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
@@ -25,6 +27,11 @@ lazy val commonSettings = Def.settings(
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
   mimaPreviousArtifacts := Set(organization.value %% name.value % "2.0.2"),
+  mimaBinaryIssueFilters ++= Seq(
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.ByteStringDeserializer.<clinit>"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.ByteStringSerializer.<clinit>"),
+    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.RedisReplyDeserializer.<clinit>"),
+  ),
   pomExtra := (
     <developers>
       <developer>
@@ -44,7 +51,12 @@ lazy val standardSettings = Def.settings(
   Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= {
-    if (sys.env.isDefinedAt("GITHUB_ACTIONS")) {
+    if (scalaVersion.value.startsWith("3.3.")) {
+      Seq(
+        "-Yfuture-lazy-vals",
+        "-release:11",
+      )
+    } else if (scalaBinaryVersion.value == "3") {
       Nil
     } else {
       Seq("-release:8")
