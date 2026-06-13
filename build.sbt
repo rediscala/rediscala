@@ -1,5 +1,3 @@
-import com.typesafe.tools.mima.core.*
-import com.typesafe.tools.mima.core.ProblemFilters.*
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseTagName := (ThisBuild / version).value
@@ -26,12 +24,7 @@ lazy val commonSettings = Def.settings(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
-  mimaPreviousArtifacts := Set(organization.value %% name.value % "2.0.2"),
-  mimaBinaryIssueFilters ++= Seq(
-    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.ByteStringDeserializer.<clinit>"),
-    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.ByteStringSerializer.<clinit>"),
-    ProblemFilters.exclude[DirectMissingMethodProblem]("redis.RedisReplyDeserializer.<clinit>"),
-  ),
+  mimaPreviousArtifacts := Set(organization.value %% name.value % "2.1.0"),
   pomExtra := (
     <developers>
       <developer>
