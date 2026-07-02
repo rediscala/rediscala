@@ -71,7 +71,7 @@ lazy val standardSettings = Def.settings(
   },
   autoAPIMappings := true,
   Test / fork := true,
-  Compile / doc / scalacOptions ++= {
+  Compile / doc / scalacOptions ++= Def.uncached {
     val branch = {
       if (isSnapshot.value) sys.process.Process("git rev-parse HEAD").lazyLines_!.head
       else (LocalRootProject / version).value
