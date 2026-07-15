@@ -21,9 +21,9 @@ val baseSourceUrl = "https://github.com/rediscala/rediscala/tree/"
 lazy val commonSettings = Def.settings(
   exportJars := false,
   organization := "io.github.rediscala",
-  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
-  homepage := Some(url("https://github.com/rediscala/rediscala")),
-  scmInfo := Some(ScmInfo(url("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
+  licenses += ("Apache-2.0", uri("https://www.apache.org/licenses/LICENSE-2.0.html")),
+  homepage := Some(uri("https://github.com/rediscala/rediscala")),
+  scmInfo := Some(ScmInfo(uri("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
   mimaPreviousArtifacts := Set(organization.value %% name.value % "2.1.0"),
   pomExtra := (
     <developers>
