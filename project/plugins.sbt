@@ -4,7 +4,7 @@ addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.7")
 
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.6")
 
-addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.1")
+addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.3.2")
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.2")
 
