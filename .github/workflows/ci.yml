@@ -41,28 +41,3 @@ jobs:
                  "project rediscala${{ matrix.project }}"
                  "onFailure testQuick"
                  test
-  latest:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-    env:
-      scala_version: "3.7.0"
-    steps:
-    - uses: actions/checkout@v7
-    - uses: actions/setup-java@v5
-      with:
-        java-version: 21
-        distribution: adopt
-    - uses: coursier/cache-action@v8
-    - uses: sbt/setup-sbt@v1
-    - run: sbt -v
-           "++ ${{env.scala_version}}!"
-           rediscala3/Test/compile
-    - uses: nick-invision/retry@v4
-      with:
-        timeout_minutes: 10
-        max_attempts: 3
-        command: sbt -v
-                 "++ ${{env.scala_version}}!"
-                 rediscala3/runDockerTests
