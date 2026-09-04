@@ -115,7 +115,7 @@ runDockerTests := Def.taskDyn {
 }.value
 
 standardSettings
-scalaVersion := "3.3.8"
+scalaVersion := "3.9.0"
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
