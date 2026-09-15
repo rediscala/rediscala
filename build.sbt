@@ -44,12 +44,7 @@ lazy val standardSettings = Def.settings(
   Test / baseDirectory := (LocalRootProject / baseDirectory).value,
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   scalacOptions ++= {
-    if (scalaVersion.value.startsWith("3.3.")) {
-      Seq(
-        "-Yfuture-lazy-vals",
-        "-release:11",
-      )
-    } else if (scalaBinaryVersion.value == "3") {
+    if (scalaBinaryVersion.value == "3") {
       Nil
     } else {
       Seq("-release:8")
@@ -115,7 +110,7 @@ runDockerTests := Def.taskDyn {
 }.value
 
 standardSettings
-scalaVersion := "3.3.8"
+scalaVersion := "3.9.0"
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
