@@ -31,7 +31,7 @@ jobs:
            Test/compile
            mimaReportBinaryIssues
            scalafixConfigRuleNamesSortCheck
-           "$(if [[ "${{ matrix.java }}" != '8' ]]; then echo scalafixCheckAll; fi)"
+           scalafixCheckAll
     - uses: nick-fields/retry@v4
       with:
         timeout_minutes: 20
