@@ -81,8 +81,8 @@ lazy val standardSettings = Def.settings(
     "org.testcontainers" % "testcontainers" % "2.0.5" % Test,
     "org.scalatest" %% "scalatest-wordspec" % "3.2.20" % Test,
     "org.scalacheck" %% "scalacheck" % "1.20.0" % Test,
-    "org.apache.pekko" %% "pekko-actor" % "1.7.0",
-    "org.apache.pekko" %% "pekko-testkit" % "1.7.0" % Test,
+    "org.apache.pekko" %% "pekko-actor" % "1.7.1",
+    "org.apache.pekko" %% "pekko-testkit" % "1.7.1" % Test,
   )
 )
 
