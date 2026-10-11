@@ -26,8 +26,7 @@ jobs:
     - uses: sbt/setup-sbt@v1
     - run: ./install-redis.sh
     - run: sbt --server -v
-           scalafmtSbtCheck
-           scalafmtCheckAll
+           scalafmtCheckRepo
            Test/compile
            mimaReportBinaryIssues
            scalafixConfigRuleNamesSortCheck
