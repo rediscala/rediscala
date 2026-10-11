@@ -37,7 +37,7 @@ jobs:
         max_attempts: 3
         command: sbt -v --server
                  "onFailure testQuick"
-                 test
+                 testFull
   latest:
     runs-on: ubuntu-latest
     timeout-minutes: 20
