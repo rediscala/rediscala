@@ -22,7 +22,7 @@ jobs:
       with:
         java-version: ${{matrix.java}}
         distribution: zulu
-    - uses: coursier/cache-action@v8
+    - uses: coursier/cache-action@v9
     - uses: sbt/setup-sbt@v1
     - run: ./install-redis.sh
     - run: sbt --server -v
@@ -51,7 +51,7 @@ jobs:
       with:
         java-version: 25
         distribution: zulu
-    - uses: coursier/cache-action@v8
+    - uses: coursier/cache-action@v9
     - uses: sbt/setup-sbt@v1
     - run: sbt -v --server
            "++ ${{env.scala_version}}!"
