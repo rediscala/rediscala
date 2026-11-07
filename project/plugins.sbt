@@ -1,3 +1,5 @@
+addSbtPlugin("com.eed3si9n" % "sbt-salad-days" % "0.2.0")
+
 addSbtPlugin("com.github.xuwei-k" % "scalafix-check" % "0.1.0")
 
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.14.9")
