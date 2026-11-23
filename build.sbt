@@ -24,7 +24,7 @@ lazy val commonSettings = Def.settings(
   licenses += ("Apache-2.0", uri("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(uri("https://github.com/rediscala/rediscala")),
   scmInfo := Some(ScmInfo(uri("https://github.com/rediscala/rediscala"), "scm:git:git@github.com:rediscala/rediscala.git")),
-  mimaPreviousArtifacts := Set(organization.value %% name.value % "2.1.0"),
+  mimaPreviousArtifacts := Set(organization.value %% name.value % "3.0.0"),
   pomExtra := (
     <developers>
       <developer>
